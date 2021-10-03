@@ -1,21 +1,31 @@
-Hugo Slides Template
----
+> Hello friends.  
+Markdown on _everything_.
 
-> Starter template for presentation-per-post [reveal-hugo](https://github.com/dzello/reveal-hugo) sites
+This directory contains the source code for the presentations, built with [Hugo](https://gohugo.io/) and [Reveal.js](https://revealjs.com/).
 
-# Getting Started
-
-* [Create a repository based off the template](https://github.com/featherbear/Slides-Hugo-Template/generate)
-* Clone your new repository
-* Navigate into the repository directory
-* Clone the reveal-hugo theme
-  * `git submodule add git@github.com:dzello/reveal-hugo.git themes/reveal-hugo`
-  * GitHub templates don't replicate the git module structures
-* Modify the `config.toml` file to your liking
-* $$$
-
-Every time you push to this repository, the site will be built and published to the repository's `gh-pages` branch
+They will automatically be built and published [here](https://featherbear.cc/unsw-comp3601-project/presentations) when pushed to this GitHub repository
 
 ---
 
-Editing guide [here](EDITING.md)
+Here's a quick TL;DR on how to create a presentation.
+
+# I'm a terminal warrior, 🔥🔥🔥 _SHOW ME THE COMMANDS_ ⚡⚡⚡
+
+1. Navigate to this directory (should contain `config.toml`, `content/`, ...)  
+2. Create a new post with `hugo new [PRESENTATION_NAME].md`  
+
+> The created post will appear in `content/[PRESENTATION_NAME].md`, and will be created as a **draft** (Won't be published).
+
+You can now run `hugo server -DEF` to start a preview server.  
+_Note: The `-DEF` flags allows draft presentations to be visible, otherwise they won't appear._
+
+3. Edit the file with markdown. Use `---` as slide separators.  
+4. When the post is finalised, remove the `draft: true` property from the front matter
+
+# copy-paste-find-replace
+
+1. Create a copy of any of the existing presentations
+2. Change the title and date
+3. Edit the content
+3. ???
+4. Profit
