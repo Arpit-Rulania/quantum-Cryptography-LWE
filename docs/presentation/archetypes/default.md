@@ -6,9 +6,14 @@ date: {{ .Date }}
 draft: true
 ---
 
-{{< slide class="center" >}}
+{{< slide class="center" content="blocks.cover" >}}
 
-## {{ replace .Name "-" " " | title }}
+> {{ replace .Name "-" " " | title }}
 
 ---
 
+
+---
+
+{{< slide content="blocks.cover" >}}
+{{< slide content="blocks.end" >}}

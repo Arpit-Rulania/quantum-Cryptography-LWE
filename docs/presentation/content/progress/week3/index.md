@@ -7,9 +7,9 @@ section: 'weekly-progress'
 draft: true
 ---
 
-{{< slide class="center" >}}
+{{< slide class="center" content="blocks.cover" >}}
 
-## Progress Week 3
+> Week 2 Progress Update
 
 ---
 
@@ -91,4 +91,5 @@ TRNG from Ring Oscillator and PRNG
 
 ---
 
-{{< slide class="center" content="blocks.end" >}}
+{{< slide content="blocks.cover" >}}
+{{< slide content="blocks.end" >}}
