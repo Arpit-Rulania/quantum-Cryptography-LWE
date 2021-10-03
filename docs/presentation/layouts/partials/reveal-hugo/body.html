@@ -26,6 +26,19 @@ if (window.location.search.match(/\?print-pdf/gi)) {
   insertCSS('{{ "/reveal-js/css/print/pdf.css" | relURL }}');
   insertCSS('{{ "/hideHomeButton.css" | relURL }}');
 }
+
+window.addEventListener('load', function() {
+  console.info("Adding excessiveness to presentation...");
+  let bgElem = document.querySelector('div.backgrounds')
+  
+  let circuitMask = document.createElement('div');
+  circuitMask.classList.add('hasCircuitMask')  
+  circuitMask.classList.add('gradientAnim')
+  circuitMask.style.height = "100%"
+  
+  bgElem.appendChild(circuitMask)
+  console.info("Circuit go brrrr");
+});
 </script>
 
 <a id="homeButton" style="position: fixed; bottom: 8px; left: 8px; z-index: 31; font-family: Helvetica, sans-serif; font-size: 12px; line-height: 1;color: #fff; background-color: rgba(0, 0, 0, 0.4); padding: 5px; text-decoration: none;" href='{{"/" | relURL }}'>Home</a>
