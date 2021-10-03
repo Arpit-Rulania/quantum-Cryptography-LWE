@@ -23,3 +23,4 @@ slide_number = true
 history = true
 center = false
 pdf_separate_fragments = false
+custom_css = "custom.css"
