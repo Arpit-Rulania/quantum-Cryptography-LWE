@@ -21,11 +21,63 @@ Testing extended to Week 4
 
 ---
 
+## VHDL Components
+
+{{% section %}}
+> BEFORE
+
+<img src="Snipaste_2021-10-03_18-36-27.jpg" width="70%" >
+
+{{% note %}} Fleshed out the specifications for the components {{% /note %}}
+
+---
+
+> AFTER
+
+![](Snipaste_2021-10-03_18-29-05.jpg)
+
+{{% note %}} In that process, we also identified a few possible issues and overheads that would make the logic area large {{% /note %}}
+
+{{% /section %}}
+
+---
+
+## Connection Diagram
+
+<img src="connection_diagram.drawio.png" width="70%" />
+
+---
+
 ## How Big?
 
-specs
+{{% section %}} 
 
-catering
+As per the project spec, the design needs to validate the provided configurations.
+
+![](required_configurations.png)
+
+> Does the design stay the same for all three configurations?
+
+---
+
+Our current design only supports up to 8-bit values.  
+
+> We need to support $q = 65535$  
+which is a 16-bit value.
+
+🟧 TODO
+
+---
+
+![](required_configurations-bigA.png)
+
+Public key A gets quite big...
+
+We probably don't want to transmit $32768 \times 16 \times 16 \times 16$ bits at once...  
+
+Instead, transmit $16 \times 16 \times 16$ bits $32768$ times?
+
+{{% /section %}}
 
 ---
 
@@ -50,34 +102,11 @@ Save some cycles!
 ---
 ![](modulo/module_subtract_multiples_better.jpg)
 
-9 cycles? How about 8?!
+9 cycles? How about 8!
 
 ![](modulo/module_subtract_multiples_even_better.jpg)
 
 {{% /section %}}
-
----
-
-## VHDL Blocks
-
-{{% section %}}
-> BEFORE
-
-<img src="Snipaste_2021-10-03_18-36-27.jpg" width="70%" >
-
----
-
-> AFTER
-
-![](Snipaste_2021-10-03_18-29-05.jpg)
-
-{{% /section %}}
-
----
-
-## Connection Diagram
-
-<img src="connection_diagram.drawio.png" width="70%" />
 
 ---
 
