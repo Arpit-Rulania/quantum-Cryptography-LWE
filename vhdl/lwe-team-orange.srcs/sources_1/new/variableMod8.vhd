@@ -73,6 +73,7 @@ begin
                         scaled_q <= scaled_q(6 downto 0) & '0';
                     else 
                         -- Kinda a wasted cycle here
+                        scaled_q <= '0' & scaled_q(7 downto 1);    
                         hasScaled <= true;
                     end if;
                 else
@@ -81,12 +82,7 @@ begin
                         isReady <= '1';
                     else
                         -- Subtract multiples of Q
-                        if scaled_q <= intermediate then
-                            -- The exit condition for hasScaled causes scaled_q >= intermediate
-                            -- Ensure we only subtract if scaled_q intermediate
-                            intermediate <= intermediate - scaled_q;
-                        end if;
-                        
+                        intermediate <= intermediate - scaled_q;
                         scaled_q <= '0' & scaled_q(7 downto 1);                        
                     end if;
                 end if;
