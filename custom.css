@@ -1,0 +1,82 @@
+/*.reveal div.slides > section {
+  height: 80%;
+}*/
+
+/*
+.reveal img {
+  max-width: 100%;
+  height:auto;
+  }
+*/
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  text-transform: unset
+}
+
+:root {
+ --styleColour: orange;
+}
+
+li {
+  display: list-item;
+}
+
+li::marker, .reveal .progress, .reveal .controls .controls-arrow {
+  color: var(--styleColour);
+}
+
+.hasCircuitMask {
+  mask-image: url(/customisations/circuitMask.svg);
+  mask-repeat: no-repeat;
+  mask-size: cover;
+}
+
+/* Splitify */
+
+:root {
+  --colorA: #153323;
+  --colorB: #564934;
+}
+
+.gradientAnim {
+ /* mix-blend-mode: hue; */
+  filter: blur(2px);
+  background: linear-gradient(146deg, var(--colorA), var(--colorB));
+  background-size: 2000% 2000%;
+  -webkit-animation: GradientAnim 25s ease infinite;
+  -moz-animation: GradientAnim 25s ease infinite;
+  animation: GradientAnim 25s ease infinite;
+}
+@-webkit-keyframes GradientAnim {
+  0% {
+    background-position: 0% 46%;
+  }
+  50% {
+    background-position: 100% 55%;
+  }
+  100% {
+    background-position: 0% 46%;
+  }
+}
+@-moz-keyframes GradientAnim {
+  0% {
+    background-position: 0% 46%;
+  }
+  50% {
+    background-position: 100% 55%;
+  }
+  100% {
+    background-position: 0% 46%;
+  }
+}
+@keyframes GradientAnim {
+  0% {
+    background-position: 0% 46%;
+  }
+  50% {
+    background-position: 100% 55%;
+  }
+  100% {
+    background-position: 0% 46%;
+  }
+}
