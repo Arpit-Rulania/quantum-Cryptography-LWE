@@ -3,8 +3,6 @@ title: "Progress - Week 3"
 layout: "bundle"
 outputs: ["Reveal"]
 date: 2021-10-03T19:13:50+11:00
-section: 'weekly-progress'
-draft: true
 ---
 
 {{< slide class="center" content="blocks.cover" >}}

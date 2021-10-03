@@ -3,7 +3,6 @@ title: "Progress - Week 2"
 layout: "bundle"
 outputs: ["Reveal"]
 date: 2021-10-03T19:13:46+11:00
-section: 'weekly-progress'
 ---
 
 > COMP3601 21T2 Project
