@@ -6,8 +6,15 @@ date: 2021-10-03T19:13:46+11:00
 section: 'weekly-progress'
 ---
 
-{{< slide content="blocks.cover" >}}
+> COMP3601 21T2 Project
 
+## Team Orange 🍊
+
+* Andrew Nicholson
+* Andrew Wong
+* Arpit Rulania
+* Ziyue Lian
+  
 ---
 
 ## Table of Contents
