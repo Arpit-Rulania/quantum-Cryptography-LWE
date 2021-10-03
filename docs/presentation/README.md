@@ -9,7 +9,7 @@ They will automatically be built and published [here](https://featherbear.cc/uns
 
 Here's a quick TL;DR on how to create a presentation.
 
-# I'm a terminal warrior, 🔥🔥🔥 _SHOW ME THE COMMANDS_ ⚡⚡⚡
+## I'm a terminal warrior, 🔥🔥🔥 _SHOW ME THE COMMANDS_ ⚡⚡⚡
 
 1. Navigate to this directory (should contain `config.toml`, `content/`, ...)  
 2. Create a new post with `hugo new [PRESENTATION_NAME].md`  
@@ -22,10 +22,40 @@ _Note: The `-DEF` flags allows draft presentations to be visible, otherwise they
 3. Edit the file with markdown. Use `---` as slide separators.  
 4. When the post is finalised, remove the `draft: true` property from the front matter
 
-# copy-paste-find-replace
+## copy-paste-find-replace
 
 1. Create a copy of any of the existing presentations
 2. Change the title and date
 3. Edit the content
 3. ???
 4. Profit
+
+# Media
+
+You can reference images by URL (i.e `![](https://picsum.photos/200/300)`) or by relative path (i.e `![](./image.png)`).  
+_For relative files you need to prepare your presentation's file directory structure_
+
+## Separate Directories
+
+To include graphics, create a folder inside the `content/` directory that matches the filename of your presentation.
+
+For example, if your presentation file was called `presentationABC.md`, create a folder called `presentationABC` such that `content/presentationABC` exists.  
+
+```
+content
++--presentationABC
+|  \--image.png
+\--presentationABC.md
+```
+
+## Bundled
+
+Create a folder inside the `content/` directory that matches the filename of your presentation.  
+Then move your presentation file into that new directory, and _rename the presentation file to `index.md`_.  
+
+```
+content
++--presentationABC
+   +--index.md
+   \--image.png
+```
