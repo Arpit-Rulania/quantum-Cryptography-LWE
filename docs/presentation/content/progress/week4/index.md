@@ -75,7 +75,9 @@ Save some cycles!
 
 ---
 
-![](connection_diagram.drawio.png)
+## Connection Diagram
+
+<img src="connection_diagram.drawio.png" width="70%" />
 
 ---
 
