@@ -14,7 +14,7 @@ draft: true
 
 ## Schedule
 
-![](gantt_change.gif)
+![](gantt/gantt_change.gif)
 
 Didn't get up to testing the RNG and Multiplier units.  
 Testing extended to Week 4
