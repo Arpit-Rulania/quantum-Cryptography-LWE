@@ -35,18 +35,17 @@ li::marker, .reveal .progress, .reveal .controls .controls-arrow {
 
 :root {
   --colorA: #153323;
-  --colorB: #243749;
+  --colorB: #564934;
 }
 
 .gradientAnim {
  /* mix-blend-mode: hue; */
   filter: blur(2px);
-  _background: radial-gradient(circle, var(--colorA) 0%, var(--colorB) 100%);
   background: linear-gradient(146deg, var(--colorA), var(--colorB));
-  background-size: 10000% 10000%;
-  -webkit-animation: GradientAnim 10s ease infinite;
-  -moz-animation: GradientAnim 10s ease infinite;
-  animation: GradientAnim 10s ease infinite;
+  background-size: 2000% 2000%;
+  -webkit-animation: GradientAnim 25s ease infinite;
+  -moz-animation: GradientAnim 25s ease infinite;
+  animation: GradientAnim 25s ease infinite;
 }
 @-webkit-keyframes GradientAnim {
   0% {
