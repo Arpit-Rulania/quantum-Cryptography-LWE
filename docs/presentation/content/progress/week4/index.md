@@ -21,6 +21,22 @@ Testing extended to Week 4
 
 ---
 
+## How Big?
+
+specs
+
+catering
+
+---
+
+
+
+Modulo implementation
+
+Inside each component, or as an outside block?
+
+---
+
 ## VHDL Blocks
 
 {{% section %}}
@@ -36,6 +52,9 @@ Testing extended to Week 4
 
 {{% /section %}}
 
+---
+
+![](connection_diagram.drawio.png)
 
 ---
 
