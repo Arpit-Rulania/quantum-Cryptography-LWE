@@ -39,23 +39,33 @@ entity variableMod8 is
 end variableMod8;
 
 architecture Behavioral of variableMod8 is
-    signal q_int : std_logic_vector(7 downto 0) := input;
+    signal intermediate : std_logic_vector(7 downto 0) := input;
     signal q_out : std_logic_vector(7 downto 0) := (others => '0');
+    signal isReady : std_logic := '0';
 begin
-
+    output <= q_out;
+    ready <= isReady;
+    
     process(clk)
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                q_int <= (others => '0');
+                intermediate <= input;
                 q_out <= (others => '0');
+                isReady <= '0';
             else
-                if unsigned(q_int) > unsigned(inQ) then
-                    q_int <= std_logic_vector(unsigned(q_int) - unsigned(inQ));
-                    ready <= '0';
+             
+                -- OPTIMISATION - https://math.stackexchange.com/questions/3559467/how-is-calculating-the-modulus-using-this-formula-faster
+                -- if mod 0 -> ???
+                -- if mod 1 -> 0 
+                -- if mod 2 -> & 1
+            
+                if unsigned(intermediate) >= unsigned(inQ) then
+                    intermediate <= std_logic_vector(unsigned(intermediate) - unsigned(inQ));
+                    isReady <= '0';
                 else
-                    q_out <= q_int;
-                    ready <= '1';
+                    q_out <= intermediate;
+                    isReady <= '1';
                 end if;
             end if;
         end if;
