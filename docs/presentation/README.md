@@ -3,7 +3,7 @@ Markdown on _everything_.
 
 This directory contains the source code for the presentations, built with [Hugo](https://gohugo.io/) and [Reveal.js](https://revealjs.com/).
 
-They will automatically be built and published [here](https://featherbear.cc/unsw-comp3601-project/presentations) when pushed to this GitHub repository
+They will automatically be built and published [here](https://featherbear.cc/unsw-comp3601-project) when pushed to this GitHub repository
 
 ---
 
