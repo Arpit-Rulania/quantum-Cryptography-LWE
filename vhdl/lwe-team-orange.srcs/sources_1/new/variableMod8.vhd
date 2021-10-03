@@ -66,16 +66,13 @@ begin
                 -- if mod 1 -> 0 
                 -- if mod 2 -> & 1
 
-                if hasScaled = false then
-                    if scaled_q < intermediate then
-                        -- Left shift, multiply by two, arrange the bits
-                        -- idk
-                        scaled_q <= scaled_q(6 downto 0) & '0';
-                    else 
-                        -- Kinda a wasted cycle here
-                        hasScaled <= true;
-                    end if;
-                else
+                if hasScaled = false and scaled_q < intermediate then
+                    -- Left shift, multiply by two, arrange the bits
+                    -- idk
+                    scaled_q <= scaled_q(6 downto 0) & '0';
+                else 
+                    hasScaled <= true;
+
                     if intermediate < unsigned(inQ) then
                         q_out <= std_logic_vector(intermediate);
                         isReady <= '1';
