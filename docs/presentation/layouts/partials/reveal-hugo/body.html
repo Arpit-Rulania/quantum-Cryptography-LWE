@@ -32,11 +32,11 @@ window.addEventListener('load', function() {
   let bgElem = document.querySelector('div.backgrounds')
   
   let circuitMask = document.createElement('div');
-  circuitMask.classList.add('hasCircuitMask')  
+  circuitMask.classList.add('circuitMask')  
   circuitMask.classList.add('gradientAnim')
   circuitMask.style.height = "100%"
   
-  bgElem.appendChild(circuitMask)
+  document.body.parentElement.appendChild(circuitMask)
   console.info("Circuit go brrrr");
 });
 </script>
