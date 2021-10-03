@@ -29,11 +29,32 @@ catering
 
 ---
 
+## Modulo
 
+{{% section %}}
 
-Modulo implementation
+It works... but it's kinda slow...
 
-Inside each component, or as an outside block?
+![](modulo/modulo_simple.jpg)
+
+> 128 % 2 takes 65 cycles  
+
+---
+
+Save some cycles!
+
+![](modulo/module_subtract_multiples.jpg)
+
+> 128 % 2 now takes 15 cycles
+
+---
+![](modulo/module_subtract_multiples_better.jpg)
+
+9 cycles? How about 8?!
+
+![](modulo/module_subtract_multiples_even_better.jpg)
+
+{{% /section %}}
 
 ---
 
