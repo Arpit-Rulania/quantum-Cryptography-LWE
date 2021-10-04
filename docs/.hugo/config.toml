@@ -3,6 +3,7 @@ languageCode = "en-au"
 
 relativeURLs = true
 theme = "reveal-hugo"
+contentDir = "../slides"
 
 [params]
 colouriseSections = true
