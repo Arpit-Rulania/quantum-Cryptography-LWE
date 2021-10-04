@@ -11,10 +11,11 @@ Here's a quick TL;DR on how to create a presentation.
 
 ## I'm a terminal warrior, 🔥🔥🔥 _SHOW ME THE COMMANDS_ ⚡⚡⚡
 
-1. Navigate to this directory (should contain `config.toml`, `content/`, ...)  
+1. Navigate to this directory (should contain `config.toml`, ...)  
 2. Create a new post with `hugo new [PRESENTATION_NAME].md`  
 
-> The created post will appear in `content/[PRESENTATION_NAME].md`, and will be created as a **draft** (Won't be published).
+> The created post will appear in `../slides/[PRESENTATION_NAME].md`, and will be created as a **draft** (Won't be published).  
+_Note: The `slides` directory is one level back (not in this folder!)_
 
 You can now run `hugo server -DEF` to start a preview server.  
 _Note: The `-DEF` flags allows draft presentations to be visible, otherwise they won't appear._
@@ -37,12 +38,12 @@ _For relative files you need to prepare your presentation's file directory struc
 
 ## Separate Directories
 
-To include graphics, create a folder inside the `content/` directory that matches the filename of your presentation.
+To include graphics, create a folder inside the `../slides/` directory that matches the filename of your presentation.
 
-For example, if your presentation file was called `presentationABC.md`, create a folder called `presentationABC` such that `content/presentationABC` exists.  
+For example, if your presentation file was called `presentationABC.md`, create a folder called `presentationABC` such that `../slides/presentationABC` exists.  
 
 ```
-content
+slides
 +--presentationABC
 |  \--image.png
 \--presentationABC.md
@@ -50,11 +51,11 @@ content
 
 ## Bundled
 
-Create a folder inside the `content/` directory that matches the filename of your presentation.  
+Create a folder inside the `../slides/` directory that matches the filename of your presentation.  
 Then move your presentation file into that new directory, and _rename the presentation file to `index.md`_.  
 
 ```
-content
+slides
 +--presentationABC
    +--index.md
    \--image.png
