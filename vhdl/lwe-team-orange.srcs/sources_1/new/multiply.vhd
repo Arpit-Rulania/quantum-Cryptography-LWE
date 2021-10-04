@@ -30,8 +30,7 @@ begin
                 sum <= (others => '0');
                 isReady <= '0';
 
-                -- Only exists in VHDL-2008
-                -- adder <= unsigned(in2) when unsigned(in1) < unsigned(in2) else unsigned(in1);
+                -- Checking for the larger of the addends isn't too important because the bit shifting will limit the cycles to 8
                 if unsigned(in1) < unsigned(in2) then
                     adder <= unsigned(in2);
                     counter <= unsigned(in1);
@@ -40,9 +39,12 @@ begin
                     counter <= unsigned(in2);
                 end if;
             elsif isReady = '0' then
-                sum <= sum + adder;
-                counter <= counter - 1;
-                
+                if counter(0) = '1' then
+                    sum <= sum + adder;
+                end if;
+
+                adder <= adder(6 downto 0) & '0';     -- adder << 1                
+                counter <= '0' & counter(7 downto 1); -- counter >> 1
                 -- counter - 1 doesn't take effect until the end of the process
                 if counter <= 1 then
                     isReady <= '1';

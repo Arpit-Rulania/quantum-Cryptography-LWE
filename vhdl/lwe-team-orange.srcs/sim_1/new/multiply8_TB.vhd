@@ -41,13 +41,66 @@ begin
     
     
     process begin
-        -- Output should be 1
+        -- Output should be 20
         wait for delay;
         in1 <= std_logic_vector(to_unsigned(5, in1'length));
         in2 <= std_logic_vector(to_unsigned(4, in2'length));
         wait for delay;
         rst <= '0';
+        wait until ready = '1';
         
+        -- Output should be 20
+        wait for delay;
+        rst <= '1';
+        in1 <= std_logic_vector(to_unsigned(4, in1'length));
+        in2 <= std_logic_vector(to_unsigned(5, in2'length));
+        wait for delay;
+        rst <= '0';
+        wait until ready = '1';
+
+        -- Output should be 0
+        wait for delay;
+        rst <= '1';
+        in1 <= std_logic_vector(to_unsigned(0, in1'length));
+        in2 <= std_logic_vector(to_unsigned(5, in2'length));
+        wait for delay;
+        rst <= '0';
+        wait until ready = '1';
+        
+        -- Output should be 49
+        wait for delay;
+        rst <= '1';
+        in1 <= std_logic_vector(to_unsigned(7, in1'length));
+        in2 <= std_logic_vector(to_unsigned(7, in2'length));
+        wait for delay;
+        rst <= '0';
+        wait until ready = '1';
+        
+        -- Output should be 0
+        wait for delay;
+        rst <= '1';
+        in1 <= std_logic_vector(to_unsigned(16, in1'length));
+        in2 <= std_logic_vector(to_unsigned(16, in2'length));
+        wait for delay;
+        rst <= '0';
+        wait until ready = '1';
+        
+        -- Output should be 16
+        wait for delay;
+        rst <= '1';
+        in1 <= std_logic_vector(to_unsigned(17, in1'length));
+        in2 <= std_logic_vector(to_unsigned(16, in2'length));
+        wait for delay;
+        rst <= '0';
+        wait until ready = '1';
+        
+        -- Output should be 246
+        wait for delay;
+        rst <= '1';
+        in1 <= std_logic_vector(to_unsigned(87, in1'length));
+        in2 <= std_logic_vector(to_unsigned(250, in2'length));
+        wait for delay;
+        rst <= '0';
         wait until ready = '1';
         
         wait;
