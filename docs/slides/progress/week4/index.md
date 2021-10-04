@@ -3,7 +3,6 @@ title: "Progress - Week 4"
 layout: "bundle"
 outputs: ["Reveal"]
 date: 2021-10-03T22:49:43+11:00
-draft: true
 ---
 
 {{< slide class="center" content="blocks.cover" >}}
@@ -107,6 +106,36 @@ Save some cycles!
 ![](modulo/module_subtract_multiples_even_better.jpg)
 
 {{% /section %}}
+
+---
+
+## Multiplier
+
+<div class='side-by-side'>
+
+<part>
+
+> Before
+
+![](./multiplier/multiplier_simple.jpg)
+
+$87 \times 250$ in $87$ cycles
+
+</part>
+
+<part>
+
+> After
+
+![](./multiplier/multiplier_bitwise.jpg)
+
+$87 \times 250$ in $7$ cycles
+
+</part>
+
+</div>
+
+🟧 TODO: Approximate Multipliers
 
 ---
 
