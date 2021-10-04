@@ -39,23 +39,64 @@ entity variableMod8 is
 end variableMod8;
 
 architecture Behavioral of variableMod8 is
-    signal q_int : std_logic_vector(7 downto 0) := input;
+    signal intermediate : unsigned(7 downto 0);
     signal q_out : std_logic_vector(7 downto 0) := (others => '0');
+    signal isReady : std_logic := '0';
+    
+    signal scaled_q : unsigned(7 downto 0);
+    signal hasScaled : boolean;
 begin
-
+    output <= q_out;
+    ready <= isReady;
+    
     process(clk)
     begin
+    
         if rising_edge(clk) then
             if rst = '1' then
-                q_int <= (others => '0');
+                scaled_q <= unsigned(inQ);
+                intermediate <= unsigned(input);
                 q_out <= (others => '0');
-            else
-                if unsigned(q_int) > unsigned(inQ) then
-                    q_int <= std_logic_vector(unsigned(q_int) - unsigned(inQ));
-                    ready <= '0';
+                isReady <= '0';
+                hasScaled <= false;
+            elsif isReady = '0' then
+             
+                -- OPTIMISATION - https://math.stackexchange.com/questions/3559467/how-is-calculating-the-modulus-using-this-formula-faster
+                
+                -- if mod 0
+                ---- unfortunate.
+                
+                -- Unlikely that we'll get these
+                if unsigned(inQ) = 1 then
+                    -- X mod 1 = 0
+                    q_out <= (others => '0');
+                    isReady <= '1';
+                elsif unsigned(inQ) = 2 then
+                    -- X mod 2 = LSB
+                    q_out <= "0000000" & input(0);
+                    isReady <= '1';
                 else
-                    q_out <= q_int;
-                    ready <= '1';
+                if hasScaled = false and scaled_q < intermediate then
+                        -- Left shift, multiply by two, arrange the bits
+                        -- idk
+                        scaled_q <= scaled_q(6 downto 0) & '0';
+                    else 
+                        hasScaled <= true;
+    
+                        if intermediate < unsigned(inQ) then
+                            q_out <= std_logic_vector(intermediate);
+                            isReady <= '1';
+                        else
+                            -- Subtract multiples of Q
+                            if scaled_q <= intermediate then
+                                -- The exit condition for hasScaled causes scaled_q >= intermediate
+                                -- Ensure we only subtract if scaled_q intermediate
+                                intermediate <= intermediate - scaled_q;
+                            end if;
+                            
+                            scaled_q <= '0' & scaled_q(7 downto 1);                        
+                        end if;
+                    end if;
                 end if;
             end if;
         end if;
