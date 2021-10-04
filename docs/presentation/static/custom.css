@@ -25,10 +25,16 @@ li::marker, .reveal .progress, .reveal .controls .controls-arrow {
   color: var(--styleColour);
 }
 
-.hasCircuitMask {
+.circuitMask {
   mask-image: url(./customisations/circuitMask.svg);
   mask-repeat: no-repeat;
   mask-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -100;
 }
 
 /* Splitify */
