@@ -40,12 +40,13 @@ begin
                     counter <= unsigned(in2);
                 end if;
             elsif isReady = '0' then
-                if counter > 0 then
-                    sum <= sum + adder;
-                    counter <= counter - 1;
-                else 
+                sum <= sum + adder;
+                counter <= counter - 1;
+                
+                -- counter - 1 doesn't take effect until the end of the process
+                if counter = 1 then
                     isReady <= '1';
-                end if; 
+                end if;
             end if;
         end if;
     end process;
