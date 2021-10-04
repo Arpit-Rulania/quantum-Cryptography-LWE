@@ -32,7 +32,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity multiply8 is
-    Port ( in1 : in STD_LOGIC_VECTOR (7 downto 0);
+    Port ( 
+           clk : in STD_LOGIC; 
+           rst : in STD_LOGIC;
+           in1 : in STD_LOGIC_VECTOR (7 downto 0);
            in2 : in STD_LOGIC_VECTOR (7 downto 0);
            output : out STD_LOGIC_VECTOR (7 downto 0);
            ready : out STD_LOGIC);
@@ -46,6 +49,8 @@ begin
               i => 8
             )
             PORT MAP (
+              clk => clk,
+              rst => rst,
               in1 => in1,
               in2 => in2,
               output => output,

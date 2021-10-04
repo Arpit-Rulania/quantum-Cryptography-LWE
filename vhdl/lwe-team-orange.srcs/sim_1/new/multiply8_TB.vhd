@@ -20,6 +20,8 @@ begin
     c: entity work.ClockProvider PORT MAP ( clk => clk );
     m: entity work.multiply8 
          PORT MAP (
+            clk => clk,
+            rst => rst,
             in1 => in1,
             in2 => in2,
             ready => ready,

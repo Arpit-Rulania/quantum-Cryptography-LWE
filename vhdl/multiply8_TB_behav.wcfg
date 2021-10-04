@@ -10,9 +10,9 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="13416fs"></ZoomStartTime>
-      <ZoomEndTime time="85417fs"></ZoomEndTime>
-      <Cursor1Time time="34066fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="2589286fs"></ZoomEndTime>
+      <Cursor1Time time="2000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="100"></NameColumnWidth>
@@ -36,19 +36,21 @@
       <obj_property name="ObjectShortName">output[7:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject type="divider" fp_name="divider61">
+   <wvobject type="divider" fp_name="divider19">
       <obj_property name="label">CALC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject fp_name="/multiply8_TB/in1" type="array">
       <obj_property name="ElementShortName">in1[7:0]</obj_property>
       <obj_property name="ObjectShortName">in1[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/multiply8_TB/in2" type="array">
       <obj_property name="ElementShortName">in2[7:0]</obj_property>
       <obj_property name="ObjectShortName">in2[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject type="divider" fp_name="divider35">
+   <wvobject type="divider" fp_name="divider18">
       <obj_property name="label">STATS</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
