@@ -25,6 +25,14 @@ li::marker, .reveal .progress, .reveal .controls .controls-arrow {
   color: var(--styleColour);
 }
 
+.reveal .slides .side-by-side {
+  display: flex !important;
+  flex-direction: row;
+}
+.reveal .slides .side-by-side > part {
+  flex: 1;
+}
+
 .circuitMask {
   mask-image: url(./customisations/circuitMask.svg);
   mask-repeat: no-repeat;

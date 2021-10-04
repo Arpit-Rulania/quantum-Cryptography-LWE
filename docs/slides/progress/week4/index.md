@@ -110,5 +110,35 @@ Save some cycles!
 
 ---
 
+## Multiplier
+
+<div class='side-by-side'>
+
+<part>
+
+> Before
+
+![](./multiplier/multiplier_simple.jpg)
+
+$87 \times 250$ in $87$ cycles
+
+</part>
+
+<part>
+
+> After
+
+![](./multiplier/multiplier_bitwise.jpg)
+
+$87 \times 250$ in $7$ cycles
+
+</part>
+
+</div>
+
+🟧 TODO: Approximate Multipliers
+
+---
+
 {{< slide content="blocks.cover" >}}
 {{< slide content="blocks.end" >}}
