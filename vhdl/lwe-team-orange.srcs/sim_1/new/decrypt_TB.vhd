@@ -19,7 +19,7 @@ architecture Behavioral of decrypt_TB is
     
     
     signal inU : arr := (8,4,0,8);
-    signal inV : integer := 22;
+--    signal inV : unsigned := 
     
     signal inS: arr := (4,7,5,5);
      
@@ -30,11 +30,11 @@ begin
             clk => clk,
             rst => rst,
             sizeM => to_unsigned(4, 8),
-            inQ => std_logic_vector(to_unsigned(25, 8)(7 downto 2)), -- Divide by 4 aka bitshift right 2 
-            inS =>  inS,
+            inQ => std_logic_vector(to_unsigned(23, 8)), 
+            inS => inS,
             
             inU => inU,
-            inV => inV,
+            inV => to_unsigned(22, 8),
             outM => output,
             ready => ready );
 
@@ -49,7 +49,6 @@ begin
     end process;
     
     process begin
-        -- Output should be 20
         wait for delay;
         
         rst <= '1';
