@@ -12,11 +12,11 @@ entity decrypt is
            rst : in STD_LOGIC;
            sizeM : in unsigned(7 downto 0); -- 15
     
-           inQ : in STD_LOGIC_VECTOR (5 downto 0);
+           inQ : in STD_LOGIC_VECTOR (7 downto 0);
            inS : in arr;
            
            inU : in arr;
-           inV : in integer;
+           inV : in unsigned(7 downto 0);
            
            outM : out STD_LOGIC;
            ready : out STD_LOGIC
@@ -32,11 +32,18 @@ architecture Behavioural of decrypt is
     signal mult_in1: std_logic_vector(7 downto 0);
     signal mult_in2: std_logic_vector(7 downto 0);
     signal mult_ready: std_logic;
-    signal mult_rst: std_logic; ------------------------------- OR with the system rst?
+    signal mult_rst: std_logic;
     signal mult_output: std_logic_vector(7 downto 0);
+    signal mult_rst_signal: std_logic; -- Assigned 
+    
+    signal mod_ready : std_logic;
+    signal mod_output : std_logic_vector(7 downto 0);
+    signal mod_rst: std_logic;
+
+    signal mod_rst_signal: std_logic; -- Assigned     
     
     signal sum: unsigned(7 downto 0);
-    signal mult_rst_signal: std_logic; -- Assigned 
+
     signal count_M : integer := 0;
     signal isWaitingForMultiplier: boolean := false;
     signal isMultiplierPrimed: boolean := false;
@@ -46,8 +53,9 @@ architecture Behavioural of decrypt is
 begin
     outM <= output;
     ready <= isReady;
-    upperBoundQ <= unsigned("11" & not(inQ)) + 1 ;-- +  (0 => '1', others => '0');
+    upperBoundQ <= unsigned("11" & not(inQ(7 downto 2))) + 1;
     mult_rst_signal <= rst or mult_rst;
+    mod_rst_signal <= rst or mod_rst;
     
     theSingleMultiplierOhMyGoodnessAreWeDoingAPipeLine: entity work.multiply8
         PORT MAP (
@@ -58,6 +66,17 @@ begin
             ready => mult_ready,
             output => mult_output
          );
+         
+    thankGoodnessWeOnlyNeedOneModuloComponent: entity work.variableMod8
+        PORT MAP (
+            clk => clk,
+            rst => mod_rst_signal,
+            inQ => inQ,
+            input => std_logic_vector(sum),
+            output => mod_output,
+            ready => mod_ready
+        );         
+
     process(clk)
     begin
     
@@ -74,6 +93,7 @@ begin
                 sum <= (others => '0');
                 count_M <= 0;
                 mult_rst <= '1';
+                mod_rst <= '1';
                 isWaitingForMultiplier <= false;
                 State <= MULTIPLY;
             elsif isReady = '0' then
@@ -89,7 +109,8 @@ begin
                             
                             -- if mult_ready = '0' then stall and wait for completion
                         elsif sizeM = count_M then
-                            isReady <= '1';
+                            State <= SUBTRACT;
+                            
                         elsif isMultiplierPrimed then
                             isMultiplierPrimed <= false;
                             mult_rst <= '0';
@@ -101,8 +122,20 @@ begin
                         end if;
                     when SUBTRACT =>
                     
+                        -- Save a cycle by always computing this subtraction, and doing it out of the process?
+                        sum <= inV - sum;
+                        State <= MODULO;
+                        
                     when MODULO =>
-                    
+                        mod_rst <= '0';
+                        if mod_ready = '1' then
+                            if mod_output < "00" & inQ(7 downto 2) or mod_output > std_logic_vector(upperBoundQ) then
+                               output <= '0';
+                            else
+                               output <= '1';         
+                            end if;
+                            isReady <= '1';
+                        end if;                        
                 end case;        
             end if;
         end if;
