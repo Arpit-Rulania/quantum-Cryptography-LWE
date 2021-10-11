@@ -60,6 +60,16 @@ begin
         rst <= '0';
         wait until ready = '1';
         
+        -- Output should be 6
+        -- No need to mod
+        wait for delay;
+        rst <= '1';
+        inQ <= std_logic_vector(to_unsigned(20, inQ'length));
+        input <= std_logic_vector(to_unsigned(6, input'length));
+        wait for delay;
+        rst <= '0';
+        wait until ready = '1';
+        
         -- Output should be 0
         wait for delay;
         rst <= '1';
