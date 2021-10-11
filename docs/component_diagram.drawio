@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2021-10-03T13:50:02.368Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/15.3.8 Chrome/91.0.4472.164 Electron/13.5.0 Safari/537.36" etag="5Cz7WgFT_xNQEtJqaCSd" compressed="false" version="15.3.8" type="device">
+<mxfile host="Electron" modified="2021-10-11T12:14:03.760Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/15.3.8 Chrome/91.0.4472.164 Electron/13.5.0 Safari/537.36" etag="rlUoSz7KTc-EKpBdkWKf" compressed="false" version="15.3.8" type="device">
   <diagram id="Qa77dYHcRy5dU1d4dy6T" name="Page-1">
-    <mxGraphModel dx="333" dy="950" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="582" dy="1662" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -136,11 +136,11 @@
         <mxCell id="HXlSVpTfHzc4MRkyUJ3o-27" value="&lt;span style=&quot;color: rgb(240 , 240 , 240)&quot;&gt;inU (8,&lt;/span&gt;&lt;span style=&quot;color: rgb(255 , 204 , 153) ; text-align: left&quot;&gt;8&lt;/span&gt;&lt;span style=&quot;color: rgb(240 , 240 , 240)&quot;&gt;)&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontColor=#FFFFFF;" parent="1" vertex="1">
           <mxGeometry x="165" y="273.5" width="56" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="HXlSVpTfHzc4MRkyUJ3o-28" value="inQ (6)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+        <mxCell id="HXlSVpTfHzc4MRkyUJ3o-28" value="inQ (8)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="164.5" y="224.5" width="47" height="18" as="geometry" />
         </mxCell>
-        <mxCell id="HXlSVpTfHzc4MRkyUJ3o-29" value="&lt;font color=&quot;#b3b3b3&quot;&gt;q/4&lt;/font&gt; is just &lt;font color=&quot;#b3b3b3&quot;&gt;q &amp;gt;&amp;gt; 2&lt;/font&gt;&lt;br&gt;(Pass the first n-2 lanes)" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;rounded=1;shadow=0;glass=0;sketch=0;fontColor=#FFFFFF;align=left;position2=1;spacing=6;" parent="1" vertex="1">
-          <mxGeometry x="6" y="155.5" width="145" height="82" as="geometry" />
+        <mxCell id="HXlSVpTfHzc4MRkyUJ3o-29" value="&lt;strike&gt;&lt;font color=&quot;#b3b3b3&quot;&gt;q/4&lt;/font&gt; is just &lt;font color=&quot;#b3b3b3&quot;&gt;q &amp;gt;&amp;gt; 2&lt;/font&gt;&lt;br&gt;(Pass the first n-2 lanes)&lt;/strike&gt;&lt;br&gt;&lt;br&gt;But, we need to perform mod q" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;rounded=1;shadow=0;glass=0;sketch=0;fontColor=#FFFFFF;align=left;position2=1;spacing=6;" parent="1" vertex="1">
+          <mxGeometry x="6" y="155.5" width="145" height="150.5" as="geometry" />
         </mxCell>
         <mxCell id="HXlSVpTfHzc4MRkyUJ3o-30" value="&lt;font color=&quot;#b3b3b3&quot;&gt;q/2&lt;/font&gt;&amp;nbsp;is just &lt;font color=&quot;#b3b3b3&quot;&gt;q &amp;gt;&amp;gt; 1&lt;/font&gt;&lt;br&gt;(Pass the first n-1 lanes)" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;rounded=1;shadow=0;glass=0;sketch=0;fontColor=#FFFFFF;align=left;position2=1;spacing=6;" parent="1" vertex="1">
           <mxGeometry x="6" y="27" width="145" height="78" as="geometry" />
@@ -184,7 +184,7 @@
         <mxCell id="HXlSVpTfHzc4MRkyUJ3o-44" value="&lt;span style=&quot;color: rgb(240 , 240 , 240)&quot;&gt;outA (8*&lt;/span&gt;&lt;span style=&quot;color: rgb(255 , 204 , 153) ; text-align: left&quot;&gt;8&lt;/span&gt;&lt;span style=&quot;color: rgb(240 , 240 , 240)&quot;&gt;*&lt;/span&gt;&lt;span style=&quot;color: rgb(255 , 204 , 153) ; text-align: left&quot;&gt;8&lt;/span&gt;&lt;span style=&quot;color: rgb(240 , 240 , 240)&quot;&gt;)&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontColor=#FFE6CC;" parent="1" vertex="1">
           <mxGeometry x="584" y="170" width="72" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="-EpJpmkHCdFSuozQQgCk-1" value="ready" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="-EpJpmkHCdFSuozQQgCk-1" value="ready" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="621" y="309.5" width="40" height="20" as="geometry" />
         </mxCell>
       </root>
