@@ -23,7 +23,6 @@ END decrypt;
 ARCHITECTURE Behavioural OF decrypt IS
     SIGNAL output : STD_LOGIC;
     SIGNAL isReady : STD_LOGIC := '0';
-    SIGNAL upperBoundQ : unsigned(7 DOWNTO 0);
 
     SIGNAL mult_in1 : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL mult_in2 : STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -50,7 +49,6 @@ ARCHITECTURE Behavioural OF decrypt IS
 BEGIN
     outM <= output;
     ready <= isReady;
-    upperBoundQ <= "00100010";-- unsigned("11" & not(inQ(7 downto 2))) + 1;
     mult_rst_signal <= rst OR mult_rst;
     mod_rst_signal <= rst OR mod_rst;
     theSingleMultiplierOhMyGoodnessAreWeDoingAPipeLine : ENTITY work.multiply8
@@ -133,17 +131,17 @@ BEGIN
                         mod_rst <= '0';
                         IF mod_ready = '1' THEN
                             IF isModuloFlipped THEN
-                                output_intermediate <= std_logic_vector(unsigned(inQ) - unsigned(mod_output));
+                                output_intermediate <= std_logic_vector(unsigned('0' & inQ(7 downto 1)) - unsigned(mod_output));
                             ELSE
-                                output_intermediate <= mod_output;
+                                output_intermediate <= std_logic_vector(unsigned(mod_output) - unsigned('0' & inQ(7 downto 1)));
                             END IF;
                             Stage <= FINAL;
                         END IF;
                     WHEN FINAL => 
-                        IF output_intermediate < "00" & inQ(7 DOWNTO 2) OR output_intermediate > STD_LOGIC_VECTOR(upperBoundQ) THEN
-                            output <= '0';
-                        ELSE
+                        IF output_intermediate < '0' & inQ(7 downto 1) THEN
                             output <= '1';
+                        ELSE
+                            output <= '0';
                         END IF;
                         isReady <= '1';                        
                 END CASE;
