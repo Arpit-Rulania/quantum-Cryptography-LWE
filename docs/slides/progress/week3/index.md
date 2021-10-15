@@ -2,90 +2,140 @@
 title: "Progress - Week 3"
 layout: "bundle"
 outputs: ["Reveal"]
-date: 2021-10-03T19:13:50+11:00
+date: 2021-10-03T22:49:43+11:00
 ---
 
 {{< slide class="center" content="blocks.cover" >}}
 
-> Week 2 Progress Update
+> Week 4 Progress Update 
 
 ---
+
+## Schedule
+
+![](gantt/gantt_change.gif)
+
+Didn't get up to testing the RNG and Multiplier units.  
+Testing extended to Week 4
+
+---
+
+## VHDL Components
+
+{{% section %}}
+> BEFORE
+
+<img src="Snipaste_2021-10-03_18-36-27.jpg" width="70%" >
+
+{{% note %}} Fleshed out the specifications for the components {{% /note %}}
+
+---
+
+> AFTER
+
+![](Snipaste_2021-10-03_18-29-05.jpg)
+
+{{% note %}} In that process, we also identified a few possible issues and overheads that would make the logic area large {{% /note %}}
+
+{{% /section %}}
+
+---
+
+## Connection Diagram
+
+<img src="connection_diagram.drawio.png" width="70%" />
+
+---
+
+## How Big?
+
+{{% section %}} 
+
+As per the project spec, the design needs to validate the provided configurations.
+
+![](required_configurations.png)
+
+> Does the design stay the same for all three configurations?
+
+---
+
+Our current design only supports up to 8-bit values.  
+
+> We need to support $q = 65535$  
+which is a 16-bit value.
+
+🟧 TODO
+
+---
+
+![](required_configurations-bigA.png)
+
+Public key A gets quite big...
+
+We probably don't want to transmit $32768 \times 16 \times 16 \times 16$ bits at once...  
+
+Instead, transmit $16 \times 16 \times 16$ bits $32768$ times?
+
+{{% /section %}}
+
+---
+
+## Modulo
 
 {{% section %}}
 
-## Progress This Week
+It works... but it's kinda slow...
 
-![](image1.png)
+![](modulo/modulo_simple.jpg)
+
+> 128 % 2 takes 65 cycles  
 
 ---
 
-## Changes to the Gantt Chart
+Save some cycles!
 
-* RNG implementation has been extended into week 3
-* Multiplication pushed back as implementation was discussed in Thursday lecture
-* Need for a modulo function
-* Need to generate prime numbers
-* More research needed to be conducted in week 2 than anticipated
+![](modulo/module_subtract_multiples.jpg)
 
-<div style="display: flex; flex-direction: row">
-<img src="ganttBefore.png" width="50%" /><img src="ganttAfter.png" width="50%"/>
+> 128 % 2 now takes 15 cycles
+
+---
+![](modulo/module_subtract_multiples_better.jpg)
+
+9 cycles? How about 8!
+
+![](modulo/module_subtract_multiples_even_better.jpg)
+
+{{% /section %}}
+
+---
+
+## Multiplier
+
+<div class='side-by-side'>
+
+<part>
+
+> Before
+
+![](./multiplier/multiplier_simple.jpg)
+
+$87 \times 250$ in $87$ cycles
+
+</part>
+
+<part>
+
+> After
+
+![](./multiplier/multiplier_bitwise.jpg)
+
+$87 \times 250$ in $7$ cycles
+
+</part>
+
 </div>
 
-{{% /section %}}
-
-
----
-
-## Random Number Generator
-
-{{% section %}}
-
-> Current Implementation
-
-Linear Feedback Shift Register
-
-* Pseudo-random
-* Uses a chain of D-Type flip-flops
-* Output is XOR'd and used as input feedback
-
-<img src="image3.png" width="50%" />
-
----
-
-> Implementation Result
-
-![](./image4.jpeg)
-
----
-
-> Alternative (P)RNG Methods
-
-TRNG from Ring Oscillator and PRNG 
-
-<img src="image5.png" width="60%" />
-
-{{% /section %}}
-
----
-
-## Current Research
-
-* Synthesisable modulo operation
-* Mersenne Primes
-  * Required for generation of A matrix
-  * 2<sup>N</sup>-1 not valid for all N
-    * Still requires a check if prime
-* Sampling and errors
-
----
-
-## Lessons Learned
-
-> Learning Vivado
-
-![](./image6.png)
-
-> Learning VHDL
+🟧 TODO: Approximate Multipliers
 
 ---
 

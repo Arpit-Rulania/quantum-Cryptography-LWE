@@ -2,7 +2,7 @@
 title: "Progress - Week 5"
 layout: "bundle"
 outputs: ["Reveal"]
-date: 2021-10-03T22:49:43+11:00
+date: 2021-10-10T22:49:43+11:00
 ---
 
 {{< slide class="center" content="blocks.cover" >}}
@@ -13,24 +13,21 @@ date: 2021-10-03T22:49:43+11:00
 
 ## Schedule
 
-![](gantt.png)
-
-Encryption not yet completed... but decryption works!
+<!-- TODO: SHOW GANTT -->
 
 ---
 
-## Decryption Module
+{{< slide class="center" >}} 
 
-{{% section %}}
+> [[MATLAB]](https://featherbear.cc/unsw-comp3601-project/matlab-model/#/1)
 
-![](./decryption_module_WF.jpg)
-
-Current bottleneck is the multiplication.  
-Perhaps pipeline the multiplication?
+{{% note %}} PSA: MATLAB isn't a coding language - Andrew Wong {{% /note %}}
 
 ---
 
-![](./decryption_module_WF.gif)
+Report blah
+
+---
 
 {{% /section %}}
 
