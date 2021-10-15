@@ -25,6 +25,11 @@ date: 2021-10-10T22:49:43+11:00
 
 ---
 
+![](./component_diagram/OLD-Snipaste_2021-10-03_18-29-05.jpg)
+
+![](./component_diagram/component_diagram.drawio_light.png)
+![](./component_diagram/component_diagram.drawio_dark.png)
+
 Report blah
 
 ---
