@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2021-10-15T10:12:29.235Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/15.3.8 Chrome/91.0.4472.164 Electron/13.5.0 Safari/537.36" etag="KeuqKwm-9hSGFeQT6cag" compressed="false" version="15.3.8" type="device">
+<mxfile host="Electron" modified="2021-10-15T10:38:39.432Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/15.3.8 Chrome/91.0.4472.164 Electron/13.5.0 Safari/537.36" etag="K4uaw3Sox-us9IBxM8qI" compressed="false" version="15.3.8" type="device">
   <diagram id="Qa77dYHcRy5dU1d4dy6T" name="Page-1">
-    <mxGraphModel dx="813" dy="493" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1278" dy="995" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,8 +10,8 @@
         <mxCell id="z-ZfQAUh8bczPbL0wc4s-19" value="&lt;div&gt;&lt;span&gt;inPriv (&lt;/span&gt;&lt;span style=&quot;color: rgb(185 , 224 , 165) ; text-align: right&quot;&gt;b&lt;/span&gt;&lt;span&gt;*63&lt;/span&gt;&lt;span&gt;)&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="510" y="167" width="75" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="z-ZfQAUh8bczPbL0wc4s-27" value="outB (8*&lt;span style=&quot;color: rgb(255 , 204 , 153) ; text-align: left&quot;&gt;8&lt;/span&gt;)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="608" y="207" width="61" height="20" as="geometry" />
+        <mxCell id="z-ZfQAUh8bczPbL0wc4s-27" value="&lt;div style=&quot;text-align: left&quot;&gt;&lt;span&gt;outB (&lt;/span&gt;&lt;span style=&quot;color: rgb(185 , 224 , 165) ; text-align: right&quot;&gt;b&lt;/span&gt;&lt;span&gt;*63)&lt;/span&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="603" y="207" width="66" height="20" as="geometry" />
         </mxCell>
         <mxCell id="z-ZfQAUh8bczPbL0wc4s-21" value="fixedMod(q)" style="rounded=0;whiteSpace=wrap;html=1;fontColor=#A6A6A6;" parent="1" vertex="1">
           <mxGeometry x="679" y="880.5" width="128" height="64" as="geometry" />
@@ -166,10 +166,10 @@
         <mxCell id="-EpJpmkHCdFSuozQQgCk-1" value="ready" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="629" y="309.5" width="40" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="cVl16DiJu5NXCzb-iIRU-3" value="&lt;span&gt;░&lt;/span&gt;&lt;font&gt;░ Generic bus width&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;dashed=1;sketch=0;fontColor=#B9E0A5;" vertex="1" parent="1">
+        <mxCell id="cVl16DiJu5NXCzb-iIRU-3" value="&lt;span&gt;░&lt;/span&gt;&lt;font&gt;░ Generic bus width&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;dashed=1;sketch=0;fontColor=#B9E0A5;" parent="1" vertex="1">
           <mxGeometry x="716" y="225" width="195" height="39.5" as="geometry" />
         </mxCell>
-        <mxCell id="cVl16DiJu5NXCzb-iIRU-4" value="&lt;span style=&quot;color: rgb(255 , 204 , 153)&quot;&gt;outA (&lt;/span&gt;&lt;span style=&quot;color: rgb(185 , 224 , 165)&quot;&gt;b&lt;/span&gt;&lt;span style=&quot;color: rgb(255 , 204 , 153)&quot;&gt;*63)&lt;/span&gt;&lt;span style=&quot;color: rgb(255 , 204 , 153)&quot;&gt;&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontColor=#FFFFFF;" vertex="1" parent="1">
+        <mxCell id="cVl16DiJu5NXCzb-iIRU-4" value="&lt;span style=&quot;color: rgb(255 , 204 , 153)&quot;&gt;outA (&lt;/span&gt;&lt;span style=&quot;color: rgb(185 , 224 , 165)&quot;&gt;b&lt;/span&gt;&lt;span style=&quot;color: rgb(255 , 204 , 153)&quot;&gt;*63)&lt;/span&gt;&lt;span style=&quot;color: rgb(255 , 204 , 153)&quot;&gt;&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=0;glass=0;sketch=0;fontColor=#FFFFFF;" parent="1" vertex="1">
           <mxGeometry x="597" y="167" width="71" height="20" as="geometry" />
         </mxCell>
       </root>
