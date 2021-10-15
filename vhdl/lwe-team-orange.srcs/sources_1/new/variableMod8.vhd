@@ -51,7 +51,7 @@ BEGIN
                     q_out <= (0 => input(0), OTHERS => '0');
                     isReady <= '1';
                 ELSE
-                    IF hasScaled = false AND scaled_q < intermediate THEN
+                    IF hasScaled = false AND scaled_q < intermediate AND scaled_q(6 DOWNTO 0) /= "0000000" THEN
                         -- Left shift, multiply by two, arrange the bits
                         -- idk
                         scaled_q <= scaled_q(6 DOWNTO 0) & '0';
