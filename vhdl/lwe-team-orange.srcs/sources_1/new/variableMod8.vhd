@@ -66,6 +66,8 @@ begin
                 -- if mod 0
                 ---- unfortunate.
                 
+                
+                -- TODO: SHOULD THESE GO INTO THE RESET LOOP?
                 -- Unlikely that we'll get these
                 if unsigned(inQ) = 1 then
                     -- X mod 1 = 0
@@ -73,9 +75,11 @@ begin
                     isReady <= '1';
                 elsif unsigned(inQ) = 2 then
                     -- X mod 2 = LSB
-                    q_out <= "0000000" & input(0);
+                    q_out <= (0 => input(0), others => '0');
                     isReady <= '1';
                 else
+                
+                
                 if hasScaled = false and scaled_q < intermediate then
                         -- Left shift, multiply by two, arrange the bits
                         -- idk
