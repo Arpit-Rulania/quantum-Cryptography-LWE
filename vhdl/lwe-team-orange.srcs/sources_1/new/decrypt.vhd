@@ -133,7 +133,7 @@ BEGIN
                             IF isModuloFlipped THEN
                                 output_intermediate <= std_logic_vector(unsigned('0' & inQ(7 downto 1)) - unsigned(mod_output));
                             ELSE
-                                output_intermediate <= std_logic_vector(unsigned(mod_output) - unsigned('0' & inQ(7 downto 1)));
+                                output_intermediate <= std_logic_vector(unsigned(mod_output) - unsigned("00" & inQ(7 downto 2)));
                             END IF;
                             Stage <= FINAL;
                         END IF;
