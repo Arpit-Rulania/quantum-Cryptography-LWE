@@ -22,6 +22,18 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+package pkg is
+  type t_array is array (natural range <>) of std_logic_vector(15 downto 0);
+end package;
+
+package body pkg is
+end package body;
+
+library ieee;
+use ieee.std_logic_1164.all;
+library work;
+use work.pkg.all;
+
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -34,8 +46,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- i = number of columns in A matrix
 entity secretKey is
   Generic ( i : integer );
+  -- type t_vector is array (0 to i-1) of std_logic_vector (15 downto 0);
   PORT (Clk, Rst: IN std_logic;
-    secret: OUT array (0 to i-1) of std_logic_vector (15 downto 0);
+    secret: OUT t_array (0 to i-1);
     ready: OUT std_logic);
 end secretKey;
 
@@ -59,7 +72,7 @@ begin
       secret(k) <= a;
       k <= k + 1;
     elsif k = i then
-      isReady <= 1;
+      isReady <= '1';
     end if;
   end process getRand;
 
