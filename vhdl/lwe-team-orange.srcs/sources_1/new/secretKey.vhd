@@ -45,8 +45,7 @@ use work.pkg.all;
 
 -- i = number of columns in A matrix
 entity secretKey is
-  Generic ( i : integer );
-  -- type t_vector is array (0 to i-1) of std_logic_vector (15 downto 0);
+  Generic ( i : integer:=16);
   PORT (Clk, Rst: IN std_logic;
     secret: OUT t_array (0 to i-1);
     ready: OUT std_logic);
@@ -56,24 +55,30 @@ architecture Behavioral of secretKey is
   component rngnum is
     PORT (Clk, Rst: IN std_logic;
       output: OUT std_logic_vector (15 DOWNTO 0));
+      --readyOUT: OUT std_logic);
   end component;  
   
   SIGNAL a: std_logic_vector (15 DOWNTO 0);
   SIGNAL k: integer:= 0;
   SIGNAL isReady: std_logic:= '0';
+  --SIGNAL randReady: std_logic;
     
 begin
   
   ready <= isReady;
   Stage0: rngnum PORT MAP (Clk, Rst, a);
-  getRand : process(a, k)
+  getRand : process(a, k, Clk)
   begin
+    -- On falling edge of Clk signal take value from RNG
     if k < i then
-      secret(k) <= a;
-      k <= k + 1;
-    elsif k = i then
-      isReady <= '1';
+        if falling_edge(Clk) then
+            secret(k) <= a;
+            k <= k + 1;
+        end if;
+    else
+        isReady <= '1';
     end if;
+    
   end process getRand;
 
 end Behavioral;
