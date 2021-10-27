@@ -42,9 +42,19 @@ begin
     end process;
     
     process begin
-    
+            -- Output should be 2
+        wait for delay;
+          rst <= '1';
+        inQ <= std_logic_vector(to_unsigned(3, inQ'length));
+        input <= std_logic_vector(to_unsigned(254, input'length));
+        wait for delay;
+        rst <= '0';
+        wait until ready = '1';
+        
+        
         -- Output should be 1
         wait for delay;
+          rst <= '1';
         inQ <= std_logic_vector(to_unsigned(2, inQ'length));
         input <= std_logic_vector(to_unsigned(5, input'length));
         wait for delay;
