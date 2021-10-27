@@ -1,5 +1,5 @@
 ---
-title: "Progress - Week 5"
+title: "Progress - Weeks 5 & 6"
 layout: "bundle"
 outputs: ["Reveal"]
 date: 2021-10-10T22:49:43+11:00
@@ -7,7 +7,7 @@ date: 2021-10-10T22:49:43+11:00
 
 {{< slide class="center" content="blocks.cover" >}}
 
-> Week 5 Progress Update
+> Week 5 & 6 Progress Update
 
 ---
 
