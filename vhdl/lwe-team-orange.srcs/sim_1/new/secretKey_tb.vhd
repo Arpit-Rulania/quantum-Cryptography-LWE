@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 10/05/2021 01:15:54 PM
+-- Create Date: 11/02/2021 12:36:39 AM
 -- Design Name: 
--- Module Name: rngnum_tb - Behavioral
+-- Module Name: seck_tb - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -17,8 +17,6 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -43,15 +41,10 @@ use work.pkg.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity secretKey_tb is
---  Port ( );
-end secretKey_tb;
+entity seck_tb is
+end seck_tb;
 
-architecture Behavioral of secretKey_tb is
-    COMPONENT rngnum IS
-    PORT (Clk, Rst: IN std_logic;
-          output: OUT std_logic_vector (15 DOWNTO 0));
-    END COMPONENT;
+architecture Behavioral of seck_tb is
     component secretKey is
         Generic ( i : integer );
         PORT (Clk, Rst: IN std_logic;
@@ -65,7 +58,6 @@ architecture Behavioral of secretKey_tb is
     SIGNAL t_ready: std_logic;
     
 begin
-    CompToTest: rngnum PORT MAP (Clk_s, Rst_s, output_s);
     SecretToTest: secretKey 
         Generic MAP (i => 16)
         PORT MAP (Clk_s, Rst_s, s_out, t_ready);
