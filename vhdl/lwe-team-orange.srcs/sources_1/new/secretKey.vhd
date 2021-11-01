@@ -52,31 +52,71 @@ entity secretKey is
 end secretKey;
 
 architecture Behavioral of secretKey is
-  component rngnum is
-    PORT (Clk, Rst: IN std_logic;
-      output: OUT std_logic_vector (15 DOWNTO 0));
-      --readyOUT: OUT std_logic);
-  end component;  
   
-  SIGNAL a: std_logic_vector (15 DOWNTO 0);
+  component xoroshiroRNG is
+    generic (
+        init_seed:  std_logic_vector(31 downto 0):= "11011011001010101011011101101100" );
+    port (
+        clk:        in  std_logic; -- rising edge active.
+        rst:        in  std_logic; -- active high.
+        reseed:     in  std_logic; -- High to request re-seeding.
+        newseed:    in  std_logic_vector(31 downto 0); -- New seed value for reseeding.
+        out_ready:  in  std_logic;
+        out_valid:  out std_logic;
+        out_data:   out std_logic_vector(15 downto 0) );
+    end component; 
+  
+  SIGNAL T: std_logic;
+  SIGNAL a: std_logic_vector (15 DOWNTO 0):= (others=>'0');
   SIGNAL k: integer:= 0;
   SIGNAL isReady: std_logic:= '0';
   --SIGNAL randReady: std_logic;
+  signal rst_rng: std_logic;
+  signal reseed_rng:        std_logic;
+  signal newseed_rng:       std_logic_vector(31 downto 0);
+  signal ready_rng:         std_logic;
+  signal valid_rng:         std_logic;
+  --signal data_rng:          std_logic_vector(15 downto 0);
     
 begin
   
   ready <= isReady;
-  Stage0: rngnum PORT MAP (Clk, Rst, a);
-  getRand : process(a, k, Clk)
+  --Stage0: rngnum PORT MAP (Clk, Rst, a);
+  inst_prng: entity work.xoroshiroRNG
+        generic map (
+            init_seed => "11011011001010101010011101101100" )
+        port map (
+            clk         => Clk,
+            rst         => rst_rng,
+            reseed      => reseed_rng,
+            newseed     => newseed_rng,
+            out_ready   => ready_rng,
+            out_valid   => valid_rng,
+            out_data    => a);
+            
+  getRand : process(a, k, Rst, Clk)
   begin
     -- On falling edge of Clk signal take value from RNG
+    if Rst = '1' then
+        rst_rng       <= '1';
+        reseed_rng    <= '0';
+        newseed_rng   <= (others => '0');
+        ready_rng     <= '0';
+    end if;
+    
+    if Rst = '0' then
+        rst_rng <= '0';
+        ready_rng <= '1';
+    end if;
+    
     if k < i then
-        if falling_edge(Clk) then
+        if falling_edge(Clk) and valid_rng = '1' then
             secret(k) <= a;
             k <= k + 1;
         end if;
     else
         isReady <= '1';
+        ready_rng <= '0';
     end if;
     
   end process getRand;
