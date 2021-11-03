@@ -30,3 +30,10 @@ end package commons;
 --  end;
  
 --end package body example_package;
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+package commonss is
+  type t_array is array (natural range <>) of std_logic_vector(15 downto 0);
+end package commonss;
