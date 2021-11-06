@@ -105,6 +105,9 @@ begin
         rst <= '0';
         
         WAIT UNTIL ready = '1';
+        WAIT FOR 400 NS;
+        
+        rst <= '1';
         WAIT;
     END PROCESS Vector_proc;
 
