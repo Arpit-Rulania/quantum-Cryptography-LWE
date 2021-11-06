@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="xoroshiro_basic_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="xoroshiro_basic_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="32300fs"></ZoomStartTime>
+      <ZoomEndTime time="117501fs"></ZoomEndTime>
+      <Cursor1Time time="40500fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="151"></NameColumnWidth>
+      <ValueColumnWidth column_width="68"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="9" />
+   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/reseed" type="logic">
+      <obj_property name="ElementShortName">reseed</obj_property>
+      <obj_property name="ObjectShortName">reseed</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/s_reseed" type="logic">
+      <obj_property name="ElementShortName">s_reseed</obj_property>
+      <obj_property name="ObjectShortName">s_reseed</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/init_seed" type="array">
+      <obj_property name="ElementShortName">init_seed[31:0]</obj_property>
+      <obj_property name="ObjectShortName">init_seed[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/s_newseed" type="array">
+      <obj_property name="ElementShortName">s_newseed[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_newseed[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/out_ready" type="logic">
+      <obj_property name="ElementShortName">out_ready</obj_property>
+      <obj_property name="ObjectShortName">out_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/out_valid" type="logic">
+      <obj_property name="ElementShortName">out_valid</obj_property>
+      <obj_property name="ObjectShortName">out_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/xoroshiro_basic_tb/s_data" type="array">
+      <obj_property name="ElementShortName">s_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_data[15:0]</obj_property>
+   </wvobject>
+</wave_config>

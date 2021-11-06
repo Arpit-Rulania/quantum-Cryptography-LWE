@@ -32,10 +32,10 @@ use ieee.numeric_std.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity xoroshiro_tb is
-end xoroshiro_tb;
+entity xoroshiro_basic_tb is
+end xoroshiro_basic_tb;
 
-architecture Behavioral of xoroshiro_tb is
+architecture Behavioral of xoroshiro_basic_tb is
     signal clk:             std_logic;
     signal clock_active:    boolean := false;
 
@@ -60,8 +60,7 @@ begin
             out_valid   => s_valid,
             out_data    => s_data );
 
-    -- Generate clock.
-    clk <= (not clk) after 10 ns when clock_active else '0';
+    c: entity work.ClockProvider PORT MAP ( clk => clk );
 
     -- Main simulation process.---------------------------------
     process is
