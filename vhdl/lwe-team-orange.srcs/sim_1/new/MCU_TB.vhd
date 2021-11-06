@@ -1,43 +1,39 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 04.10.2021 00:21:10
--- Design Name: 
--- Module Name: MCU_TB - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+entity mcu_tb is
+end mcu_tb;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
-entity MCU_TB is
---  Port ( );
-end MCU_TB;
-
-architecture Behavioral of MCU_TB is
-
+architecture Behavioral of mcu_tb is
+    SIGNAL clk, rst, reseed, init: std_logic;
+    Signal nseed : std_logic_vector(31 downto 0);
+    
+    
 begin
 
+    inst_uut: entity work.mcu
+    port map (
+        mcuClk => clk,
+        mcuRst => rst,
+        mcuReseed => reseed,
+        mcuNewseed => nseed,
+        mcuInit => init
+    );
 
+    c: entity work.ClockProvider PORT MAP ( clk => clk );
+    
+    test_proc: PROCESS
+    BEGIN
+        rst <= '1';
+        WAIT FOR 5 NS;
+        rst <= '0';
+        init <= '1';
+        FOR index IN 0 To 4 LOOP
+            WAIT UNTIL clk='1' AND clk'EVENT;
+        END LOOP;
+        WAIT FOR 5 NS;
+        --ASSERT output_s = X"88" REPORT "Failed output=88";
+        WAIT;
+    END PROCESS test_proc;
+    
 end Behavioral;

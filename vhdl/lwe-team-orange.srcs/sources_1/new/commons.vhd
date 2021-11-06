@@ -8,4 +8,4 @@ package commons is
   type arr is array(0 to 3) of integer;    
   
   type t_array is array (natural range <>) of std_logic_vector(15 downto 0);
-end package commonss;
+end package commons;
