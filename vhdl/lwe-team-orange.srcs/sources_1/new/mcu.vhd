@@ -9,8 +9,7 @@ entity mcu is
         clk : in STD_LOGIC;
         rst : in STD_LOGIC;
         should_reseed : in STD_LOGIC;
-        seed : in STD_LOGIC_VECTOR(31 downto 0);
-        init : in STD_LOGIC
+        seed : in STD_LOGIC_VECTOR(31 downto 0)
     );
 end mcu;
 
@@ -22,7 +21,7 @@ architecture Behavioral of mcu is
     signal rst_rng : std_logic;
     signal should_reseed_rng : std_logic;
     signal newseed_rng : std_logic_vector(31 downto 0);
-    signal ready_rng : std_logic;
+    signal enable_rng : std_logic;
     signal valid_rng : std_logic;
     signal data_rng : std_logic_vector(15 downto 0);
     
@@ -34,15 +33,12 @@ begin
     -- Place all module port map definitions up here!
     -- Instantiate rng component.
     inst_prng: entity work.xoroshiroRNG
-        generic map (
-            init_seed => "11011011001010101010011101101100" ---- TODO:
-        )
         port map (
             clk              => clk,
             rst              => rst_rng,
             should_reseed    => should_reseed_rng,
             newseed          => newseed_rng,
-            out_ready        => ready_rng,
+            enable           => enable_rng,
             out_valid        => valid_rng,
             out_data         => data_rng
         );
@@ -73,17 +69,20 @@ begin
                 -- start over like the rng or secret key need 
                 -- to be emptied, the next four lines reset the rng module.
                 rst_rng <= rst;
+                enable_rng <= '0';
                 should_reseed_rng <= '0';
                 newseed_rng <= (others => '0');
-                ready_rng <= '0';
                 State <= Initialise;
             elsif should_reseed = '1' then
                 -- Next four lines reset the rng module.
                 rst_rng <= '0';
                 should_reseed_rng <= '1';
                 newseed_rng <= seed;
-                ready_rng <= '0';
+                enable_rng <= '0';
             else
+                rst_rng <= '0';
+                enable_rng <= '1';
+                
                 case State is
                     -- When everything needs to be initalised it happens here.
                     -- For example the secret key and A matrix can be made here.
@@ -91,11 +90,12 @@ begin
                     -- Create a different process with an appropriate signal then
                     -- to do the dot product and make the B matrix.
                     WHEN Initialise =>
-                        if init = '1' then
-                            ready_rng <= '1';
-                        else
-                            ready_rng <= '0';
+                        -- Enable the RNG
+                                                  -- TODO: Matrix A is made
+                        IF secret_ready = '1' and false then
+                            State <= GenerateB;
                         end if;
+                   
 
 
                     -- multiplication process trigerred by stepOne signal.

@@ -1,41 +1,12 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 10/27/2021 11:27:47 PM
--- Design Name: 
--- Module Name: xoroshiroRNG - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity xoroshiroRNG is
     generic (
         -- Default seed value.
-        init_seed:  std_logic_vector(31 downto 0):= "11011011001010101011011101101100" );
+        init_seed:  std_logic_vector(31 downto 0):= "11011011001010101011011101101100" 
+    );
 
     port (
         clk:                in  std_logic; -- rising edge active.
@@ -44,12 +15,12 @@ entity xoroshiroRNG is
         newseed:            in  std_logic_vector(31 downto 0); -- New seed value for reseeding.
         -- High when the user accepts the current random data word
         -- and requests new random data for the next clock cycle.
-        out_ready:          in  std_logic;
+        enable:             in  std_logic;
         -- High when valid random data is available on the output.
         -- Low during the first clock cycle after reset and after re-seeding
         out_valid:          out std_logic;
         -- A new random word appears after every rising clock edge
-        -- where out_ready = '1'.
+        -- where enable = '1'.
         out_data:           out std_logic_vector(15 downto 0) );
 end xoroshiroRNG;
 
@@ -91,7 +62,21 @@ begin
     begin
         if rising_edge(clk) then
 
-            if out_ready = '1' or reg_valid = '0' then
+            -- Synchronous reset.
+            if rst = '1' then
+                reg_state_s0    <= init_seed(15 downto 0);
+                reg_state_s1    <= init_seed(31 downto 16);
+                reg_valid       <= '0';
+                reg_output      <= (others => '0');
+            end if;
+            
+            if should_reseed = '1' then
+                reg_state_s0    <= newseed(15 downto 0);
+                reg_state_s1    <= newseed(31 downto 16);
+                reg_valid       <= '0';
+            end if;
+            
+            if enable = '1' or reg_valid = '0' then
 
                 -- Prepare output word.
                 reg_valid       <= '1';
@@ -110,20 +95,7 @@ begin
 
             end if;
 
-            -- Re-seed function.
-            if reseed = '1' then
-                reg_state_s0    <= newseed(15 downto 0);
-                reg_state_s1    <= newseed(31 downto 16);
-                reg_valid       <= '0';
-            end if;
-
-            -- Synchronous reset.
-            if rst = '1' then
-                reg_state_s0    <= init_seed(15 downto 0);
-                reg_state_s1    <= init_seed(31 downto 16);
-                reg_valid       <= '0';
-                reg_output      <= (others => '0');
-            end if;
+        
 
         end if;
     end process;
