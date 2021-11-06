@@ -38,19 +38,19 @@ entity xoroshiroRNG is
         init_seed:  std_logic_vector(31 downto 0):= "11011011001010101011011101101100" );
 
     port (
-        clk:        in  std_logic; -- rising edge active.
-        rst:        in  std_logic; -- active high.
-        reseed:     in  std_logic; -- High to request re-seeding.
-        newseed:    in  std_logic_vector(31 downto 0); -- New seed value for reseeding.
+        clk:                in  std_logic; -- rising edge active.
+        rst:                in  std_logic; -- active high.
+        should_reseed:      in  std_logic; -- High to request re-seeding.
+        newseed:            in  std_logic_vector(31 downto 0); -- New seed value for reseeding.
         -- High when the user accepts the current random data word
         -- and requests new random data for the next clock cycle.
-        out_ready:  in  std_logic;
+        out_ready:          in  std_logic;
         -- High when valid random data is available on the output.
         -- Low during the first clock cycle after reset and after re-seeding
-        out_valid:  out std_logic;
+        out_valid:          out std_logic;
         -- A new random word appears after every rising clock edge
         -- where out_ready = '1'.
-        out_data:   out std_logic_vector(15 downto 0) );
+        out_data:           out std_logic_vector(15 downto 0) );
 end xoroshiroRNG;
 
 architecture Behavioral of xoroshiroRNG is
