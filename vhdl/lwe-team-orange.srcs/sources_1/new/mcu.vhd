@@ -22,15 +22,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 library work;
 use work.commons.all;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 -- Add external signals if nessesary.
 entity mcu is
     Port ( mcuClk : in STD_LOGIC;

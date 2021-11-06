@@ -13,11 +13,7 @@ architecture Behavioral of decrypt_TB is
     signal cycles : integer := 0;
     constant delay : time := 20ns;
     
-    
     signal output : std_logic;
-
-    
-    
     signal inU : arr := (8,4,0,8);
 --    signal inV : unsigned := 
     
