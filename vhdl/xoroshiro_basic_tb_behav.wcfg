@@ -43,9 +43,9 @@
       <obj_property name="ElementShortName">s_newseed[31:0]</obj_property>
       <obj_property name="ObjectShortName">s_newseed[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/out_ready" type="logic">
-      <obj_property name="ElementShortName">out_ready</obj_property>
-      <obj_property name="ObjectShortName">out_ready</obj_property>
+   <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/enable" type="logic">
+      <obj_property name="ElementShortName">enable</obj_property>
+      <obj_property name="ObjectShortName">enable</obj_property>
    </wvobject>
    <wvobject fp_name="/xoroshiro_basic_tb/inst_prng/out_valid" type="logic">
       <obj_property name="ElementShortName">out_valid</obj_property>
