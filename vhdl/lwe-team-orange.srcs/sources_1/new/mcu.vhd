@@ -53,12 +53,14 @@ begin
             i => 16
         )
         port map (
-            Clk => clk, 
-            Rst => rst,
+            clk => clk, 
+            rst => rst,
+            ready => secret_ready,
+            
             randomNum => data_rng,
             validRng => valid_rng,
-            secret => secretk,
-            ready => secret_ready
+
+            secret => secretk
         );
     
 
