@@ -23,8 +23,20 @@ jobs:
         hugo-version: '0.68.3'
         extended: true
 
-    - name: Build
-      run: cd docs/.hugo && hugo --gc --minify --cleanDestinationDir -d public
+    - name: Build slides
+      run: hugo --gc --minify --cleanDestinationDir -d ../www_public
+      working-directory: ./docs/.hugo
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+
+    - name: Build meeting logs site
+      run: |
+        npm install
+        npm run build
+        cp -R public ../www_public/meetings
+      working-directory: ./docs/.meeting_logs
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v2.3.1
