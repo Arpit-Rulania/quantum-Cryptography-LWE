@@ -11,7 +11,7 @@ date: 2021-11-07T22:49:43+11:00
 
 ---
 
-## Schedule
+### Schedule
 
 ![](./gantt.jpg)
 
@@ -19,7 +19,7 @@ date: 2021-11-07T22:49:43+11:00
 
 ---
 
-## Development of the MCU
+### Development of the MCU
 
 * Main Control Unit created to co-ordinate signals
 * Two operating modes
@@ -28,7 +28,7 @@ date: 2021-11-07T22:49:43+11:00
 
 ---
 
-## Dot Product
+### Dot Product
 
 ![](dotproduct.png)
 
@@ -36,11 +36,29 @@ date: 2021-11-07T22:49:43+11:00
 
 ---
 
-## Approximate Multipliers
+<style>
+iframe.viz {
+  background-color: rgba(255,255,255,0.85);
+  height: 100vh;
+  width: 100%;
+  overflow-y: hidden;
+  transition: background-color 0.3s;
+}
+iframe.viz:hover {
+  background-color: rgba(255,255,255,1);
+}
+
+.resp-container {
+  max-height: 600px;  
+  overflow-y: hidden;
+}
+</style>
+
+### Approximate Multipliers
 
 {{% section %}}
 
-> Speed, Space & Accuracy
+> Speed, Space, Accuracy, Security
 
 <img width="40%" src="./8is7a1ixij201.jpg" />
 
@@ -62,11 +80,35 @@ date: 2021-11-07T22:49:43+11:00
     </div>
 </div>
 
+---
+
+> Future: Verification of acceptable error
+
+* Consistency with error ratios for invalid keypairs
+* Magnitude of importance
+
+---
+
+<div class="resp-container">
+<small style="position:absolute; top: -20px; left: 0; right: 0;">e.g. Consistency with error ratios for invalid keypairs</small>
+<iframe class="viz" src="//featherbear.github.io/UNSW-COMP3601/project/matlab/d_vals_badS.html"></iframe>
+</div>
+
+---
+
+<div class="resp-container">
+<small style="position:absolute; top: -20px; left: 0; right: 0;">e.g. Magnitude of importance</small>
+<iframe class="viz" src="//featherbear.github.io/UNSW-COMP3601/project/matlab/log_m45,n65,qTO157.html"></iframe>
+</div>
+
+* [Cryptographic Integrity 1](https://featherbear.cc/unsw-comp3601-project/matlab-model/#/5)
+* [Cryptographic Integrity 2](https://featherbear.cc/unsw-comp3601-project/matlab-model/#/9)
+
 {{% /section %}}
 
 ---
 
-## Optimising the Encryption Stage
+### Optimising the Encryption Stage
 
 {{% section %}}
 
@@ -82,10 +124,11 @@ i.e 10% selection chance / 90% not selected
 
 ---
 
-##### <u>Proposal</u>
+###### <u>Proposal</u>
 
-Select the sampled rows external to the encryption,  
-and pass in only the required data
+Select the sampled rows prior to calling the encryption module, and pass in only the required data
+
+* Possible mitigation of side-channel timing attack?
 
 {{% /section %}}
 
