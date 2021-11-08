@@ -7,6 +7,7 @@ on:
     paths:
     - docs/slides/**
     - docs/.hugo/**
+    - docs/.meeting_logs/**
 
 jobs:
   build-deploy:
