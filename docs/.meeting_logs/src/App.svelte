@@ -114,7 +114,7 @@
 
 <div class="container">
   <div class="titleBlock gradientAnim">
-    <h1>Generic Cards List Page</h1>
+    <h1>COMP3601 | Team Orange | Meetings</h1>
     <div class="modeToggle" on:click={() => showFlatView = !showFlatView}>
       <svelte:component this={showFlatView ? FileIcon : ColumnsIcon} />
     </div>
