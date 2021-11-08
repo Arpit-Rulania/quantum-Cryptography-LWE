@@ -6,7 +6,6 @@
         title: TITLE
         date: DD/MM/YYYY
         content: STRING OR STRING[]
-        link: HREF
       }
     ]
   }
