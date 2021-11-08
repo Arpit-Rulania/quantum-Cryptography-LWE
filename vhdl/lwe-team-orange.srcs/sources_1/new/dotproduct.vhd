@@ -57,30 +57,30 @@ end dotproduct;
 architecture Behavioral of dotproduct is
     
     -- Uses multiplication component
-    component mulitply is
-        Generic ( i : integer );
-        Port (
-            clk : in STD_LOGIC; 
-            rst : in STD_LOGIC;
-            in1 : in STD_LOGIC_VECTOR(i-1 downto 0);
-            in2 : in STD_LOGIC_VECTOR(i-1 downto 0);
-            output : out STD_LOGIC_VECTOR(i-1 downto 0);
-            ready : out STD_LOGIC
-        );
-    end component;
+--    component mulitply is
+--        Generic ( i : integer );
+--        Port (
+--            clk : in STD_LOGIC; 
+--            rst : in STD_LOGIC;
+--            in1 : in STD_LOGIC_VECTOR(i-1 downto 0);
+--            in2 : in STD_LOGIC_VECTOR(i-1 downto 0);
+--            output : out STD_LOGIC_VECTOR(i-1 downto 0);
+--            ready : out STD_LOGIC
+--        );
+--    end component;
     
     -- Signals for intermediate results
     signal mult_results: t_array (0 to i-1);
     signal mult_ready: std_logic_vector (0 to i-1);
-    signal counter: integer;
-    signal sum: unsigned(i-1 downto 0);
+    signal counter: integer := 0;
+    signal sum: unsigned(i-1 downto 0) := to_unsigned(0, i);
     
 begin
     -- Generate multiple instances of the multiplication A
     -- Perform 16 simultaneous multiplications on the integers comprising the vector
     GEN_MULT:
     for n in 0 to i-1 generate
-        MULT: mulitply
+        MULT: entity work.multiply
             Generic MAP (i => 16)
             Port MAP (
                 clk,
@@ -92,28 +92,24 @@ begin
             );
     end generate GEN_MULT;
     
-    RESET_PROCESS:
-    process(rst)
-    begin
-        if rst = '1' then
-            sum <= unsigned(0);
-            counter <= 0;
-            mult_results <= t_array(0);
-            mult_ready <= std_logic_vector(0);
-            ready <= '0';
-        end if;
-    end process;
-    
     ADDITION:
-    process(mult_ready)
+    process(clk)
     begin
-        if counter = i then
-            C <= std_logic_vector(sum);
-            ready <= '1';
-        elsif mult_ready(counter) = '1' then
-            sum  <= sum + unsigned(mult_results(counter));
-            counter <= counter + 1;
-        end if;
+        if rising_edge(clk) then
+            if rst = '1' then
+                sum <= to_unsigned(0, 16);
+                counter <= 0;
+--                mult_results <= (others => (others => '0'));
+--                mult_ready <= (others => '0');
+                ready <= '0';
+            elsif counter = i then
+                C <= std_logic_vector(sum);
+                ready <= '1';
+            elsif mult_ready(counter) = '1' then
+                sum  <= sum + unsigned(mult_results(counter));
+                counter <= counter + 1;
+            end if;
+        end if;     
     end process;
 
 end Behavioral;
