@@ -68,7 +68,7 @@ date: 2021-11-01T22:49:43+11:00
 > Speeding things up
 
 * Looked to change B matrix generation module
-* Increased number of instantiated multiplication modules
+* Increased number of multiplication modules
 * Uses generics to allow for different configurations
     * E.g. For a 16 column A matrix now uses 16 multiplier modules for parallelisation of the modules
 * Reduces time taken to generate B matrix due to costliness of modulo operation

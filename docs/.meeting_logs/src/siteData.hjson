@@ -68,6 +68,7 @@
         content: [
           Progress check-in
           Reassignment of tasks
+          Changed implementation of the encryption module to accept pre-sampled values
         ]
       }
     ]
