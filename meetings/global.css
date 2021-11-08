@@ -1,0 +1,168 @@
+:root {
+  --stripColour: rgb(241, 240, 232);
+  --colorA: #4dc088;
+  --colorB: #699fd5;
+  --titleHeight: 100px;
+  --bMargin: 15px;
+}
+
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  color: #333;
+  margin: 0;
+  /* padding: 8px; */
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+
+  background-image: url("images/pattern.png");
+  background-repeat: repeat;
+
+  overflow-y: scroll;
+
+}
+
+a {
+  color: rgb(0, 100, 200);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:visited {
+  color: rgb(0, 80, 160);
+}
+
+label {
+  display: block;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.4em;
+  margin: 0 0 0.5em 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+input:disabled {
+  color: #ccc;
+}
+
+input[type="range"] {
+  height: 0;
+}
+
+button {
+  color: #333;
+  background-color: #f4f4f4;
+  outline: none;
+}
+
+button:active {
+  background-color: #ddd;
+}
+
+button:focus {
+  border-color: #666;
+}
+
+.gradientBorder {
+  --borderWidth: 3px;
+  position: relative;
+  background: var(--stripColour);
+  border-radius: var(--borderWidth);
+}
+.gradientBorder:after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  background: linear-gradient(146deg, var(--colorA), var(--colorB));
+  border-radius: calc(2 * var(--borderWidth));
+  z-index: -1;
+  animation: gradientBorderAnim 3s ease alternate infinite;
+  background-size: 300% 300%;
+}
+
+@keyframes gradientBorderAnim {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.gradientAnim {
+  /* z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: hue;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; */
+  background: radial-gradient(var(--colorA), var(--colorB));
+  background-size: 1000% 1000%;
+  -webkit-animation: GradientAnim 20s ease infinite;
+  -moz-animation: GradientAnim 20s ease infinite;
+  animation: GradientAnim 20s ease infinite;
+}
+@-webkit-keyframes GradientAnim {
+  0% {
+    background-position: 0% 46%;
+  }
+  50% {
+    background-position: 100% 55%;
+  }
+  100% {
+    background-position: 0% 46%;
+  }
+}
+@-moz-keyframes GradientAnim {
+  0% {
+    background-position: 0% 46%;
+  }
+  50% {
+    background-position: 100% 55%;
+  }
+  100% {
+    background-position: 0% 46%;
+  }
+}
+@keyframes GradientAnim {
+  0% {
+    background-position: 0% 46%;
+  }
+  50% {
+    background-position: 100% 55%;
+  }
+  100% {
+    background-position: 0% 46%;
+  }
+}
