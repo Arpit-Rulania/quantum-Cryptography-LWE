@@ -43,8 +43,8 @@ begin
                     sum <= sum + adder;
                 end if;
 
-                adder <= adder(6 downto 0) & '0';     -- adder << 1                
-                counter <= '0' & counter(7 downto 1); -- counter >> 1
+                adder <= adder(i-2 downto 0) & '0';     -- adder << 1                
+                counter <= '0' & counter(i-1 downto 1); -- counter >> 1
                 -- counter - 1 doesn't take effect until the end of the process
                 if counter <= 1 then
                     isReady <= '1';
