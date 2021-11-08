@@ -7,4 +7,5 @@
 
 ---
 
-Presentations available [here](https://featherbear.cc/unsw-comp3601-project/)
+Presentations available [here](https://featherbear.cc/unsw-comp3601-project/)  
+Meeting logs available [here](https://featherbear.cc/unsw-comp3601-project/meetings)
