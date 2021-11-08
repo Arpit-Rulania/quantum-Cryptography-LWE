@@ -3,9 +3,72 @@
     title: Meetings
     content: [
       {
-        title: TITLE
-        date: DD/MM/YYYY
-        content: STRING OR STRING[]
+        title: 16/09/2021
+        content: [
+          First group meeting
+          Introduction of members
+        ]
+      }
+      {
+        title: 20/09/2021
+        content: [
+          Planning of initial block diagrams and component signals
+          Creation of Gantt chart
+          Initial assignment of tasks to group members
+        ]
+      }
+      {
+        title: 2/10/2021
+        content: [
+          Code review and feedback
+          Adjustment of deliverable schedule
+        ]
+      }
+      {
+        title: 4/10/2021
+        content: [
+          Planning and collaboration of presentation content
+        ]
+      }
+      {
+        title: 12/10/2021
+        content: [
+          Initial design report meeting
+          Planned the structure of the report
+          Delegation of sections for the report
+        ]
+      }
+      {
+        title: 16/10/2021
+        content: [
+          Meeting checkup
+        ]
+      }
+      {
+        title: 26/10/2021
+        content: [
+          Serialisation of the A matrix and ready signal
+          Storage of the A matrix inside the MCU
+          B matrix dot product parallelisation
+          Encryption
+        ]
+      }
+      {
+        title: 2/11/2021
+        content: [
+          New RNG generation method - Xoroshiro RNG
+          Decision to implement ready and reset signals for the dot product module
+          Planning for text file I/O
+          Optimisation of encoded data during transmission?
+          Further evaluation of different approximate multiplier methods
+        ]
+      }
+      {
+        title: 8/11/2021
+        content: [
+          Progress check-in
+          Reassignment of tasks
+        ]
       }
     ]
   }
