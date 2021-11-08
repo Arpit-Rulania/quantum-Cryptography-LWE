@@ -36,6 +36,36 @@ date: 2021-11-07T22:49:43+11:00
 
 ---
 
+## Approximate Multipliers
+
+{{% section %}}
+
+> Speed, Space & Accuracy
+
+<img width="40%" src="./8is7a1ixij201.jpg" />
+
+---
+
+* Error corrections are useful (better approx.) but...
+  * 1-1 mapped LUT is costly
+* Binned EC values?
+* Single average EC value?
+
+<div style="display: flex; flex-direction: row;">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <img width="100%" src="./correction_visualisation/before.jpg" />
+        Uncorrected
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <img width="100%" src="./correction_visualisation/after.jpg" />
+        Corrected
+    </div>
+</div>
+
+{{% /section %}}
+
+---
+
 ## Optimising the Encryption Stage
 
 {{% section %}}
