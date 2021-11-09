@@ -11,6 +11,16 @@ date: 2021-11-07T22:49:43+11:00
 
 ---
 
+### Overview
+
+* Project Schedule
+* Dot product development
+* MCU development
+* Approximate multiplier consideration
+* Encryption optimisation
+
+---
+
 ### Schedule
 
 ![](./gantt.jpg)
@@ -19,20 +29,20 @@ date: 2021-11-07T22:49:43+11:00
 
 ---
 
-### Development of the MCU
-
-* Main Control Unit created to co-ordinate signals
-* Two operating modes
-  * Encryption
-  * Decryption
-
----
-
 ### Dot Product
 
 ![](dotproduct.png)
 
-> Next steps: Multiplier
+> Reworked to have 16 in parallel
+
+---
+
+### Development of the MCU
+
+* Start Main Control Unit created to co-ordinate signals
+* Two operating modes
+  * Encryption
+  * Decryption
 
 ---
 
