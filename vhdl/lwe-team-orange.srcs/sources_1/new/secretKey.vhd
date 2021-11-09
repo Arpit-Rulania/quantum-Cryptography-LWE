@@ -17,9 +17,28 @@ end secretKey;
 
 architecture Behavioral of secretKey is  
   SIGNAL k: integer:= 0;
+  SIGNAL tempnum: std_logic_vector (15 DOWNTO 0);
   SIGNAL isReady: std_logic:= '0';
+  -- Mod compnent signals
+  SIGNAL mrst: std_logic:= '1';
+  SIGNAL mout: std_logic_vector (15 DOWNTO 0);
+  SIGNAL mRdy: std_logic:= '0';
+  
     
 begin
+    
+    ModuloComponent : ENTITY work.variableMod
+        GENERIC MAP (
+            i => 16
+        )
+        PORT MAP(
+            clk => clk,
+            rst => mrst,
+            inQ => "0101010110101101", -- TEMPORARY PRIME FOR TESTING.
+            input => tempnum,
+            output => mout,
+            ready => mRdy
+        );
   
   ready <= isReady;
   
@@ -31,11 +50,23 @@ begin
     if rst = '1' then
       isReady <= '0';
       secret <= (others => (others => '0'));
+      tempnum <= randomNum;
+      mrst <= '1';
     elsif rst = '0' then
         if k < i then
             if falling_edge(Clk) and validRng = '1' then
-                secret(k) <= randomNum;
-                k <= k + 1;
+                -- reset mod component, input new numbers, and put output into secret k
+                if mRdy = '1' then
+                    secret(k) <= mout;
+                    k <= k + 1;
+                    tempnum <= randomNum;
+                    mrst <= '1';
+                elsif mRdy = '0' then
+                    mrst <= '0';
+                end if;
+                
+                -- secret(k) <= randomNum;
+                -- k <= k + 1;
             end if;
         else
             isReady <= '1';
