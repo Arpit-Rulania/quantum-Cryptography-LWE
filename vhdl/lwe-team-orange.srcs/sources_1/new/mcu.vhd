@@ -26,8 +26,18 @@ architecture Behavioral of mcu is
     signal data_rng : std_logic_vector(15 downto 0);
     
     -- signals for secret key
-    signal secretk : t_array (0 to 15);  
-    signal secret_ready : std_logic;    
+    signal secretk : t_array; 
+    signal secret_rst : std_logic; 
+    signal secret_ready : std_logic; 
+    
+    -- The following is the spot A matrix is stored
+    SIGNAL Asize: integer:= 0; -- IMPORTANT NOTE, THIS SIGNAL GOES UPTO 15 FOR NOW, WILL GO UP TO GIVEN GENERIC LATER. (generic is number of rows of A)
+    signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.  
+    signal secret_matrix : t_array; 
+    
+    -- Lolol sigs to go from Initialise to GenerateB
+    signal amd : std_logic; -- ~a matrix done
+    signal smd : std_logic; -- ~s matrix done
          
 begin
     -- Place all module port map definitions up here!
@@ -50,13 +60,11 @@ begin
         )
         port map (
             clk => clk, 
-            rst => rst,
-            ready => secret_ready,
-            
+            rst => secret_rst,           
             randomNum => data_rng,
             validRng => valid_rng,
-
-            secret => secretk
+            secret => secretk,
+            ready => secret_ready
         );
     
 
@@ -68,11 +76,17 @@ begin
                 -- If anything needs to be reset fully to 
                 -- start over like the rng or secret key need 
                 -- to be emptied, the next four lines reset the rng module.
+                secret_rst <= rst;
+                amd <= '0';
+                smd <= '0';
                 rst_rng <= rst;
                 enable_rng <= '0';
                 should_reseed_rng <= '0';
                 newseed_rng <= (others => '0');
                 State <= Initialise;
+                Amatrix <= (others => (others => (others => '0')));
+                secret_matrix <= (others => (others => '0'));
+                Asize <= 0;
             elsif should_reseed = '1' then
                 -- Next four lines reset the rng module.
                 rst_rng <= '0';
@@ -91,13 +105,28 @@ begin
                     -- to do the dot product and make the B matrix.
                     WHEN Initialise =>
                         -- Enable the RNG
+                        if Asize < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
+                            if secret_ready = '1' then
+                                Amatrix(Asize) <= secretk;
+                                Asize <= Asize + 1;
+                                secret_rst <= '1';
+                            elsif secret_ready = '0' then
+                                secret_rst <= '0';
+                            end if;
+                        end if;
+                        if Asize = 16 then      --- AGAIN 16 SHOULD NOT BE HARDCODED WE NEED TO DECIDE ON A SET METHOD HERE.............................
+                            secret_rst <= '0';
+                            if secret_ready = '1' then
+                                secret_matrix <= secretK;
+                                secret_rst <= '1';
+                                smd <= '1';
+                            end if;
+                            amd <= '1';
+                        end if;
                                                   -- TODO: Matrix A is made
-                        IF secret_ready = '1' and false then
+                        if amd = '1' and smd = '1' then
                             State <= GenerateB;
                         end if;
-                   
-
-
                     -- multiplication process trigerred by stepOne signal.
                     -- once complete it will trigger stepEncrypt
                     WHEN GenerateB =>
