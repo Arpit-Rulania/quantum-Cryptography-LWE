@@ -10,7 +10,7 @@ entity secretKey is
     rst: IN std_logic;
     randomNum: IN std_logic_vector (15 DOWNTO 0);
     validRng : IN std_logic;
-    secret: OUT t_array (0 to i-1);
+    secret: OUT t_array;
     ready: OUT std_logic
   );
 end secretKey;
@@ -21,7 +21,7 @@ architecture Behavioral of secretKey is
   SIGNAL isReady: std_logic:= '0';
   -- Mod compnent signals
   SIGNAL mrst: std_logic:= '1';
-  SIGNAL mout: std_logic_vector (15 DOWNTO 0);
+  SIGNAL mout: std_logic_vector (15 DOWNTO 0);  --AHAHA CHANGE THIS TO GENERIC LATER.................. !!!!!?!!!!
   SIGNAL mRdy: std_logic:= '0';
   
     
@@ -50,6 +50,7 @@ begin
     if rst = '1' then
       isReady <= '0';
       secret <= (others => (others => '0'));
+      k <= 0;
       tempnum <= randomNum;
       mrst <= '1';
     elsif rst = '0' then
