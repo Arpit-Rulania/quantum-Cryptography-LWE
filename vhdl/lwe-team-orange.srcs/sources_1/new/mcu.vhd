@@ -114,7 +114,7 @@ begin
                                 secret_rst <= '0';
                             end if;
                         end if;
-                        if Asize = 16 then      --- AGAIN 16 SHOULD NOT BE HARDCODED WE NEED TO DECIDE ON A SET METHOD HERE.............................
+                        if Asize = 16 then      --- AGAIN 16 SHOULD NOT BE HARDCODED WE NEED TO DECIDE ON A SET METHOD HERE..............................
                             secret_rst <= '0';
                             if secret_ready = '1' then
                                 secret_matrix <= secretK;
