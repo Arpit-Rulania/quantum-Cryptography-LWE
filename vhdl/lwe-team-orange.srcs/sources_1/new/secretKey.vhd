@@ -8,7 +8,8 @@ entity secretKey is
   PORT (
     clk: IN std_logic;
     rst: IN std_logic;
-    randomNum: IN std_logic_vector (15 DOWNTO 0);
+    
+    inQ: IN std_logic_vector(i-1 downto 0);
     validRng : IN std_logic;
     secret: OUT t_array;
     ready: OUT std_logic
@@ -34,7 +35,7 @@ begin
         PORT MAP(
             clk => clk,
             rst => mrst,
-            inQ => "0101010110101101", -- TEMPORARY PRIME FOR TESTING.
+            inQ => inQ,
             input => tempnum,
             output => mout,
             ready => mRdy

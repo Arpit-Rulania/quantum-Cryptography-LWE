@@ -17,6 +17,10 @@ architecture Behavioral of mcu is
     type StateType is (GenerateA, GenerateSecret, GenerateB, Encrypt, Decrypt);
     signal State : StateType;
     
+    
+    signal q_value: std_logic_vector(15 downto 0) := "0101010110101101";
+    -- TODO: Change this programmatically in the GenerateQ stage (To be created)
+    
     -- Signals for rng
     signal rst_rng : std_logic;
     signal should_reseed_rng : std_logic;
@@ -56,7 +60,8 @@ begin
         )
         port map (
             clk => clk, 
-            rst => secret_rst,           
+            rst => secret_rst,
+            inQ => q_value,    
             randomNum => data_rng,
             validRng => valid_rng,
             secret => secretk,
