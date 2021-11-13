@@ -1,16 +1,17 @@
-library ieee;
+\library ieee;
 use ieee.std_logic_1164.all;
 use work.commons.all;
 
 -- i = number of columns in A matrix
 entity secretKey is
-  Generic ( i : integer := 16);
+  Generic ( i : integer := 16;
+            bitsize : integer := 16);
   PORT (
     clk: IN std_logic;
     rst: IN std_logic;
     
-    inQ: IN std_logic_vector(i-1 downto 0);
-    randomNum: IN std_logic_vector (i-1 DOWNTO 0);
+    inQ: IN std_logic_vector(bitsize-1 downto 0);
+    randomNum: IN std_logic_vector (bitsize-1 DOWNTO 0);
     validRng : IN std_logic;
     secret: OUT t_array;
     ready: OUT std_logic
@@ -19,11 +20,11 @@ end secretKey;
 
 architecture Behavioral of secretKey is  
   SIGNAL k: integer:= 0;
-  SIGNAL tempnum: std_logic_vector (i-1 DOWNTO 0);
+  SIGNAL tempnum: std_logic_vector (bitsize-1 DOWNTO 0);
   SIGNAL isReady: std_logic:= '0';
   -- Mod compnent signals
   SIGNAL mrst: std_logic:= '1';
-  SIGNAL mout: std_logic_vector (i-1 DOWNTO 0);
+  SIGNAL mout: std_logic_vector (bitsize-1 DOWNTO 0);
   SIGNAL mRdy: std_logic:= '0';
   
     
@@ -31,7 +32,7 @@ begin
     
     ModuloComponent : ENTITY work.variableMod
         GENERIC MAP (
-            i => i
+            i => bitsize
         )
         PORT MAP(
             clk => clk,
