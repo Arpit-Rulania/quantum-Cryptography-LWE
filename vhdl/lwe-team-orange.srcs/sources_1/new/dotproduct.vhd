@@ -17,21 +17,10 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-package pkg is
-    type t_array is array (natural range <>) of std_logic_vector(15 downto 0);
-end package;
-
-package body pkg is
-end package body;
-
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;
-library work;
-use work.pkg.all;
+use work.commons.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -47,8 +36,8 @@ entity dotproduct is
     Port (
         clk: in std_logic;
         rst: in std_logic;
-        A : in t_array (0 to i-1);
-        B : in t_array (0 to i-1);
+        A : in t_array;
+        B : in t_array;
         C : out std_logic_vector (15 downto 0);
         ready : out std_logic
     );
@@ -70,7 +59,7 @@ architecture Behavioral of dotproduct is
 --    end component;
     
     -- Signals for intermediate results
-    signal mult_results: t_array (0 to i-1);
+    signal mult_results: t_array;
     signal mult_ready: std_logic_vector (0 to i-1);
     signal counter: integer := 0;
     signal sum: unsigned(i-1 downto 0) := to_unsigned(0, i);
