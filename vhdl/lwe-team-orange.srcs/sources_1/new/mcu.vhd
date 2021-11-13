@@ -14,7 +14,7 @@ entity mcu is
 end mcu;
 
 architecture Behavioral of mcu is
-    type StateType is (Initialise, GenerateB, Encrypt, Decrypt);
+    type StateType is (GenerateA, GenerateSecret, GenerateB, Encrypt, Decrypt);
     signal State : StateType;
     
     -- Signals for rng
@@ -35,10 +35,6 @@ architecture Behavioral of mcu is
     signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.  
     signal secret_matrix : t_array; 
     
-    -- Lolol sigs to go from Initialise to GenerateB
-    signal amd : std_logic; -- ~a matrix done
-    signal smd : std_logic; -- ~s matrix done
-         
 begin
     -- Place all module port map definitions up here!
     -- Instantiate rng component.
@@ -76,16 +72,18 @@ begin
                 -- If anything needs to be reset fully to 
                 -- start over like the rng or secret key need 
                 -- to be emptied, the next four lines reset the rng module.
-                secret_rst <= rst;
-                amd <= '0';
-                smd <= '0';
+                
                 rst_rng <= rst;
                 enable_rng <= '0';
                 should_reseed_rng <= '0';
                 newseed_rng <= (others => '0');
-                State <= Initialise;
-                Amatrix <= (others => (others => (others => '0')));
+                
+                State <= GenerateA;
+                
+                secret_rst <= rst;
                 secret_matrix <= (others => (others => '0'));
+
+                Amatrix <= (others => (others => (others => '0')));
                 Asize <= 0;
             elsif should_reseed = '1' then
                 -- Next four lines reset the rng module.
@@ -98,37 +96,26 @@ begin
                 enable_rng <= '1';
                 
                 case State is
-                    -- When everything needs to be initalised it happens here.
-                    -- For example the secret key and A matrix can be made here.
-                    -- once the two are made it will trigger the signal "stepOne".!!!!!!! IMPT
-                    -- Create a different process with an appropriate signal then
-                    -- to do the dot product and make the B matrix.
-                    WHEN Initialise =>
-                        -- Enable the RNG
+                    WHEN GenerateA =>
                         if Asize < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
+                            secret_rst <= '0';
                             if secret_ready = '1' then
                                 Amatrix(Asize) <= secretk;
                                 Asize <= Asize + 1;
                                 secret_rst <= '1';
-                            elsif secret_ready = '0' then
-                                secret_rst <= '0';
                             end if;
+                        else
+                            State <= GenerateSecret;
                         end if;
-                        if Asize = 16 then      --- AGAIN 16 SHOULD NOT BE HARDCODED WE NEED TO DECIDE ON A SET METHOD HERE..............................
-                            secret_rst <= '0';
-                            if secret_ready = '1' then
-                                secret_matrix <= secretK;
-                                secret_rst <= '1';
-                                smd <= '1';
-                            end if;
-                            amd <= '1';
-                        end if;
-                                                  -- TODO: Matrix A is made
-                        if amd = '1' and smd = '1' then
+                    
+                    When GenerateSecret => 
+                        secret_rst <= '0';
+                        if secret_ready = '1' then
+                            secret_rst <= '1';
                             State <= GenerateB;
+                            secret_matrix <= secretK;
                         end if;
-                    -- multiplication process trigerred by stepOne signal.
-                    -- once complete it will trigger stepEncrypt
+
                     WHEN GenerateB =>
                         --signals to activate multiplier.
 
