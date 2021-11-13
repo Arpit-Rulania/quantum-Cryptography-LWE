@@ -11,7 +11,7 @@ end primenumgen;
 
 architecture Behavioral of primenumgen is
     type t_Data is array (0 to 31) of std_logic_vector (15 DOWNTO 0);
-    signal r_Data : t_Data := ("0000000000000010", "0000000000000011", "0000000000000101", "0000000000000111", 
+    signal r_Data : t_Data := ("1101010000101111", "0000000000000011", "0000000000000101", "0000000000000111", 
                                "0000000000001011", "0000000000001101", "0000000000010001", "0000000000010011",
                                "0000000000010111", "0000000000011101", "0000000000011111", "0000000000100101",
                                "0000000000101001", "0000000000101111", "0000000000110101", "0000000000111011",
@@ -26,5 +26,10 @@ begin
     --index_integer <= conv_integer(index);
     --index_integer <= to_integer(unsigned(index));
    -- index_integer <= index1;
-    poutput <= r_Data(to_integer(unsigned(index(4 downto 0))));
+    getprimeProc : process(rst)
+    begin
+        if Rst = '1' then
+            poutput <= r_Data(to_integer(unsigned(index(4 downto 0))));
+        end if;
+    end process getprimeProc;
 end Behavioral;
