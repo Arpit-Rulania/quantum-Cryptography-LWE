@@ -56,7 +56,8 @@ begin
     -- Instantitate secret key module.
     inst_seckey: entity work.secretKey
         generic map (
-            i => 16
+            i => 16,      -- i is the length of the row i.e. number of columns
+            bitsize => 16 -- bitsize is the number of bits the number is made of.... make it a generic later or not???
         )
         port map (
             clk => clk, 
@@ -67,8 +68,16 @@ begin
             secret => secretk,
             ready => secret_ready
         );
+        
+    -- Instantiate prime number generator module.
+    inst_primenumgenz: entity work.primenumgen
+        port map (
+            Clk => clk,
+            Rst => rst,
+            index => data_rng,
+            poutput => q_value 
+        );
     
-
     main: process(clk)
     begin
         if rising_edge(clk) then
