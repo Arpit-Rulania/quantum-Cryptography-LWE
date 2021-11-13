@@ -17,21 +17,10 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-package pkg is
-  type t_array is array (natural range <>) of std_logic_vector(15 downto 0);
-end package;
-
-package body pkg is
-end package body;
-
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;
-library work;
-use work.pkg.all;
+use work.commons.all;
 
 entity matrixmult is
   Generic (i : integer:=16);
@@ -39,8 +28,8 @@ entity matrixmult is
     clk : in std_logic;
     rst : in std_logic;
     inQ : in std_logic_vector (15 downto 0);
-    rowA : in t_array (0 to i-1);
-    secret : in t_array (0 to i-1);
+    rowA : in t_array;
+    secret : in t_array;
     rowB : out std_logic_vector (15 downto 0);
     ready : out std_logic
   );
@@ -55,8 +44,8 @@ architecture Behavioral of matrixmult is
     Port (
       clk : in std_logic;
       rst : in std_logic;
-      A : in t_array (0 to i-1);
-      B : in t_array (0 to i-1);
+      A : in t_array;
+      B : in t_array;
       C : out std_logic_vector (15 downto 0);
       ready : out std_logic
     );

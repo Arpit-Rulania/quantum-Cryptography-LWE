@@ -17,50 +17,40 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-package pkg is
-  type t_array is array (natural range <>) of std_logic_vector(15 downto 0);
-end package;
-
-package body pkg is
-end package body;
-
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-library work;
-use work.pkg.all;
+use IEEE.NUMERIC_STD.ALL;
+use work.commons.all;
 
 entity matrixmult_tb is
 --  Port ( );
 end matrixmult_tb;
 
 architecture Behavioral of matrixmult_tb is
-    component matrixmult is
-    Generic ( i : integer:= 16);
-    Port (
-      clk : in std_logic;
-      rst : in std_logic;
-      inQ : in std_logic_vector (15 downto 0);
-      rowA : in t_array (0 to i-1);
-      secret : in t_array (0 to i-1);
-      rowB : out std_logic_vector (15 downto 0);
-      ready : out std_logic
-    );
-    end component;
+--    component matrixmult is
+--    Generic ( i : integer:= 16);
+--    Port (
+--      clk : in std_logic;
+--      rst : in std_logic;
+--      inQ : in std_logic_vector (15 downto 0);
+--      rowA : in t_array (0 to i-1);
+--      secret : in t_array (0 to i-1);
+--      rowB : out std_logic_vector (15 downto 0);
+--      ready : out std_logic
+--    );
+--    end component;
     
     SIGNAL Clk_s, Rst_s: std_logic;
     SIGNAL output_s: std_logic_vector(15 DOWNTO 0);
-    SIGNAL in1: t_array (0 to 15);
-    SIGNAL in2: t_array (0 to 15);
+    SIGNAL in1: t_array;
+    SIGNAL in2: t_array;
     SIGNAL Q: std_logic_vector (15 downto 0);
     SIGNAL t_ready: std_logic;
     
 begin
-    CompToTest: matrixmult port map (
+    CompToTest: work.matrixmult 
+    generic map (i => 16)
+    port map (
         Clk_s,
         Rst_s,
         Q,
