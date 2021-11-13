@@ -10,6 +10,7 @@ entity secretKey is
     rst: IN std_logic;
     
     inQ: IN std_logic_vector(i-1 downto 0);
+    randomNum: IN std_logic_vector (i-1 DOWNTO 0);
     validRng : IN std_logic;
     secret: OUT t_array;
     ready: OUT std_logic
@@ -18,11 +19,11 @@ end secretKey;
 
 architecture Behavioral of secretKey is  
   SIGNAL k: integer:= 0;
-  SIGNAL tempnum: std_logic_vector (15 DOWNTO 0);
+  SIGNAL tempnum: std_logic_vector (i-1 DOWNTO 0);
   SIGNAL isReady: std_logic:= '0';
   -- Mod compnent signals
   SIGNAL mrst: std_logic:= '1';
-  SIGNAL mout: std_logic_vector (15 DOWNTO 0);  --AHAHA CHANGE THIS TO GENERIC LATER.................. !!!!!?!!!!
+  SIGNAL mout: std_logic_vector (i-1 DOWNTO 0);
   SIGNAL mRdy: std_logic:= '0';
   
     
@@ -30,7 +31,7 @@ begin
     
     ModuloComponent : ENTITY work.variableMod
         GENERIC MAP (
-            i => 16
+            i => i
         )
         PORT MAP(
             clk => clk,
