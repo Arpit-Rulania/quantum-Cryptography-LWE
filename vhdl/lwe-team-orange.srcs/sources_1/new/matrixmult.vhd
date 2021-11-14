@@ -64,9 +64,18 @@ architecture Behavioral of matrixmult is
   end component;
 
   signal dotReady : std_logic;
+  signal rstMod : std_logic;
   signal dotOut : std_logic_vector (15 downto 0);
 
 begin
+
+  MODRST:
+  process (clk)
+  begin
+    if rising_edge(clk) then
+        rstMod <= not dotReady;
+    end if;
+  end process;
 
   Stage1:
   dotproduct port map (
@@ -81,7 +90,7 @@ begin
   Stage2:
   variableMod port map (
     clk,
-    not dotReady,
+    rstMod,
     inQ,
     dotOut,
     rowB,
