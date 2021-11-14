@@ -27,18 +27,18 @@ entity matrixmult_tb is
 end matrixmult_tb;
 
 architecture Behavioral of matrixmult_tb is
---    component matrixmult is
---    Generic ( i : integer:= 16);
---    Port (
---      clk : in std_logic;
---      rst : in std_logic;
---      inQ : in std_logic_vector (15 downto 0);
---      rowA : in t_array (0 to i-1);
---      secret : in t_array (0 to i-1);
---      rowB : out std_logic_vector (15 downto 0);
---      ready : out std_logic
---    );
---    end component;
+    component matrixmult is
+    Generic ( i : integer:= 16);
+    Port (
+      clk : in std_logic;
+      rst : in std_logic;
+      inQ : in std_logic_vector (15 downto 0);
+      rowA : in t_array;
+      secret : in t_array;
+      rowB : out std_logic_vector (15 downto 0);
+      ready : out std_logic
+    );
+    end component;
     
     SIGNAL Clk_s, Rst_s: std_logic;
     SIGNAL output_s: std_logic_vector(15 DOWNTO 0);
@@ -48,8 +48,8 @@ architecture Behavioral of matrixmult_tb is
     SIGNAL t_ready: std_logic;
     
 begin
-    CompToTest: work.matrixmult 
-    generic map (i => 16)
+    CompToTest: matrixmult 
+--    generic map (i => 16)
     port map (
         Clk_s,
         Rst_s,
@@ -70,7 +70,7 @@ begin
     
     -- Set up input
     -- Q
-    Q <= std_logic_vector(to_unsigned(17,16));
+    Q <= std_logic_vector(to_unsigned(4651,16));
 
     -- Input 1:
     in1(0) <= std_logic_vector(to_unsigned(20, 16));
