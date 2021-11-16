@@ -79,6 +79,14 @@
           Review of the matrix multiplier
         ]
       }
+      {
+        title: 16/11/2021
+        content: [
+          Discussed integration of MCU control signals
+          Issued tasks for encryption operation
+          Discussed matrix multiplication integration issues
+        ]
+      }
     ]
   }
 ]
