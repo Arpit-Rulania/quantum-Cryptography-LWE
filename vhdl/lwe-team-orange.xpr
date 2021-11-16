@@ -75,13 +75,13 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
-      <File Path="$PSRCDIR/sources_1/new/commons.vhd">
+      <File Path="$PSRCDIR/sources_1/new/XoroshiroRNG.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/XoroshiroRNG.vhd">
+      <File Path="$PSRCDIR/sources_1/new/commons.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -99,32 +99,70 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/multiply.vhd">
+      <File Path="$PSRCDIR/sources_1/new/primenumgen.vhd">
         <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/mcu.vhd">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/adder.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/dotproduct.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/ErrorMatrixGen.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/matrixmult.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/multiply8.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/variableMod8.vhd">
+      <File Path="$PSRCDIR/sources_1/new/multiply.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/decrypt.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/MCU.vhd">
+      <File Path="$PSRCDIR/sources_1/new/variableMod8.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -150,76 +188,6 @@
       </File>
       <File Path="$PSRCDIR/sim_1/new/MCU_TB.vhd">
         <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/variableMod16_TB.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/Xoroshiro_comprehensive_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/Xoroshiro_basic_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/secretKey_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/ClockProvider_TB.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/TextFileProvider.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/decrypt_TB.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/multiply8_TB.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/rngnum_tb.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sim_1/new/variableMod8_TB.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -270,6 +238,104 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sim_1/new/matrixmult_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/variableMod8_TB.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/secretKey_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/TextFileProvider.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/amatrix_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/ErrorTB.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/multiply8_TB.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/rngnum_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/Xoroshiro_basic_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/ClockProvider_TB.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/dotproduct_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/Xoroshiro_comprehensive_tb.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/variableMod16_TB.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sim_1/new/decrypt_TB.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="mcu_tb"/>
@@ -281,7 +347,7 @@
         <Option Name="PamDutBypassFile" Val="xil_dut_bypass"/>
         <Option Name="PamSignalDriverFile" Val="xil_bypass_driver"/>
         <Option Name="PamPseudoTop" Val="pseudo_tb"/>
-        <Option Name="SrcSet" Val=""/>
+        <Option Name="SrcSet" Val="sources_1"/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/variableMod8_TB_behav.wcfg"/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/MCU_TB_behav.wcfg"/>
         <Option Name="XSimWcfgFile" Val="$PPRDIR/xoroshiro_basic_tb_behav.wcfg"/>
@@ -316,12 +382,11 @@
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="15">
-    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k70tfbv676-3" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7k70tfbv676-3" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design"/>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
