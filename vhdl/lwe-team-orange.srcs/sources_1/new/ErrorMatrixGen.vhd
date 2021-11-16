@@ -16,34 +16,6 @@ entity ErrorMatrixGen is
 end ErrorMatrixGen;
 
 architecture Behavioral of ErrorMatrixGen is
-    component xoroshiroRNG is 
-        generic (
-            -- Default seed value.
-            init_seed:  std_logic_vector(31 downto 0):= "11011011001010101011011101101100" 
-        );
-        port (
-            clk:                in  std_logic; -- rising edge active.
-            rst:                in  std_logic; -- active high.
-            should_reseed:      in  std_logic; -- High to request re-seeding.
-            newseed:            in  std_logic_vector(31 downto 0); -- New seed value for reseeding.
-            -- High when the user accepts the current random data word
-            -- and requests new random data for the next clock cycle.
-            enable:             in  std_logic;
-            -- High when valid random data is available on the output.
-            -- Low during the first clock cycle after reset and after re-seeding
-            out_valid:          out std_logic;
-            -- A new random word appears after every rising clock edge
-            -- where enable = '1'.
-            out_data:           out std_logic_vector(15 downto 0) );
-    end component;
-    
-    component adder is
-    Port ( clk : in  STD_LOGIC;
-           a : in  STD_LOGIC_VECTOR (17 downto 0);
-           b : in  STD_LOGIC_VECTOR (17 downto 0);
-           r : out  STD_LOGIC_VECTOR (17 downto 0));      
-    end component;
-    
     signal xoro_1 : std_logic_vector(15 downto 0);
     signal xoro_2 : std_logic_vector(15 downto 0);
     signal xoro_3 : std_logic_vector(15 downto 0);
@@ -60,7 +32,7 @@ architecture Behavioral of ErrorMatrixGen is
     type statetype is (s0, s1, s2);
     signal state, next_state: statetype := s0;
 begin
-    xoro1: xoroshiroRNG 
+    xoro1: entity work.xoroshiroRNG 
     generic map (init_seed => "11011011001010101011011101101100")
     port map(
           clk => clk,
@@ -71,7 +43,7 @@ begin
           out_valid => valid_1,
           out_data => xoro_1
           );
-    xoro2: xoroshiroRNG 
+    xoro2: entity work.xoroshiroRNG 
     generic map (init_seed => "11111011111010101011011101101100")
     port map(
           clk => clk,
@@ -82,7 +54,7 @@ begin
           out_valid => valid_2,
           out_data => xoro_2
           );
-    xoro3: xoroshiroRNG 
+    xoro3: entity work.xoroshiroRNG 
     generic map (init_seed => "00001011001010101011011101101100")
     port map(
           clk => clk,
@@ -93,7 +65,7 @@ begin
           out_valid => valid_3,
           out_data => xoro_3
           );
-    xoro4: xoroshiroRNG 
+    xoro4: entity work.xoroshiroRNG 
     generic map (init_seed => "11111111111000111111111000011111")
     port map(
           clk => clk,
@@ -104,7 +76,7 @@ begin
           out_valid => valid_4,
           out_data => xoro_4
           );
-    adder1 : adder
+    adder1 : entity work.adder
       port map (
         a => adder_1,
         b => adder_2,
