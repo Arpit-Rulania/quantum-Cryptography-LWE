@@ -34,6 +34,14 @@ architecture Behavioral of mcu is
     signal secret_rst : std_logic; 
     signal secret_ready : std_logic; 
     
+    -- signals for matrix mult
+    signal mult_rst : std_logic;
+    signal temp_arow : t_array;
+    signal mult_out : std_logic_vector(15 downto 0);
+    signal mult_ready : std_logic;
+    signal mult_counter : integer := 0;
+    signal Bmatrix : t_array;
+    
     -- The following is the spot A matrix is stored
     SIGNAL Asize: integer:= 0; -- IMPORTANT NOTE, THIS SIGNAL GOES UPTO 15 FOR NOW, WILL GO UP TO GIVEN GENERIC LATER. (generic is number of rows of A)
     signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.  
@@ -77,6 +85,18 @@ begin
             index => data_rng,
             poutput => q_value 
         );
+        
+    -- Instantiate matrixmult module.
+    inst_mmult: entity work.matrixmult
+        port map (
+            clk => clk,
+            rst => mult_rst,
+            inQ => q_value,
+            rowA => temp_arow,
+            secret => secretK,
+            rowB => mult_out,
+            ready => mult_ready
+        );
     
     main: process(clk)
     begin
@@ -96,8 +116,9 @@ begin
                 
                 secret_rst <= rst;
                 secret_matrix <= (others => (others => '0'));
-
+                Bmatrix <= (others => (others => '0'));
                 Amatrix <= (others => (others => (others => '0')));
+                mult_counter <= 0;
                 Asize <= 0;
             elsif should_reseed = '1' then
                 -- Next four lines reset the rng module.
@@ -126,13 +147,24 @@ begin
                         secret_rst <= '0';
                         if secret_ready = '1' then
                             secret_rst <= '1';
+                            mult_rst <= '1';
                             State <= GenerateB;
                             secret_matrix <= secretK;
                         end if;
 
                     WHEN GenerateB =>
                         --signals to activate multiplier.
-
+                        if mult_counter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
+                            if mult_ready = '0' then
+                                temp_arow <= Amatrix(mult_counter);
+                                mult_rst <= '0';
+                            elsif mult_ready = '1' then
+                                Bmatrix(mult_counter) <= mult_out;
+                                mult_rst <= '1';
+                                mult_counter <= mult_counter + 1; 
+                            end if;
+                        end if;
+                        
                     -- Encryption module goes here
                     -- once complete it will trigger stepDecrypt
                     WHEN Encrypt =>
