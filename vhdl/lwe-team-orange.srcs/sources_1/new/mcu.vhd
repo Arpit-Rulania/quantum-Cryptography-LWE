@@ -1,5 +1,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.ALL;
+
 library work;
 use work.commons.all;
 
@@ -14,7 +17,11 @@ entity mcu is
 end mcu;
 
 architecture Behavioral of mcu is
-    type StateType is (GenerateA, GenerateSecret, GenerateB, Encrypt, Decrypt);
+    type StateType is (
+        GenerateA, GenerateSecret, GenerateErrorMatrix, GenerateB,
+        Idle,
+        Encrypt, Decrypt
+    );
     signal State : StateType;
     
     
@@ -34,18 +41,23 @@ architecture Behavioral of mcu is
     signal secret_rst : std_logic; 
     signal secret_ready : std_logic; 
     
+    
     -- signals for matrix mult
     signal mult_rst : std_logic;
     signal temp_arow : t_array;
     signal mult_out : std_logic_vector(15 downto 0);
     signal mult_ready : std_logic;
-    signal mult_counter : integer := 0;
-    signal Bmatrix : t_array;
     
-    -- The following is the spot A matrix is stored
-    SIGNAL Asize: integer:= 0; -- IMPORTANT NOTE, THIS SIGNAL GOES UPTO 15 FOR NOW, WILL GO UP TO GIVEN GENERIC LATER. (generic is number of rows of A)
-    signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.  
-    signal secret_matrix : t_array; 
+    -- signals for error matrix generator
+    signal errorGen_ready : std_logic;
+    signal errorGen_value : integer;
+    
+    signal secret_matrix : t_array;
+    signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.
+    signal Bmatrix : t_array;  
+     
+    
+    signal rowCounter : integer := 0;
     
 begin
     -- Place all module port map definitions up here!
@@ -98,6 +110,15 @@ begin
             ready => mult_ready
         );
     
+    inst_errMtx: entity work.errormatrixgen
+        port map (
+            clk => clk,
+            rst => rst,
+--            ready => errorGen_ready,
+            error_normalised => errorGen_value
+--            ,
+        );
+    
     main: process(clk)
     begin
         if rising_edge(clk) then
@@ -118,8 +139,11 @@ begin
                 secret_matrix <= (others => (others => '0'));
                 Bmatrix <= (others => (others => '0'));
                 Amatrix <= (others => (others => (others => '0')));
-                mult_counter <= 0;
-                Asize <= 0;
+                
+                mult_rst <= '1';
+               
+                
+                rowCounter <= 0;
             elsif should_reseed = '1' then
                 -- Next four lines reset the rng module.
                 rst_rng <= '0';
@@ -132,14 +156,15 @@ begin
                 
                 case State is
                     WHEN GenerateA =>
-                        if Asize < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
+                        if rowCounter < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
                             secret_rst <= '0';
                             if secret_ready = '1' then
-                                Amatrix(Asize) <= secretk;
-                                Asize <= Asize + 1;
+                                Amatrix(rowCounter) <= secretk;
+                                rowCounter <= rowCounter + 1;
                                 secret_rst <= '1';
                             end if;
                         else
+                            rowCounter <= 0;
                             State <= GenerateSecret;
                         end if;
                     
@@ -148,27 +173,46 @@ begin
                         if secret_ready = '1' then
                             secret_rst <= '1';
                             mult_rst <= '1';
-                            State <= GenerateB;
+                            State <= GenerateErrorMatrix;
                             secret_matrix <= secretK;
                         end if;
 
-                    WHEN GenerateB =>
-                        --signals to activate multiplier.
-                        if mult_counter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
-                            if mult_ready = '0' then
-                                temp_arow <= Amatrix(mult_counter);
-                                mult_rst <= '0';
-                            elsif mult_ready = '1' then
-                                Bmatrix(mult_counter) <= mult_out;
-                                mult_rst <= '1';
-                                mult_counter <= mult_counter + 1; 
+                    WHEN GenerateErrorMatrix => 
+                        if rowCounter < 16 then
+                            if errorGen_ready = '1' then
+                                Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+                                rowCounter <= rowCounter + 1;
                             end if;
+                        else
+                            rowCounter <= 0;
+                            State <= GenerateB;
                         end if;
                         
+                    WHEN GenerateB =>
+                        --signals to activate multiplier.
+                        if rowCounter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
+                            if mult_ready = '0' then
+                                temp_arow <= Amatrix(rowCounter);
+                                mult_rst <= '0';
+                            else
+                                Bmatrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
+                                mult_rst <= '1';
+                                rowCounter <= rowCounter + 1; 
+                            end if;
+                        else
+                            rowCounter <= 0;
+                            State <= Idle;
+                        end if;
+                        
+                    WHEN Idle => 
+                    
+                    
+                        
                     -- Encryption module goes here
-                    -- once complete it will trigger stepDecrypt
                     WHEN Encrypt =>
                         --signals to activate encryption.
+
+
 
                     -- Decryption module here.
                     WHEN Decrypt =>
