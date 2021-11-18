@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="26080001fs"></ZoomEndTime>
-      <Cursor1Time time="13920000fs"></Cursor1Time>
+      <ZoomStartTime time="19675000fs"></ZoomStartTime>
+      <ZoomEndTime time="23070001fs"></ZoomEndTime>
+      <Cursor1Time time="21035000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="272"></NameColumnWidth>
-      <ValueColumnWidth column_width="132"></ValueColumnWidth>
+      <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="8" />
+   <WVObjectSize size="11" />
    <wvobject fp_name="/mcu_tb/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -35,8 +35,9 @@
       <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject fp_name="group1215" type="group">
-      <obj_property name="label">RNG Items</obj_property>
+      <obj_property name="label">RNG Module</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/mcu_tb/seed" type="array">
          <obj_property name="ElementShortName">seed[31:0]</obj_property>
          <obj_property name="ObjectShortName">seed[31:0]</obj_property>
@@ -52,11 +53,59 @@
       <wvobject fp_name="/mcu_tb/inst_uut/data_rng" type="array">
          <obj_property name="ElementShortName">data_rng[15:0]</obj_property>
          <obj_property name="ObjectShortName">data_rng[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/valid_rng" type="logic">
+         <obj_property name="ElementShortName">valid_rng</obj_property>
+         <obj_property name="ObjectShortName">valid_rng</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="group193" type="group">
-      <obj_property name="label">RNG Row</obj_property>
+   <wvobject fp_name="group117" type="group">
+      <obj_property name="label">Prime Generation</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/mcu_tb/inst_uut/q_rst" type="logic">
+         <obj_property name="ElementShortName">q_rst</obj_property>
+         <obj_property name="ObjectShortName">q_rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/q_ready" type="logic">
+         <obj_property name="ElementShortName">q_ready</obj_property>
+         <obj_property name="ObjectShortName">q_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/q_enable" type="logic">
+         <obj_property name="ElementShortName">q_enable</obj_property>
+         <obj_property name="ObjectShortName">q_enable</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/q_value" type="array">
+         <obj_property name="ElementShortName">q_value[15:0]</obj_property>
+         <obj_property name="ObjectShortName">q_value[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider136">
+      <obj_property name="label">------------------ DEBUG ------------------</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#E0FFFF</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mcu_tb/inst_uut/rowCounter" type="other">
+      <obj_property name="ElementShortName">rowCounter</obj_property>
+      <obj_property name="ObjectShortName">rowCounter</obj_property>
+      <obj_property name="CustomSignalColor">#E0FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="divider" fp_name="divider118">
+      <obj_property name="label">------------------ PARAMS ------------------</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">#0000FF</obj_property>
+   </wvobject>
+   <wvobject fp_name="group193" type="group">
+      <obj_property name="label">Secret Key</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/mcu_tb/inst_uut/secret_matrix" type="array">
+         <obj_property name="ElementShortName">secret_matrix[0:15][15:0]</obj_property>
+         <obj_property name="ObjectShortName">secret_matrix[0:15][15:0]</obj_property>
+      </wvobject>
       <wvobject fp_name="/mcu_tb/inst_uut/secretk" type="array">
          <obj_property name="ElementShortName">secretk[0:15][15:0]</obj_property>
          <obj_property name="ObjectShortName">secretk[0:15][15:0]</obj_property>
@@ -73,14 +122,14 @@
    <wvobject fp_name="/mcu_tb/inst_uut/Amatrix" type="array">
       <obj_property name="ElementShortName">Amatrix[0:15][0:15][15:0]</obj_property>
       <obj_property name="ObjectShortName">Amatrix[0:15][0:15][15:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/mcu_tb/inst_uut/Bmatrix" type="array">
+      <obj_property name="ElementShortName">Bmatrix[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">Bmatrix[0:15][15:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
       <obj_property name="isExpanded"></obj_property>
-   </wvobject>
-   <wvobject fp_name="/mcu_tb/inst_uut/Asize" type="other">
-      <obj_property name="ElementShortName">Asize</obj_property>
-      <obj_property name="ObjectShortName">Asize</obj_property>
-   </wvobject>
-   <wvobject fp_name="/mcu_tb/inst_uut/secret_matrix" type="array">
-      <obj_property name="ElementShortName">secret_matrix[0:15][15:0]</obj_property>
-      <obj_property name="ObjectShortName">secret_matrix[0:15][15:0]</obj_property>
    </wvobject>
 </wave_config>
