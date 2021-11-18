@@ -18,8 +18,10 @@ end mcu;
 
 architecture Behavioral of mcu is
     type StateType is (
-        GenerateQ, -- Pre-init
-        GenerateA, GenerateSecret, GenerateErrorMatrix, GenerateB, --- Init
+        GenerateQ,
+        GenerateA, GenerateSecret, GenerateErrorMatrix,
+        GenerateB, GenerateB_post_setup, GenerateB_post,
+        
         Idle, -- Idle
         Encrypt, Decrypt -- Execution
     );
@@ -58,7 +60,12 @@ architecture Behavioral of mcu is
     signal errorGen_ready : std_logic;
     signal errorGen_value : integer;
     
-    signal secret_matrix : t_array;
+    -- signals for modulo unit
+    signal mod_rst: std_logic;
+    signal mod_input: std_logic_vector(15 downto 0);
+    signal mod_output: std_logic_vector(15 downto 0);
+    signal mod_ready: std_logic;
+    
     signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.
     signal Bmatrix : t_array;  
     signal secret_key : t_array;
@@ -126,6 +133,17 @@ begin
             error_normalised => errorGen_value
         );
     
+    inst_mod: entity work.variableMod
+        generic map (i => 16)
+        port map (
+            clk => clk,
+            rst => mod_rst,
+            inQ => q_value,
+            input => mod_input,
+            output => mod_output,
+            ready => mod_ready
+        );
+    
     main: process(clk)
     begin
         if rising_edge(clk) then
@@ -148,11 +166,15 @@ begin
                 Bmatrix <= (others => (others => '0'));
                 Amatrix <= (others => (others => (others => '0')));
                 
+                mult_inA <= (others => (others => '0'));
+                mult_inB <= (others => (others => '0'));
+                
+                mod_rst <= '1';
+                
                 mult_rst <= '1';
                 
                 q_rst <= '1';
-                q_enable <= '0'; -- Enabled during GenerateQ
-               
+                q_enable <= '0'; -- Enabled during GenerateQ               
                 
                 rowCounter <= 0;
             elsif should_reseed = '1' then
@@ -217,19 +239,44 @@ begin
                         secret_rst <= '0';
                         
                         if rowCounter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
-                            if mult_ready = '0' then
-                                temp_arow <= Amatrix(rowCounter);
-                                mult_rst <= '0';
-                            else
+                            if mult_ready = '1' then
                                 Bmatrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
                                 mult_rst <= '1';
-                                rowCounter <= rowCounter + 1; 
+                                rowCounter <= rowCounter + 1;                                
+                            else
+                                mult_inA <= Amatrix(rowCounter);
+                                mult_rst <= '0'; 
+                            end if;
+                        else
+                            rowCounter <= 0;
+                            State <= GenerateB_post_setup;
+                        end if;
+                    
+                    WHEN GenerateB_post_setup =>
+                        mod_input <= Bmatrix(rowCounter);
+                        State <= GenerateB_post;
+                        
+                    WHEN GenerateB_post => 
+                        -- Fixup values to fit within 0 <= x < q
+                        -- Needed because the error matrix could spit out -1 (0xFFFFFFFF)
+                        if rowCounter < 16 then
+                            if mod_ready = '1' then
+                                Bmatrix(rowCounter) <= mod_output; -- Store result
+                                
+                                mod_rst <= '1'; -- Prime modulo unit to load next value
+                                if rowCounter /= 15 then
+                                    mod_input <= Bmatrix(rowCounter + 1);
+                                end if;
+                                
+                                rowCounter <= rowCounter + 1;
+                            else
+                                mod_rst <= '0'; 
                             end if;
                         else
                             rowCounter <= 0;
                             State <= Idle;
                         end if;
-                        
+                    
                     WHEN Idle => 
                     
                     
