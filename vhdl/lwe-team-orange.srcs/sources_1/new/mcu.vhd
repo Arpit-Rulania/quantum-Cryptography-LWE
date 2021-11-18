@@ -252,8 +252,8 @@ begin
                     WHEN GenerateErrorMatrix => 
                         if rowCounter < TEMP_n_rows then
                             if errorGen_ready = '1' then
-                                --Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
-                                --DEBUG_error_matrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+                                Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+                                DEBUG_error_matrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
                                 rowCounter <= rowCounter + 1;
                             end if;
                         else
