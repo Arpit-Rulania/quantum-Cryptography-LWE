@@ -43,16 +43,16 @@ architecture Behavioral of mcu is
     signal q_enable : std_logic;
     
     -- signals for secret key
-    signal secretk : t_array; 
+    signal secret_output : t_array; -- intermediate signal; gets stored into secret_matrix on completion
     signal secret_rst : std_logic; 
     signal secret_ready : std_logic; 
     
-    
     -- signals for matrix mult
     signal mult_rst : std_logic;
-    signal temp_arow : t_array;
     signal mult_out : std_logic_vector(15 downto 0);
     signal mult_ready : std_logic;
+    signal mult_inA: t_array;
+    signal mult_inB: t_array;
     
     -- signals for error matrix generator
     signal errorGen_ready : std_logic;
@@ -61,7 +61,7 @@ architecture Behavioral of mcu is
     signal secret_matrix : t_array;
     signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.
     signal Bmatrix : t_array;  
-     
+    signal secret_key : t_array;
     
     signal rowCounter : integer := 0;
     
@@ -79,8 +79,8 @@ begin
             out_data         => data_rng
         );
  
-    -- Instantitate secret key module.
-    inst_seckey: entity work.secretKey
+    -- Instantitate secret vector generation module.
+    inst_secvector: entity work.secretVector
         generic map (
             i => 16,      -- i is the length of the row i.e. number of columns
             bitsize => 16 -- bitsize is the number of bits the number is made of.... make it a generic later or not???
@@ -91,7 +91,7 @@ begin
             inQ => q_value,    
             randomNum => data_rng,
             validRng => valid_rng,
-            secret => secretk,
+            output => secret_output,
             ready => secret_ready
         );
         
@@ -112,9 +112,9 @@ begin
             clk => clk,
             rst => mult_rst,
             inQ => q_value,
-            rowA => temp_arow,
-            secret => secretK,
-            rowB => mult_out,
+            inA => mult_inA,
+            inB => mult_inB,
+            output  => mult_out,
             ready => mult_ready
         );
     
@@ -143,7 +143,8 @@ begin
                 State <= GenerateQ;
                 
                 secret_rst <= rst;
-                secret_matrix <= (others => (others => '0'));
+                secret_key <= (others => (others => '0'));
+                
                 Bmatrix <= (others => (others => '0'));
                 Amatrix <= (others => (others => (others => '0')));
                 
@@ -181,7 +182,7 @@ begin
                         if rowCounter < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
                             secret_rst <= '0';
                             if secret_ready = '1' then
-                                Amatrix(rowCounter) <= secretk;
+                                Amatrix(rowCounter) <= secret_output;
                                 rowCounter <= rowCounter + 1;
                                 secret_rst <= '1';
                             end if;
@@ -195,8 +196,8 @@ begin
                         if secret_ready = '1' then
                             secret_rst <= '1';
                             mult_rst <= '1';
+                            secret_key <= secret_output;
                             State <= GenerateErrorMatrix;
-                            secret_matrix <= secretK;
                         end if;
 
                     WHEN GenerateErrorMatrix => 
@@ -212,6 +213,9 @@ begin
                         
                     WHEN GenerateB =>
                         --signals to activate multiplier.
+                        mult_inB <= secret_key;
+                        secret_rst <= '0';
+                        
                         if rowCounter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
                             if mult_ready = '0' then
                                 temp_arow <= Amatrix(rowCounter);

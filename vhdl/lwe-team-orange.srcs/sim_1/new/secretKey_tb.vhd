@@ -3,10 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.commons.all;
 
-entity secretKey_TB is
-end secretKey_TB;
+entity secretVector_TB is
+end secretVector_TB;
 
-architecture Behavioral of secretKey_TB is
+architecture Behavioral of secretVector_TB is
     SIGNAL clk: std_logic;
     SIGNAL rst: std_logic;
     
@@ -18,7 +18,7 @@ architecture Behavioral of secretKey_TB is
     signal randomNum:  std_logic_vector (15 DOWNTO 0);
         
 begin
-    SecretToTest: entity work.secretKey 
+    SecretToTest: entity work.secretVector 
         Generic MAP (
             i => 16
         )
@@ -27,7 +27,7 @@ begin
             rst => rst,
             randomNum => randomNum,
             validRng => validRng,
-            secret => secret,
+            output => secret,
             ready => ready
        );
 
