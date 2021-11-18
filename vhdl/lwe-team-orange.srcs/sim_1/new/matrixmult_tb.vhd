@@ -1,22 +1,4 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 11.11.2021 23:01:43
--- Design Name: 
--- Module Name: matrixmult_tb - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;
@@ -26,20 +8,7 @@ entity matrixmult_tb is
 --  Port ( );
 end matrixmult_tb;
 
-architecture Behavioral of matrixmult_tb is
-    component matrixmult is
-    Generic ( i : integer:= 16);
-    Port (
-      clk : in std_logic;
-      rst : in std_logic;
-      inQ : in std_logic_vector (15 downto 0);
-      rowA : in t_array;
-      secret : in t_array;
-      rowB : out std_logic_vector (15 downto 0);
-      ready : out std_logic
-    );
-    end component;
-    
+architecture Behavioral of matrixmult_tb is  
     SIGNAL Clk_s, Rst_s: std_logic;
     SIGNAL output_s: std_logic_vector(15 DOWNTO 0);
     SIGNAL in1: t_array;
@@ -48,16 +17,16 @@ architecture Behavioral of matrixmult_tb is
     SIGNAL t_ready: std_logic;
     
 begin
-    CompToTest: matrixmult 
+    CompToTest: entity work.matrixmult 
 --    generic map (i => 16)
     port map (
-        Clk_s,
-        Rst_s,
-        Q,
-        in1,
-        in2,
-        output_s,
-        t_ready
+        clk => clk_s,
+        rst => rst_s,
+        inQ => Q,
+        inA => in1,
+        inB => in2,
+        output => output_s,
+        ready => t_ready
     );
     
     Clk_proc: PROCESS
@@ -110,10 +79,15 @@ begin
     
     Matrixmult_proc: process
     begin
+    
         Rst_s <= '1';
         wait for 30 ns;
         Rst_s <= '0';
+        
+        -- Should be 841
+        wait until output_s = std_logic_vector(to_unsigned(841, output_s'length));
         wait;
+        
     end process Matrixmult_proc;
 
 end Behavioral;

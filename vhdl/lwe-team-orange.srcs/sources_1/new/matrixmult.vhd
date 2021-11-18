@@ -1,3 +1,7 @@
+-- Dot product and modulo utility
+-- NOTE: Multiplies an `i` vector with another `i` vector
+-- Outputs a single value 
+
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;
