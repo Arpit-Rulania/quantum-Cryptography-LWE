@@ -80,7 +80,7 @@ architecture Behavioral of mcu is
     
     
     
-    constant TEMP_n_rows: integer := 4;
+    constant TEMP_n_rows: integer := 16;
     
 begin
     -- Place all module port map definitions up here!
@@ -123,17 +123,29 @@ begin
             output => q_value 
         );
         
-    -- Instantiate matrixmult module.
-    inst_mmult: entity work.matrixmult
-        port map (
-            clk => clk,
-            rst => mult_rst,
-            inQ => q_value,
-            inA => mult_inA,
-            inB => mult_inB,
-            output  => mult_out,
-            ready => mult_ready
-        );
+--    -- Instantiate matrixmult module.
+--    inst_mmult: entity work.matrixmult
+--        port map (
+--            clk => clk,
+--            rst => mult_rst,
+--            inQ => q_value,
+--            inA => mult_inA,
+--            inB => mult_inB,
+--            output  => mult_out,
+--            ready => mult_ready
+--        );
+
+    inst_dotprod: entity work.dotproduct
+      generic map (i => 16) 
+      port map (
+        clk => clk,
+        rst => mult_rst,
+        A => mult_inA,
+        B => mult_inB,
+        inQ => q_value,
+        C => mult_out,
+        ready => mult_ready
+      );
     
     inst_errMtx: entity work.errormatrixgen
         port map (

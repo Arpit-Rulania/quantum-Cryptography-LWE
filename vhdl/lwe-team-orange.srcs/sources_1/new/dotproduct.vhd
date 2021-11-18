@@ -28,11 +28,15 @@ architecture Behavioral of dotproduct is
     signal mod_operation_primed : std_logic;
     signal mod_enable : std_logic;
     signal mod_enable_control : std_logic;
-    signal mod_output : std_logic_vector(i-1 downto 0);
+    signal mod_output : std_logic_vector((2*i)-1 downto 0);
     signal mod_ready : std_logic;
+    
+    signal expanded_q: std_logic_vector((2*i)-1 downto 0);
 begin
 
+    expanded_q <= (2*i-1 downto i => '0') & inQ;
     mod_enable_control <= not mod_enable;
+    
 
     -- Generate multiple instances of the multiplication A
     -- Perform 16 simultaneous multiplications on the integers comprising the vector
@@ -56,7 +60,7 @@ begin
         port map (
             clk => clk,
             rst => mod_enable_control,
-            inQ => inQ,
+            inQ => expanded_q,
             input => std_logic_vector(sum),
             output => mod_output,
             ready => mod_ready
@@ -77,16 +81,17 @@ begin
             elsif counter = i then
                 C <= std_logic_vector(sum(i-1 downto 0));
                 ready <= '1';
-            elsif mod_ready = '1' then
-                mod_enable <= '0';
-                sum <= unsigned(mod_output);
-                counter <= counter + 1;
-                
-            elsif mult_ready(counter) = '1' then
-                sum <= sum + unsigned(mult_results(counter));
-                
+            elsif mod_enable = '1' then
+                if mod_ready = '1' then
+                    mod_enable <= '0';
+                    mod_operation_primed <= '0';
+                    sum <= unsigned(mod_output);
+                    counter <= counter + 1;
+                end if;
+            elsif mult_ready(counter) = '1' then               
                 if mod_operation_primed = '0' then
                     mod_operation_primed <= '1';
+                    sum <= sum + unsigned(mult_results(counter));
                 else
                     mod_enable <= '1';
                 end if;                

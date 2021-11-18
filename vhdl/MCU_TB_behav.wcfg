@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="15244934fs"></ZoomStartTime>
-      <ZoomEndTime time="16508935fs"></ZoomEndTime>
-      <Cursor1Time time="10944934fs"></Cursor1Time>
+      <ZoomStartTime time="1093034fs"></ZoomStartTime>
+      <ZoomEndTime time="1224835fs"></ZoomEndTime>
+      <Cursor1Time time="1094434fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="272"></NameColumnWidth>
-      <ValueColumnWidth column_width="124"></ValueColumnWidth>
+      <NameColumnWidth column_width="248"></NameColumnWidth>
+      <ValueColumnWidth column_width="121"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="19" />
+   <WVObjectSize size="20" />
    <wvobject fp_name="/mcu_tb/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -90,55 +90,6 @@
       <wvobject fp_name="/mcu_tb/inst_uut/errorGen_value" type="other">
          <obj_property name="ElementShortName">errorGen_value</obj_property>
          <obj_property name="ObjectShortName">errorGen_value</obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject fp_name="group151" type="group">
-      <obj_property name="label">Matrix Multiplier</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/rst" type="logic">
-         <obj_property name="ElementShortName">rst</obj_property>
-         <obj_property name="ObjectShortName">rst</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/inQ" type="array">
-         <obj_property name="ElementShortName">inQ[15:0]</obj_property>
-         <obj_property name="ObjectShortName">inQ[15:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/inA" type="array">
-         <obj_property name="ElementShortName">inA[0:15][15:0]</obj_property>
-         <obj_property name="ObjectShortName">inA[0:15][15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/output" type="array">
-         <obj_property name="ElementShortName">output[15:0]</obj_property>
-         <obj_property name="ObjectShortName">output[15:0]</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/ready" type="logic">
-         <obj_property name="ElementShortName">ready</obj_property>
-         <obj_property name="ObjectShortName">ready</obj_property>
-         <obj_property name="CustomSignalColor">#FF0000</obj_property>
-         <obj_property name="UseCustomSignalColor">true</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/dotReady" type="logic">
-         <obj_property name="ElementShortName">dotReady</obj_property>
-         <obj_property name="ObjectShortName">dotReady</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/rstMod_control" type="logic">
-         <obj_property name="ElementShortName">rstMod_control</obj_property>
-         <obj_property name="ObjectShortName">rstMod_control</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/rstMod" type="logic">
-         <obj_property name="ElementShortName">rstMod</obj_property>
-         <obj_property name="ObjectShortName">rstMod</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/dotOut" type="array">
-         <obj_property name="ElementShortName">dotOut[15:0]</obj_property>
-         <obj_property name="ObjectShortName">dotOut[15:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/i" type="other">
-         <obj_property name="ElementShortName">i</obj_property>
-         <obj_property name="ObjectShortName">i</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group164" type="group">
@@ -263,6 +214,63 @@
          <obj_property name="ObjectShortName">i</obj_property>
       </wvobject>
    </wvobject>
+   <wvobject fp_name="group675" type="group">
+      <obj_property name="label">Dot Product</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/mult_results" type="array">
+         <obj_property name="ElementShortName">mult_results[0:15][31:0]</obj_property>
+         <obj_property name="ObjectShortName">mult_results[0:15][31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/mult_ready" type="array">
+         <obj_property name="ElementShortName">mult_ready[0:15]</obj_property>
+         <obj_property name="ObjectShortName">mult_ready[0:15]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/A" type="array">
+         <obj_property name="ElementShortName">A[0:15][15:0]</obj_property>
+         <obj_property name="ObjectShortName">A[0:15][15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/C" type="array">
+         <obj_property name="ElementShortName">C[15:0]</obj_property>
+         <obj_property name="ObjectShortName">C[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/mod_enable_control" type="logic">
+         <obj_property name="ElementShortName">mod_enable_control</obj_property>
+         <obj_property name="ObjectShortName">mod_enable_control</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/mod_operation_primed" type="logic">
+         <obj_property name="ElementShortName">mod_operation_primed</obj_property>
+         <obj_property name="ObjectShortName">mod_operation_primed</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/mod_ready" type="logic">
+         <obj_property name="ElementShortName">mod_ready</obj_property>
+         <obj_property name="ObjectShortName">mod_ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/counter" type="other">
+         <obj_property name="ElementShortName">counter</obj_property>
+         <obj_property name="ObjectShortName">counter</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/ready" type="logic">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/sum" type="array">
+         <obj_property name="ElementShortName">sum[31:0]</obj_property>
+         <obj_property name="ObjectShortName">sum[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/mod_output" type="array">
+         <obj_property name="ElementShortName">mod_output[31:0]</obj_property>
+         <obj_property name="ObjectShortName">mod_output[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/mcu_tb/inst_uut/inst_dotprod/mod_enable" type="logic">
+      <obj_property name="ElementShortName">mod_enable</obj_property>
+      <obj_property name="ObjectShortName">mod_enable</obj_property>
+   </wvobject>
    <wvobject type="divider" fp_name="divider136">
       <obj_property name="label">------------------ DEBUG ------------------</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -314,6 +322,7 @@
       <obj_property name="ObjectShortName">secret_key[0:15][15:0]</obj_property>
       <obj_property name="CustomSignalColor">#FFD700</obj_property>
       <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/mcu_tb/inst_uut/Amatrix" type="array">
       <obj_property name="ElementShortName">Amatrix[0:15][0:15][15:0]</obj_property>
