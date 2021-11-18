@@ -250,7 +250,7 @@ begin
                         secret_rst <= '0';
                         
                         if rowCounter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
-                            if mult_ready = '1' then
+                            if mult_ready = '1' and mult_rst /= '1' then
                                 Bmatrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
                                 DEBUG_raw_B_matrix(rowCounter) <= mult_out;
                                 DEBUG_premod_B_matrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
