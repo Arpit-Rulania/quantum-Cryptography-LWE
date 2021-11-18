@@ -13,7 +13,8 @@ entity ErrorMatrixGen is
       --  seed_3:             in std_logic_vector(15 downto 0);
       --  seed_4:             in std_logic_vector(15 downto 0);
         error:              out std_logic_vector(15 downto 0);
-        error_normalised:   out integer :=0 );
+        error_normalised:   out integer :=0
+     );
 end ErrorMatrixGen;
 
 architecture Behavioral of ErrorMatrixGen is
@@ -26,12 +27,14 @@ architecture Behavioral of ErrorMatrixGen is
     signal valid_3: std_logic;
     signal valid_4: std_logic;
     
-    signal adder_1 : std_logic_vector(17 downto 0);
-    signal adder_2 : std_logic_vector(17 downto 0);
-    signal adder_3 : std_logic_vector(17 downto 0);
+    signal adder_inA : std_logic_vector(17 downto 0);
+    signal adder_inB : std_logic_vector(17 downto 0);
+    signal adder_out : std_logic_vector(17 downto 0);
     
     type statetype is (s0, s1, s2);
     signal state, next_state: statetype := s0;
+    
+    signal firstCycleCompleted : std_logic := '0';
 begin
     xoro1: entity work.xoroshiroRNG 
     generic map (init_seed => "11011011001010101011011101101100")
@@ -79,10 +82,10 @@ begin
           );
     adder1 : entity work.adder
       port map (
-        a => adder_1,
-        b => adder_2,
+        a => adder_inA,
+        b => adder_inB,
         clk => clk,
-        r => adder_3
+        r => adder_out
     );
     
 process(clk, rst)
@@ -90,37 +93,44 @@ begin
     if rising_edge(clk) then
         if rst = '1' then
             state <= s0;
+            firstCycleCompleted <= '0';
+            
             error <= (others => '0');
+            error_normalised <= 0;
         else
             ready <= '0';
-            if state = s0 then
-                ready <= '1';
-                error <= adder_3(17 downto 2);
-                error_normalised <= (to_integer(unsigned(adder_3(17 downto 2))) - 32768)/12000;
-            end if;
-            state <= next_state;
+            
+            case state is
+                when s0 =>
+                    adder_inA <= "00"&xoro_1;
+                    adder_inB <= "00"&xoro_2;
+                    state <= s1; -- next state
+                    
+                    if firstCycleCompleted = '1' then
+                        ready <= '1';
+                        error <= adder_out(17 downto 2);
+                        error_normalised <= (to_integer(unsigned(adder_out(17 downto 2))) - 32768)/12000;
+                    end if;
+                when s1 =>
+                    adder_inA <= adder_out;
+                    adder_inB <= "00"&xoro_3;
+                    state <= s2; -- next state
+                    
+                when s2 =>
+                    adder_inA <= adder_out;
+                    adder_inB <= "00"&xoro_4;
+                    firstCycleCompleted <= '1';
+                    state <= s0; -- next state
+            end case;
         end if;
     end if;
 end process;
 
 
-process(clk, state, xoro_1, xoro_2, xoro_3, xoro_4, adder_3)
+process(clk, state, xoro_1, xoro_2, xoro_3, xoro_4, adder_out)
 
 begin
-    case state is
-        when s0 =>
-            adder_1 <= "00"&xoro_1;
-            adder_2 <= "00"&xoro_2;
-            next_state <= s1;
-        when s1 =>
-            adder_1 <= adder_3;
-            adder_2 <= "00"&xoro_3;
-            next_state <= s2;
-        when s2 =>
-            adder_1 <= adder_3;
-            adder_2 <= "00"&xoro_4;
-            next_state <= s0;
-    end case;
+
 end process;
 
 end Behavioral;
