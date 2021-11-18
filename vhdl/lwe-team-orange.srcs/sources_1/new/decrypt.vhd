@@ -9,12 +9,12 @@ ENTITY decrypt IS
     PORT (
         clk : IN STD_LOGIC;
         rst : IN STD_LOGIC;
-        sizeM : IN unsigned(7 DOWNTO 0); -- 15
+        sizeM : IN unsigned(7 DOWNTO 0); -- 15!!!!!!!
 
         inQ : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
         inS : IN arr;
 
-        inU : IN arr;
+        inU : IN arr;                           --<------ THIS CHANGES TO t_array CROSS REFERENCE WITH ENCRYPT MODULE
         inV : IN unsigned(7 DOWNTO 0);
 
         outM : OUT STD_LOGIC;
