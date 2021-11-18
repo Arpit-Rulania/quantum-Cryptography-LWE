@@ -70,6 +70,11 @@ architecture Behavioral of mcu is
     signal Bmatrix : t_array;  
     signal secret_key : t_array;
     
+    
+    signal DEBUG_error_matrix: t_array;
+    signal DEBUG_raw_B_matrix: t_array;
+    signal DEBUG_premod_B_matrix: t_array;
+    
     signal rowCounter : integer := 0;
     
 begin
@@ -166,6 +171,11 @@ begin
                 Bmatrix <= (others => (others => '0'));
                 Amatrix <= (others => (others => (others => '0')));
                 
+                --- DEBUG SIGNALS
+                DEBUG_error_matrix <= (others => (others => '0'));
+                DEBUG_raw_B_matrix <= (others => (others => '0'));
+                DEBUG_premod_B_matrix <= (others => (others => '0'));
+                
                 mult_inA <= (others => (others => '0'));
                 mult_inB <= (others => (others => '0'));
                 
@@ -226,6 +236,7 @@ begin
                         if rowCounter < 16 then
                             if errorGen_ready = '1' then
                                 Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+                                DEBUG_error_matrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
                                 rowCounter <= rowCounter + 1;
                             end if;
                         else
@@ -241,6 +252,8 @@ begin
                         if rowCounter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
                             if mult_ready = '1' then
                                 Bmatrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
+                                DEBUG_raw_B_matrix(rowCounter) <= mult_out;
+                                DEBUG_premod_B_matrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
                                 mult_rst <= '1';
                                 rowCounter <= rowCounter + 1;                                
                             else
@@ -261,14 +274,15 @@ begin
                         -- Needed because the error matrix could spit out -1 (0xFFFFFFFF)
                         if rowCounter < 16 then
                             if mod_ready = '1' then
-                                Bmatrix(rowCounter) <= mod_output; -- Store result
-                                
-                                mod_rst <= '1'; -- Prime modulo unit to load next value
-                                if rowCounter /= 15 then
-                                    mod_input <= Bmatrix(rowCounter + 1);
+                                if mod_rst /= '1' then
+                                    Bmatrix(rowCounter) <= mod_output; -- Store result
+                                    mod_rst <= '1'; -- Prime modulo unit to load next value
+                                    if rowCounter /= 15 then
+                                        mod_input <= Bmatrix(rowCounter + 1);
+                                    end if;
+                                    
+                                    rowCounter <= rowCounter + 1;
                                 end if;
-                                
-                                rowCounter <= rowCounter + 1;
                             else
                                 mod_rst <= '0'; 
                             end if;

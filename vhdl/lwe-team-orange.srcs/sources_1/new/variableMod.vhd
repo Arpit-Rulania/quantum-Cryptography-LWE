@@ -52,7 +52,7 @@ BEGIN
                     q_out <= (0 => input(0), OTHERS => '0');
                     isReady <= '1';
                 ELSE
-                    IF hasScaled = false AND scaled_q < intermediate AND scaled_q(i-2 DOWNTO 0) /= 0 THEN
+                    IF hasScaled = false AND scaled_q < intermediate AND scaled_q(i-1) /= '1' THEN
                         -- Left shift, multiply by two, arrange the bits
                         -- idk
                         scaled_q <= scaled_q(i-2 DOWNTO 0) & '0';
