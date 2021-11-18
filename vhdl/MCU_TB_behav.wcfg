@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="12690034fs"></ZoomStartTime>
-      <ZoomEndTime time="12809835fs"></ZoomEndTime>
-      <Cursor1Time time="12935000fs"></Cursor1Time>
+      <ZoomStartTime time="15244934fs"></ZoomStartTime>
+      <ZoomEndTime time="16508935fs"></ZoomEndTime>
+      <Cursor1Time time="10944934fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="272"></NameColumnWidth>
-      <ValueColumnWidth column_width="128"></ValueColumnWidth>
+      <ValueColumnWidth column_width="124"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="19" />
    <wvobject fp_name="/mcu_tb/clk" type="logic">
@@ -95,10 +95,7 @@
    <wvobject fp_name="group151" type="group">
       <obj_property name="label">Matrix Multiplier</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/clk" type="logic">
-         <obj_property name="ElementShortName">clk</obj_property>
-         <obj_property name="ObjectShortName">clk</obj_property>
-      </wvobject>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/rst" type="logic">
          <obj_property name="ElementShortName">rst</obj_property>
          <obj_property name="ObjectShortName">rst</obj_property>
@@ -106,26 +103,30 @@
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/inQ" type="array">
          <obj_property name="ElementShortName">inQ[15:0]</obj_property>
          <obj_property name="ObjectShortName">inQ[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/inA" type="array">
          <obj_property name="ElementShortName">inA[0:15][15:0]</obj_property>
          <obj_property name="ObjectShortName">inA[0:15][15:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/inB" type="array">
-         <obj_property name="ElementShortName">inB[0:15][15:0]</obj_property>
-         <obj_property name="ObjectShortName">inB[0:15][15:0]</obj_property>
-      </wvobject>
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/output" type="array">
          <obj_property name="ElementShortName">output[15:0]</obj_property>
          <obj_property name="ObjectShortName">output[15:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/ready" type="logic">
          <obj_property name="ElementShortName">ready</obj_property>
          <obj_property name="ObjectShortName">ready</obj_property>
+         <obj_property name="CustomSignalColor">#FF0000</obj_property>
+         <obj_property name="UseCustomSignalColor">true</obj_property>
       </wvobject>
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/dotReady" type="logic">
          <obj_property name="ElementShortName">dotReady</obj_property>
          <obj_property name="ObjectShortName">dotReady</obj_property>
+      </wvobject>
+      <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/rstMod_control" type="logic">
+         <obj_property name="ElementShortName">rstMod_control</obj_property>
+         <obj_property name="ObjectShortName">rstMod_control</obj_property>
       </wvobject>
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mmult/rstMod" type="logic">
          <obj_property name="ElementShortName">rstMod</obj_property>
@@ -207,7 +208,6 @@
    <wvobject fp_name="group193" type="group">
       <obj_property name="label">Global Modulo</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/mcu_tb/inst_uut/inst_mod/clk" type="logic">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>

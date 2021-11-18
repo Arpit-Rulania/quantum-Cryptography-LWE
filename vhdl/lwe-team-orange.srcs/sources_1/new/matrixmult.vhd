@@ -12,10 +12,10 @@ entity matrixmult is
   Port ( 
     clk : in std_logic;
     rst : in std_logic;
-    inQ : in std_logic_vector (15 downto 0);
+    inQ : in std_logic_vector (i-1 downto 0);
     inA : in t_array;
     inB : in t_array;
-    output : out std_logic_vector (15 downto 0);
+    output : out std_logic_vector (i-1 downto 0);
     ready : out std_logic
   );
 end matrixmult;
@@ -25,10 +25,16 @@ architecture Behavioral of matrixmult is
   -- Create components for row multiplier
   -- 2 stages: inA & inB -> dotproduct -> modulo -> output
   signal dotReady : std_logic;
+  signal dotOut : std_logic_vector (i-1 downto 0);
+  
+  signal rstReady : std_logic;
   signal rstMod : std_logic;
-  signal dotOut : std_logic_vector (15 downto 0);
-
+  
+  signal rstMod_control : std_logic;
 begin
+
+  ready <= rstReady and not rst;
+  rstMod_control <= rst or rstMod;
 
   MODRST:
   process (clk)
@@ -46,6 +52,7 @@ begin
         rst => rst,
         A => inA,
         B => inB,
+        inQ => inQ,
         C => dotOut,
         ready => dotReady
       );
@@ -55,11 +62,11 @@ begin
       generic map (i => i)
       port map (
         clk => clk,
-        rst => rstMod,
+        rst => rstMod_control,
         inQ => inQ,
         input => dotOut,
         output => output,
-        ready => ready
+        ready => rstReady
       );
 
 end Behavioral;

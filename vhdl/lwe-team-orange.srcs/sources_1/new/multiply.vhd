@@ -9,12 +9,12 @@ entity multiply is
            rst : in STD_LOGIC;
            in1 : in STD_LOGIC_VECTOR(i-1 downto 0);
            in2 : in STD_LOGIC_VECTOR(i-1 downto 0);
-           output : out STD_LOGIC_VECTOR(i-1 downto 0);
+           output : out STD_LOGIC_VECTOR((2*i)-1 downto 0);
            ready : out STD_LOGIC);
 end multiply;
 
 architecture Behavioural of multiply is
-    signal sum : unsigned(i-1 downto 0);
+    signal sum : unsigned((2*i)-1 downto 0);
     signal adder : unsigned(i-1 downto 0);
     signal counter : unsigned(i-1 downto 0);
     signal isReady : std_logic;
