@@ -4,9 +4,10 @@ n = 16
 
 ##################
 
-from math import sqrt, pow
+from math import sqrt, pow, log, floor
 from itertools import count, islice
 from json import dumps
+from random import sample
 
 
 def is_prime(n):
@@ -22,5 +23,14 @@ while i < pow(2, n):
     i += 1
 
 print("Generated %d primes up to 2^%d" % (len(primes), n))
+
+primesFormatted = [*map(lambda s: bin(s)[2:].rjust(16, '0'), primes)]
+
 with open("primes.txt", "w") as f:
-    f.write(dumps([*map(lambda s: bin(s)[2:].rjust(16, '0'), primes)]))
+    f.write(dumps(primesFormatted))
+
+bitFitSize = floor(log(len(primes)) / log(2))
+print("Pruning primes to fit a %d-bit space" % bitFitSize)
+
+with open("primes.sampled.txt", "w") as f:
+    f.write(dumps(sample(primesFormatted, int(pow(2, bitFitSize)))))
