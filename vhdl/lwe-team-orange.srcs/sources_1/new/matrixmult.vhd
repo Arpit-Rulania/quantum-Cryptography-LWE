@@ -22,6 +22,7 @@ architecture Behavioral of matrixmult is
   -- 2 stages: inA & inB -> dotproduct -> modulo -> output
   signal dotReady : std_logic;
   signal rstMod : std_logic;
+  signal rstMod_forward : std_logic;
   signal dotOut : std_logic_vector (15 downto 0);
 
 begin
@@ -30,12 +31,18 @@ begin
   process (clk)
   begin
     if rising_edge(clk) then
-        rstMod <= not dotReady;
+        if rst = '1' then
+            rstMod <= '0';
+            rstMod_forward <= '1';
+        else
+            -- Delay signal by 1 cycle to allow initialisation
+            rstMod_forward <= not dotReady;
+            rstMod <= rstMod_forward;
+        end if;
     end if;
   end process;
 
-  Stage1:
-  entity work.dotproduct 
+  Stage1: entity work.dotproduct 
       generic map (i => i) 
       port map (
         clk => clk,
@@ -45,9 +52,8 @@ begin
         C => dotOut,
         ready => dotReady
       );
-
-  Stage2:
-  entity work.variableMod 
+  
+  Stage2: entity work.variableMod 
       generic map (i => i)
       port map (
         clk => clk,
