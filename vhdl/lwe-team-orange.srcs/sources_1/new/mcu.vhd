@@ -18,9 +18,10 @@ end mcu;
 
 architecture Behavioral of mcu is
     type StateType is (
-        GenerateA, GenerateSecret, GenerateErrorMatrix, GenerateB,
-        Idle,
-        Encrypt, Decrypt
+        GenerateQ, -- Pre-init
+        GenerateA, GenerateSecret, GenerateErrorMatrix, GenerateB, --- Init
+        Idle, -- Idle
+        Encrypt, Decrypt -- Execution
     );
     signal State : StateType;
     
@@ -35,6 +36,10 @@ architecture Behavioral of mcu is
     signal enable_rng : std_logic;
     signal valid_rng : std_logic;
     signal data_rng : std_logic_vector(15 downto 0);
+    
+    -- Signals for q value selection
+    signal q_rst : std_logic;
+    signal q_ready : std_logic;
     
     -- signals for secret key
     signal secretk : t_array; 
@@ -89,13 +94,14 @@ begin
             ready => secret_ready
         );
         
-    -- Instantiate prime number generator module.
-    inst_primenumgenz: entity work.primenumgen
+    -- Instantiate prime number lookup module.
+    inst_primelookup: entity work.primeLookup
         port map (
-            Clk => clk,
-            Rst => rst,
+            clk => clk,
+            rst => q_rst,
             index => data_rng,
-            poutput => q_value 
+            ready => q_ready,
+            output => q_value 
         );
         
     -- Instantiate matrixmult module.
@@ -134,7 +140,7 @@ begin
                 should_reseed_rng <= '0';
                 newseed_rng <= (others => '0');
                 
-                State <= GenerateA;
+                State <= GenerateQ;
                 
                 secret_rst <= rst;
                 secret_matrix <= (others => (others => '0'));
@@ -142,6 +148,7 @@ begin
                 Amatrix <= (others => (others => (others => '0')));
                 
                 mult_rst <= '1';
+                q_rst <= '1';
                
                 
                 rowCounter <= 0;
@@ -156,6 +163,11 @@ begin
                 enable_rng <= '1';
                 
                 case State is
+                    WHEN GenerateQ =>
+                        if valid_rng = '1' and q_ready = '1' then
+                            State <= GenerateA;
+                        end if;                        
+                    
                     WHEN GenerateA =>
                         if rowCounter < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
                             secret_rst <= '0';
