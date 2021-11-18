@@ -7,6 +7,7 @@ entity primeLookup is
     PORT (
         clk: in std_logic;
         rst: in std_logic;
+        enable: in std_logic;
         ready: out std_logic;
         index: in std_logic_vector(15 downto 0);
         output: OUT std_logic_vector (15 DOWNTO 0)
@@ -14,6 +15,7 @@ entity primeLookup is
 end primeLookup;
 
 architecture Behavioral of primeLookup is
+    signal ready_signal : std_logic;
     type t_Data is array (0 to 4096-1) of std_logic_vector (15 DOWNTO 0);
 
     -- 4096 randomly selected primes up to 2^16
@@ -22,15 +24,17 @@ architecture Behavioral of primeLookup is
     );
     
 begin
+    ready <= ready_signal;
+    
     getprimeProc : process(clk)
     begin
         if rising_edge(clk) then
             if rst = '1' then
                 output <= (others => '0');
-                ready <= '0';
-            else
+                ready_signal <= '0';
+            elsif enable = '1' and ready_signal = '0' then
                 output <= r_Data(to_integer(unsigned(index(12-1 downto 0)))); -- floor(log 16 / log 2) = 12 bits
-                ready <= '1'; -- Access only valid for first read
+                ready_signal <= '1';
             end if;
         end if;
     end process;

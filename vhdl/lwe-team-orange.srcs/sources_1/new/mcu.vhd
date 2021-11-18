@@ -38,8 +38,9 @@ architecture Behavioral of mcu is
     signal data_rng : std_logic_vector(15 downto 0);
     
     -- Signals for q value selection
-    signal q_rst : std_logic;
     signal q_ready : std_logic;
+    signal q_rst : std_logic;
+    signal q_enable : std_logic;
     
     -- signals for secret key
     signal secretk : t_array; 
@@ -99,6 +100,7 @@ begin
         port map (
             clk => clk,
             rst => q_rst,
+            enable => q_enable,
             index => data_rng,
             ready => q_ready,
             output => q_value 
@@ -148,7 +150,9 @@ begin
                 Amatrix <= (others => (others => (others => '0')));
                 
                 mult_rst <= '1';
+                
                 q_rst <= '1';
+                q_enable <= '0'; -- Enabled during GenerateQ
                
                 
                 rowCounter <= 0;
@@ -160,14 +164,21 @@ begin
                 enable_rng <= '0';
             else
                 rst_rng <= '0';
+                
                 enable_rng <= '1';
                 
                 case State is
                     WHEN GenerateQ =>
-                        if valid_rng = '1' and q_ready = '1' then
+                        q_rst <= '0';                         
+                        if valid_rng = '1' then
+                            q_enable <= '1';
+                        end if;
+                        
+                        -- Separated condition !important
+                        if q_ready = '1' then
                             State <= GenerateA;
                         end if;                        
-                    
+                
                     WHEN GenerateA =>
                         if rowCounter < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
                             secret_rst <= '0';
