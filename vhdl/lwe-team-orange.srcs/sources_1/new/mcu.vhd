@@ -114,6 +114,7 @@ begin
         port map (
             clk => clk,
             rst => rst,
+            -- -- @darrel: TODO - Implement READY signal
 --            ready => errorGen_ready,
             error_normalised => errorGen_value
 --            ,
