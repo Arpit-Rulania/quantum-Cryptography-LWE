@@ -7,6 +7,7 @@ entity ErrorMatrixGen is
     port (
         clk:                in  std_logic; -- rising edge active.
         rst:                in  std_logic; -- active high.
+        ready:              out std_logic;
       --  seed_1:             in std_logic_vector(15 downto 0);
       --  seed_2:             in std_logic_vector(15 downto 0);
       --  seed_3:             in std_logic_vector(15 downto 0);
@@ -91,7 +92,9 @@ begin
             state <= s0;
             error <= (others => '0');
         else
+            ready <= '0';
             if state = s0 then
+                ready <= '1';
                 error <= adder_3(17 downto 2);
                 error_normalised <= (to_integer(unsigned(adder_3(17 downto 2))) - 32768)/12000;
             end if;
