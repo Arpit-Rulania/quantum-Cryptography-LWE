@@ -9,14 +9,14 @@ entity multiply is
            rst : in STD_LOGIC;
            in1 : in STD_LOGIC_VECTOR(i-1 downto 0);
            in2 : in STD_LOGIC_VECTOR(i-1 downto 0);
-           output : out STD_LOGIC_VECTOR(i-1 downto 0);
+           output : out STD_LOGIC_VECTOR((2*i)-1 downto 0);
            ready : out STD_LOGIC);
 end multiply;
 
 architecture Behavioural of multiply is
-    signal sum : unsigned(i-1 downto 0);
-    signal adder : unsigned(i-1 downto 0);
-    signal counter : unsigned(i-1 downto 0);
+    signal sum : unsigned((2*i)-1 downto 0);
+    signal adder : unsigned((2*i)-1 downto 0);
+    signal counter : unsigned((2*i)-1 downto 0);
     signal isReady : std_logic;
 begin
     -- Link your signals to the outputs
@@ -32,19 +32,19 @@ begin
 
                 -- Checking for the larger of the addends isn't too important because the bit shifting will limit the cycles to 8
                 if unsigned(in1) < unsigned(in2) then
-                    adder <= unsigned(in2);
-                    counter <= unsigned(in1);
+                    adder <= (2*i-1 downto i => '0') & unsigned(in2);
+                    counter <= (2*i-1 downto i => '0') & unsigned(in1);
                 else
-                    adder <= unsigned(in1);
-                    counter <= unsigned(in2);
+                    adder <= (2*i-1 downto i => '0') & unsigned(in1);
+                    counter <= (2*i-1 downto i => '0') & unsigned(in2);
                 end if;
             elsif isReady = '0' then
                 if counter(0) = '1' then
                     sum <= sum + adder;
                 end if;
 
-                adder <= adder(i-2 downto 0) & '0';     -- adder << 1                
-                counter <= '0' & counter(i-1 downto 1); -- counter >> 1
+                adder <= adder(2*i-2 downto 0) & '0';     -- adder << 1                
+                counter <= '0' & counter(2*i-1 downto 1); -- counter >> 1
                 -- counter - 1 doesn't take effect until the end of the process
                 if counter <= 1 then
                     isReady <= '1';

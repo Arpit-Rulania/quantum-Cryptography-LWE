@@ -1,23 +1,3 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 08.11.2021 21:56:35
--- Design Name: 
--- Module Name: dotproduct_tb - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -59,12 +39,12 @@ architecture Behavioral of dotproduct_tb is
     
 begin
     CompToTest: dotproduct port map (
-        Clk_s,
-        Rst_s,
-        in1,
-        in2,
-        output_s,
-        t_ready
+        clk => clk_s,
+        rst => rst_s,
+        A => in1,
+        B => in2,
+        C => output_s,
+        ready => t_ready
     );
     
     Clk_proc: PROCESS

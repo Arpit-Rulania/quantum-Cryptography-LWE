@@ -20,7 +20,8 @@ architecture Behavioral of mcu is
     type StateType is (
         GenerateQ,
         GenerateA, GenerateSecret, GenerateErrorMatrix,
-        GenerateB, GenerateB_post_setup, GenerateB_post,
+        GenerateB_setup, GenerateB,
+        GenerateB_post_setup, GenerateB_post,
         
         Idle, -- Idle
         Encrypt, Decrypt -- Execution
@@ -29,7 +30,6 @@ architecture Behavioral of mcu is
     
     
     signal q_value: std_logic_vector(15 downto 0) := "0101010110101101";
-    -- TODO: Change this programmatically in the GenerateQ stage (To be created)
     
     -- Signals for rng
     signal rst_rng : std_logic;
@@ -77,6 +77,11 @@ architecture Behavioral of mcu is
     
     signal rowCounter : integer := 0;
     
+    
+    
+    
+    constant TEMP_n_rows: integer := 16;
+    
 begin
     -- Place all module port map definitions up here!
     -- Instantiate rng component.
@@ -94,7 +99,7 @@ begin
     -- Instantitate secret vector generation module.
     inst_secvector: entity work.secretVector
         generic map (
-            i => 16,      -- i is the length of the row i.e. number of columns
+            i => TEMP_n_rows,      -- i is the length of the row i.e. number of columns
             bitsize => 16 -- bitsize is the number of bits the number is made of.... make it a generic later or not???
         )
         port map (
@@ -118,17 +123,29 @@ begin
             output => q_value 
         );
         
-    -- Instantiate matrixmult module.
-    inst_mmult: entity work.matrixmult
-        port map (
-            clk => clk,
-            rst => mult_rst,
-            inQ => q_value,
-            inA => mult_inA,
-            inB => mult_inB,
-            output  => mult_out,
-            ready => mult_ready
-        );
+--    -- Instantiate matrixmult module.
+--    inst_mmult: entity work.matrixmult
+--        port map (
+--            clk => clk,
+--            rst => mult_rst,
+--            inQ => q_value,
+--            inA => mult_inA,
+--            inB => mult_inB,
+--            output  => mult_out,
+--            ready => mult_ready
+--        );
+
+    inst_dotprod: entity work.dotproduct
+      generic map (i => 16) 
+      port map (
+        clk => clk,
+        rst => mult_rst,
+        A => mult_inA,
+        B => mult_inB,
+        inQ => q_value,
+        C => mult_out,
+        ready => mult_ready
+      );
     
     inst_errMtx: entity work.errormatrixgen
         port map (
@@ -211,7 +228,7 @@ begin
                         end if;                        
                 
                     WHEN GenerateA =>
-                        if rowCounter < 16 then   --- 16 SHOULD NOT BE HARDCODED IT IS THE NUMBER OF ROWS....................................................
+                        if rowCounter < TEMP_n_rows then
                             secret_rst <= '0';
                             if secret_ready = '1' then
                                 Amatrix(rowCounter) <= secret_output;
@@ -233,31 +250,41 @@ begin
                         end if;
 
                     WHEN GenerateErrorMatrix => 
-                        if rowCounter < 16 then
+                        if rowCounter < TEMP_n_rows then
                             if errorGen_ready = '1' then
-                                Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
-                                DEBUG_error_matrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+                                --Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+                                --DEBUG_error_matrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
                                 rowCounter <= rowCounter + 1;
                             end if;
                         else
                             rowCounter <= 0;
-                            State <= GenerateB;
+                            State <= GenerateB_setup;
                         end if;
-                        
-                    WHEN GenerateB =>
-                        --signals to activate multiplier.
+
+                    WHEN GenerateB_setup =>
+                        -- signals to activate multiplier.
+                        mult_inA <= Amatrix(rowCounter);
                         mult_inB <= secret_key;
                         secret_rst <= '0';
+                        State <= GenerateB;
+                    
+                    WHEN GenerateB =>
+
                         
-                        if rowCounter < 16 then       -- HAVE TO FIND A WAY TO GET ALL 3 CASES DEFINED INSTEAD OF USING 16.
+                        if rowCounter < TEMP_n_rows then
                             if mult_ready = '1' and mult_rst /= '1' then
                                 Bmatrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
+                                
                                 DEBUG_raw_B_matrix(rowCounter) <= mult_out;
                                 DEBUG_premod_B_matrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
+                                
                                 mult_rst <= '1';
+                                if rowCounter /= (TEMP_n_rows-1) then
+                                    mult_inA <= Amatrix(rowCounter + 1);
+                                end if;
+                                
                                 rowCounter <= rowCounter + 1;                                
                             else
-                                mult_inA <= Amatrix(rowCounter);
                                 mult_rst <= '0'; 
                             end if;
                         else
@@ -272,12 +299,13 @@ begin
                     WHEN GenerateB_post => 
                         -- Fixup values to fit within 0 <= x < q
                         -- Needed because the error matrix could spit out -1 (0xFFFFFFFF)
-                        if rowCounter < 16 then
+                        if rowCounter < TEMP_n_rows then
                             if mod_ready = '1' then
                                 if mod_rst /= '1' then
                                     Bmatrix(rowCounter) <= mod_output; -- Store result
+
                                     mod_rst <= '1'; -- Prime modulo unit to load next value
-                                    if rowCounter /= 15 then
+                                    if rowCounter /= (TEMP_n_rows-1) then
                                         mod_input <= Bmatrix(rowCounter + 1);
                                     end if;
                                     
