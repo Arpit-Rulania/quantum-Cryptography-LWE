@@ -35,8 +35,11 @@ architecture Behavioral of encrypt is
     signal genReady : std_logic_vector(0 to A_width-1);
     signal qbytwo : std_logic_vector(15 downto 0) := (others => '0');
     signal sumBfiltered : std_logic_vector(15 downto 0);
+    signal outrdy : std_logic;
 
 begin
+    encrypt_ready <= outrdy;
+
     GEN_MOD:
     for n in 0 to A_width-1 generate
         ModuloComponent : ENTITY work.variableMod
@@ -70,16 +73,17 @@ begin
     begin
         if rising_edge(Clock) then
             if Reset = '1' then
-                encrypt_ready <= '0';
+                outrdy <= '0';
                 if M = '1' then
                     qbytwo <= '0' & inQ(15 downto 1);   -- Q/2
                     --modInput <= sumB - qbytwo;              
                     --modInput <= std_logic_vector(unsigned(sumB(15 downto 0)) - unsigned(qbytwo(15 downto 0)));
+                    modInput <= std_logic_vector(unsigned(sumB(15 downto 0)) - unsigned(qbytwo(15 downto 0)));
                 elsif M = '0' then
                     modInput <= sumB;
                 end if;
             elsif modReady = '1' and genReady(A_width - 1) = '1' then
-                encrypt_ready <= '0';
+                outrdy <= '1';
             end if;
         end if;
     end process;
