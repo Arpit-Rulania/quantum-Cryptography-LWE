@@ -1,6 +1,10 @@
 %% Config
-config = 3; % Which spec configuration
-N = 10000; % Message length
+fileID = fopen("measure.txt"); % Open file
+data = fread(fileID, 'ubit1'); % Interpret file as bit array
+fclose(fileID);
+
+config = 1; % Which spec configuration
+N = size(data, 1); % Message length
 
 % Generate list of primes
 p_num = primes(65535);
@@ -57,8 +61,8 @@ B_exact = keygen_exact(A, s, q, e_mag);
 B_approx = keygen_approx(A, s, q);
 
 %% Encryption and Decryption
-M_decexact = zeros(1, N);
-M_decapprox = zeros(1, N);
+M_decexact = zeros(N, 1);
+M_decapprox = zeros(N, 1);
 
 errors_exact = 0;
 errors_approx = 0;
@@ -69,18 +73,28 @@ for i = 1:N
     [u_approx, v_approx] = encrypt(M(i), A, B_approx, q);
     
     % Decrypt
-    M_decexact(1, i) = decrypt(u_exact, v_exact, s, q);
-    M_decapprox(1, i) = decrypt(u_approx, v_approx, s, q);
+    M_decexact(i) = decrypt(u_exact, v_exact, s, q);
+    M_decapprox(i) = decrypt(u_approx, v_approx, s, q);
     
-    if M(1, i) ~= M_decexact(1, i)
+    if M(i) ~= M_decexact(i)
         errors_exact = errors_exact + 1;
     end
-    if M(1, i) ~= M_decapprox(1, i)
+    if M(i) ~= M_decapprox(i)
         errors_approx = errors_approx + 1;
     end
     
     
 end
+
+%% Print to file
+fileID = fopen("exact_message.txt", 'w');
+fwrite(fileID, data, 'ubit1');
+fclose(fileID);
+
+fileID = fopen("approx_message.txt", 'w');
+fwrite(fileID, data, 'ubit1');
+fclose(fileID);
+
 %% Evaluate Effectiveness
 exact_failure_perc = errors_exact/N *100;
 approx_failure_perc = errors_approx/N *100;
