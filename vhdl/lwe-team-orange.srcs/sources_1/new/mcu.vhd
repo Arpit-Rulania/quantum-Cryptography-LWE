@@ -10,6 +10,8 @@ use work.commons.all;
 entity mcu is
     generic(
         bitWidth : integer := 16;
+        aHeight : integer:=16;
+        aWidth : integer:=16);
     port (
         clk : in STD_LOGIC;
         rst : in STD_LOGIC;
@@ -24,9 +26,12 @@ architecture Behavioral of mcu is
         GenerateA, GenerateSecret, GenerateErrorMatrix,
         GenerateB_setup, GenerateB,
         GenerateB_post_setup, GenerateB_post,
-        EncryptPT2, EncryptPT3,
+        
         Idle, -- Idle
-        Encrypt, Decrypt -- Execution
+        
+        Encrypt, Encrypt_setup_row, Encrypt_exec,
+        
+        Decrypt
     );
     signal State : StateType;
     
@@ -68,6 +73,11 @@ architecture Behavioral of mcu is
     signal mod_output: std_logic_vector(15 downto 0);
     signal mod_ready: std_logic;
     
+    -- signals for decryption unit
+    signal dec_ready: std_logic;
+    signal dec_rst: std_logic;
+
+    
     signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.
     signal Bmatrix : t_array;  
     signal secret_key : t_array;
@@ -79,23 +89,24 @@ architecture Behavioral of mcu is
     
     signal rowCounter : integer := 0;
     
-    signal sampleSize : integer := aHeight/4;
-    signal sampleCounter : integer := 0;
     signal InnerSampleCounter : integer := 0;
-    signal uSumArray : t_array;
-    signal vsum : std_logic_vector(15 downto 0);
+    signal Amatrix_sampleSum : t_array;
+    signal Bmatrix_sampleSum : std_logic_vector(bitWidth-1 downto 0);
     signal samplerModBeingCalculated : std_logic := '0';
     
-    signal mod_rst_enc : std_logic;
-    signal q_value_enc : std_logic_vector(15 downto 0);
-    signal mod_input_enc : std_logic_vector(15 downto 0);
-    signal mod_output_enc : std_logic_vector(15 downto 0);
-    signal mod_ready_enc : std_logic;
+    signal enc_rst : std_logic;
+    signal enc_ready : std_logic;
     
-    signal resetEncModule : std_logic;
-    signal encU : t_array;
-    signal encV : std_logic_vector(15 downto 0);
-    signal encModuleRdy : std_logic;
+    signal enc_mod_rst : std_logic;
+    signal enc_mod_q : std_logic_vector(bitWidth-1 downto 0);
+    signal enc_mod_input : std_logic_vector(bitWidth-1 downto 0);
+    signal enc_mod_output : std_logic_vector(bitWidth-1 downto 0);
+    signal enc_mod_ready : std_logic;
+    
+
+    signal data_U : t_array;
+    signal data_V : std_logic_vector(15 downto 0);
+    signal data_M : std_logic;
     
     
     
@@ -119,7 +130,7 @@ begin
     inst_secvector: entity work.secretVector
         generic map (
             i => TEMP_n_rows,      -- i is the length of the row i.e. number of columns
-            bitsize => 16 -- bitsize is the number of bits the number is made of.... make it a generic later or not???
+            bitsize => bitWidth
         )
         port map (
             clk => clk, 
@@ -155,7 +166,10 @@ begin
 --        );
 
     inst_dotprod: entity work.dotproduct
-      generic map (i => 16) 
+      generic map (
+        width => bitWidth,
+        dim => 16
+      ) 
       port map (
         clk => clk,
         rst => mult_rst,
@@ -175,7 +189,7 @@ begin
         );
     
     inst_mod: entity work.variableMod
-        generic map (i => 16)
+        generic map (i => bitWidth)
         port map (
             clk => clk,
             rst => mod_rst,
@@ -186,28 +200,44 @@ begin
         );
         
     inst_mod2: entity work.variableMod
-        generic map (i => 16)
+        generic map (i => bitWidth)
         port map (
             clk => clk,
-            rst => mod_rst_enc,
-            inQ => q_value_enc,
-            input => mod_input_enc,
-            output => mod_output_enc,
-            ready => mod_ready_enc
+            rst => enc_mod_rst,
+            inQ => enc_mod_q,
+            input => enc_mod_input,
+            output => enc_mod_output,
+            ready => enc_mod_ready
         );
         
-    isdt_encrypt: entity work.encrypt
+    inst_encrypt: entity work.encrypt
         generic map (A_width => aWidth)
         port map (
-            Clock => clk,
-            Reset => resetEncModule,
-            M => '0',
+            clk => clk,
+            rst => enc_rst,
+            inM => data_M,
             inQ => q_value,
-            sumA => uSumArray,
-            sumB => vsum,
-            u => encU,
-            v => encV,
-            encrypt_ready => encModuleRdy 
+            inA => Amatrix_sampleSum,
+            inB => Bmatrix_sampleSum,
+            outU => data_U,
+            outV => data_V,
+            ready => enc_ready 
+        );
+
+    inst_decrypt: entity work.decrypt
+        generic map (
+            width => bitWidth,
+            dim => 16
+        )
+        port map (
+            clk => clk,
+            rst => dec_rst,
+            inQ => q_value,
+            inS => secret_key,
+            inU => data_U,
+            inV => unsigned(data_V),
+            outM => data_M,
+            ready => dec_ready
         );
     
     main: process(clk)
@@ -229,10 +259,14 @@ begin
                 secret_rst <= rst;
                 secret_key <= (others => (others => '0'));
                 
+
+                enc_rst <= '1';
+
                 Bmatrix <= (others => (others => '0'));
                 Amatrix <= (others => (others => (others => '0')));
-                uSumArray <= (others => (others => '0'));
-                vsum <= (others => '0');
+                
+                Amatrix_sampleSum <= (others => (others => '0'));
+                Bmatrix_sampleSum <= (others => '0');
                 
                 
                 --- DEBUG SIGNALS
@@ -367,65 +401,55 @@ begin
                     
                     WHEN Idle => 
                     
---                    clk => clk,
---                    rst => mod_rst_enc,
---                    inQ => q_value_enc,
---                    input => mod_input_enc,
---                    output => mod_output_enc,
---                    ready => mod_ready_enc
+                    
                         
                     -- Encryption module goes here
+                    -- Sample and sum the random selection of rows from the A and B matrix within the MCU
+                    -- then pass it to the encryption module
                     WHEN Encrypt =>
-                        if sampleCounter < sampleSize then
-                            --data_rng mod sampleSize to get a number
-                            -- samplerModBeingCalculated
+                        enc_rst <= '1';
+                        enc_mod_rst <= '1';
+
+                        -- Get `sampleSize` number of random rows
+                        if rowCounter < aHeight / 4 then
+                            -- data_rng mod aHeight to get a number
+                            
                             if samplerModBeingCalculated = '0' then
-                                mod_input_enc <= data_rng;
-                                q_value_enc <= std_logic_vector(to_unsigned(aHeight, 16));
-                                mod_rst_enc <= '1';
+                                -- Set up sampler modulo unit
+                                enc_mod_input <= data_rng;
+                                enc_mod_q <= std_logic_vector(to_unsigned(aHeight, bitWidth));
+                                
                                 InnerSampleCounter <= 0;
                                 samplerModBeingCalculated <= '1';
-                            elsif samplerModBeingCalculated = '1' and mod_ready_enc = '0' then
-                                mod_rst_enc <= '0';
-                            elsif samplerModBeingCalculated = '1' and mod_ready_enc = '1' then
+                            elsif samplerModBeingCalculated = '1' then
+                                enc_mod_rst <= '0';
                                 
-                                State <= EncryptPT2;
---                                if InnerSampleCounter < 16 then
---                                    uSumArray(InnerSampleCounter) <= Amatrix(TO_INTEGER(unsigned(mod_output_enc)))(InnerSampleCounter) + uSumArray(InnerSampleCounter);
---                                    InnerSampleCounter <= InnerSampleCounter + 1;
---                                else
---                                    vsum <= vsum + Bmatrix(TO_INTEGER(unsigned(mod_output_enc)));
---                                    sampleCounter <= sampleCounter + 1;
---                                    samplerModBeingCalculated <= '0';
---                                end if;
+                                if enc_mod_ready = '1' then
+                                    State <= Encrypt_setup_row;
+                                end if;
                             end if;
-                            
-                            -- use that number as an index to select row from A
-                            -- add that array to uSumArray
-                            -- add the sum from b to vsum(std logic vector)
                         else
-                            resetEncModule <= '1';
-                            State <= EncryptPT3;
+                            enc_rst <= '0';
+                            State <= Encrypt_exec;
                             
                         end if;
-                        
-                    WHEN EncryptPT2 =>
+                    
+                    -- Add the rows of A, and column at B to the sample sum matrices
+                    WHEN Encrypt_setup_row =>
                         if InnerSampleCounter < 16 then
-                            uSumArray(InnerSampleCounter) <= Amatrix(TO_INTEGER(unsigned(mod_output_enc)))(InnerSampleCounter) + uSumArray(InnerSampleCounter);
+                            Amatrix_sampleSum(InnerSampleCounter) <= Amatrix(TO_INTEGER(unsigned(enc_mod_output)))(InnerSampleCounter) + Amatrix_sampleSum(InnerSampleCounter);
                             InnerSampleCounter <= InnerSampleCounter + 1;
                         else
-                            vsum <= vsum + Bmatrix(TO_INTEGER(unsigned(mod_output_enc)));
-                            sampleCounter <= sampleCounter + 1;
+                            Bmatrix_sampleSum <= Bmatrix_sampleSum + Bmatrix(TO_INTEGER(unsigned(enc_mod_output)));
+                            rowCounter <= rowCounter + 1;
                             samplerModBeingCalculated <= '0';
                             State <= Encrypt;
                         end if;
 
-                    WHEN EncryptPT3 =>
-                        if encModuleRdy = '0' then
-                            resetEncModule <= '0';
-                        end if;
-                        if encModuleRdy = '1' then
-                            State <= Decrypt;
+                    WHEN Encrypt_exec =>
+                        enc_rst <= '0';
+                        if enc_ready = '1' then
+                            State <= Idle;
                         end if;
                         
                     -- Decryption module here.
