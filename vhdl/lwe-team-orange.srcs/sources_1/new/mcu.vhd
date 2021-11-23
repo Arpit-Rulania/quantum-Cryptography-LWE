@@ -9,9 +9,13 @@ use work.commons.all;
 -- Add external signals if nessesary.
 entity mcu is
     generic(
+        -- Size of values
         bitWidth : integer := 16;
-        aHeight : integer:=16;
-        aWidth : integer:=16);
+        
+        -- Matrix dimensions
+        aHeight : integer := 16;
+        aWidth : integer := 16 -- MAX 16
+    );
     port (
         clk : in STD_LOGIC;
         rst : in STD_LOGIC;
@@ -36,7 +40,7 @@ architecture Behavioral of mcu is
     signal State : StateType;
     
     
-    signal q_value: std_logic_vector(15 downto 0) := "0101010110101101";
+    signal q_value: std_logic_vector(bitWidth-1 downto 0) := "0101010110101101";
     
     -- Signals for rng
     signal rst_rng : std_logic;
@@ -44,7 +48,7 @@ architecture Behavioral of mcu is
     signal newseed_rng : std_logic_vector(31 downto 0);
     signal enable_rng : std_logic;
     signal valid_rng : std_logic;
-    signal data_rng : std_logic_vector(15 downto 0);
+    signal data_rng : std_logic_vector(bitWidth-1 downto 0);
     
     -- Signals for q value selection
     signal q_ready : std_logic;
@@ -56,9 +60,9 @@ architecture Behavioral of mcu is
     signal secret_rst : std_logic; 
     signal secret_ready : std_logic; 
     
-    -- signals for matrix mult
+    -- signals for dot production (matrix mult)
     signal mult_rst : std_logic;
-    signal mult_out : std_logic_vector(15 downto 0);
+    signal mult_out : std_logic_vector(bitWidth-1 downto 0);
     signal mult_ready : std_logic;
     signal mult_inA: t_array;
     signal mult_inB: t_array;
@@ -69,8 +73,8 @@ architecture Behavioral of mcu is
     
     -- signals for modulo unit
     signal mod_rst: std_logic;
-    signal mod_input: std_logic_vector(15 downto 0);
-    signal mod_output: std_logic_vector(15 downto 0);
+    signal mod_input: std_logic_vector(bitWidth-1 downto 0);
+    signal mod_output: std_logic_vector(bitWidth-1 downto 0);
     signal mod_ready: std_logic;
     
     -- signals for decryption unit
@@ -78,10 +82,9 @@ architecture Behavioral of mcu is
     signal dec_rst: std_logic;
 
     
-    signal Amatrix : amat_array (0 to 15); -- IMPORTANT NOTE CHANGE 15 TO SOME GENERIC LATER. IT IS 15 RN FOR TESTING PURPOSES.
+    signal Amatrix : amat_array (0 to aHeight-1);
     signal Bmatrix : t_array;  
     signal secret_key : t_array;
-    
     
     signal DEBUG_error_matrix: t_array;
     signal DEBUG_raw_B_matrix: t_array;
@@ -105,13 +108,9 @@ architecture Behavioral of mcu is
     
 
     signal data_U : t_array;
-    signal data_V : std_logic_vector(15 downto 0);
+    signal data_V : std_logic_vector(bitWidth-1 downto 0);
     signal data_M : std_logic;
-    
-    
-    
-    constant TEMP_n_rows: integer := 16;
-    
+        
 begin
     -- Place all module port map definitions up here!
     -- Instantiate rng component.
@@ -129,7 +128,7 @@ begin
     -- Instantitate secret vector generation module.
     inst_secvector: entity work.secretVector
         generic map (
-            i => TEMP_n_rows,      -- i is the length of the row i.e. number of columns
+            i => aWidth,
             bitsize => bitWidth
         )
         port map (
@@ -152,23 +151,11 @@ begin
             ready => q_ready,
             output => q_value 
         );
-        
---    -- Instantiate matrixmult module.
---    inst_mmult: entity work.matrixmult
---        port map (
---            clk => clk,
---            rst => mult_rst,
---            inQ => q_value,
---            inA => mult_inA,
---            inB => mult_inB,
---            output  => mult_out,
---            ready => mult_ready
---        );
 
     inst_dotprod: entity work.dotproduct
       generic map (
         width => bitWidth,
-        dim => 16
+        dim => aWidth
       ) 
       port map (
         clk => clk,
@@ -227,7 +214,7 @@ begin
     inst_decrypt: entity work.decrypt
         generic map (
             width => bitWidth,
-            dim => 16
+            dim => aWidth
         )
         port map (
             clk => clk,
@@ -259,8 +246,8 @@ begin
                 secret_rst <= rst;
                 secret_key <= (others => (others => '0'));
                 
-
                 enc_rst <= '1';
+                enc_mod_rst <= '1';
 
                 Bmatrix <= (others => (others => '0'));
                 Amatrix <= (others => (others => (others => '0')));
@@ -277,9 +264,9 @@ begin
                 mult_inA <= (others => (others => '0'));
                 mult_inB <= (others => (others => '0'));
                 
-                mod_rst <= '1';
-                
+                mod_rst <= '1';                
                 mult_rst <= '1';
+                
                 q_rst <= '1';
                 q_enable <= '0'; -- Enabled during GenerateQ               
                 
@@ -308,7 +295,7 @@ begin
                         end if;                        
                 
                     WHEN GenerateA =>
-                        if rowCounter < TEMP_n_rows then
+                        if rowCounter < aHeight then
                             secret_rst <= '0';
                             if secret_ready = '1' then
                                 Amatrix(rowCounter) <= secret_output;
@@ -330,7 +317,7 @@ begin
                         end if;
 
                     WHEN GenerateErrorMatrix => 
-                        if rowCounter < TEMP_n_rows then
+                        if rowCounter < aHeight then
                             if errorGen_ready = '1' then
                                 Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
                                 DEBUG_error_matrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
@@ -351,7 +338,7 @@ begin
                     WHEN GenerateB =>
 
                         
-                        if rowCounter < TEMP_n_rows then
+                        if rowCounter < aHeight then
                             if mult_ready = '1' and mult_rst /= '1' then
                                 Bmatrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
                                 
@@ -359,7 +346,7 @@ begin
                                 DEBUG_premod_B_matrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
                                 
                                 mult_rst <= '1';
-                                if rowCounter /= (TEMP_n_rows-1) then
+                                if rowCounter /= (aHeight-1) then
                                     mult_inA <= Amatrix(rowCounter + 1);
                                 end if;
                                 
@@ -379,13 +366,13 @@ begin
                     WHEN GenerateB_post => 
                         -- Fixup values to fit within 0 <= x < q
                         -- Needed because the error matrix could spit out -1 (0xFFFFFFFF)
-                        if rowCounter < TEMP_n_rows then
+                        if rowCounter < aHeight then
                             if mod_ready = '1' then
                                 if mod_rst /= '1' then
                                     Bmatrix(rowCounter) <= mod_output; -- Store result
 
                                     mod_rst <= '1'; -- Prime modulo unit to load next value
-                                    if rowCounter /= (TEMP_n_rows-1) then
+                                    if rowCounter /= (aHeight-1) then
                                         mod_input <= Bmatrix(rowCounter + 1);
                                     end if;
                                     
@@ -436,7 +423,7 @@ begin
                     
                     -- Add the rows of A, and column at B to the sample sum matrices
                     WHEN Encrypt_setup_row =>
-                        if InnerSampleCounter < 16 then
+                        if InnerSampleCounter < Awidth then
                             Amatrix_sampleSum(InnerSampleCounter) <= Amatrix(TO_INTEGER(unsigned(enc_mod_output)))(InnerSampleCounter) + Amatrix_sampleSum(InnerSampleCounter);
                             InnerSampleCounter <= InnerSampleCounter + 1;
                         else
