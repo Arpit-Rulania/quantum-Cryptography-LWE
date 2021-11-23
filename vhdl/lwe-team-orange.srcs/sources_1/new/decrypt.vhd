@@ -6,7 +6,7 @@ USE work.commons.ALL;
 
 ENTITY decrypt IS
     GENERIC (
-        sizeM : integer;
+        dim : integer;
         width : integer
     );
     PORT (
@@ -28,12 +28,11 @@ ARCHITECTURE Behavioural OF decrypt IS
     SIGNAL output : STD_LOGIC;
     SIGNAL isReady : STD_LOGIC := '0';
 
-    SIGNAL mult_in1 : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
-    SIGNAL mult_in2 : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
-    SIGNAL mult_ready : STD_LOGIC;
-    SIGNAL mult_rst : STD_LOGIC;
-    SIGNAL mult_output : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
-    SIGNAL mult_rst_signal : STD_LOGIC; -- Assigned 
+    SIGNAL dot_ready : STD_LOGIC;
+    SIGNAL dot_rst : STD_LOGIC;
+    SIGNAL dot_output : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
+    SIGNAL dot_rst_signal : STD_LOGIC; -- Assigned 
+
     SIGNAL mod_ready : STD_LOGIC;
     SIGNAL mod_output : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
     SIGNAL mod_rst : STD_LOGIC;
@@ -42,30 +41,31 @@ ARCHITECTURE Behavioural OF decrypt IS
     SIGNAL sum : unsigned(width-1 DOWNTO 0);
     SIGNAL output_intermediate : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
 
-    SIGNAL count_M : INTEGER := 0;
-    SIGNAL isWaitingForMultiplier : BOOLEAN := false;
-    SIGNAL isMultiplierPrimed : BOOLEAN := false;
     SIGNAL isModuloFlipped : BOOLEAN := false;
     
 
-    TYPE StageEnum IS (MULTIPLY, SUBTRACT, MODULO, FINAL);
-    SIGNAL Stage : StageEnum := MULTIPLY;
+    TYPE StageEnum IS (DOTPRODUCT, SUBTRACT, MODULO, FINAL);
+    SIGNAL Stage : StageEnum := DOTPRODUCT;
 BEGIN
     outM <= output;
     ready <= isReady;
-    mult_rst_signal <= rst OR mult_rst;
+    dot_rst_signal <= rst OR dot_rst;
     mod_rst_signal <= rst OR mod_rst;
-    theSingleMultiplierOhMyGoodnessAreWeDoingAPipeLine : ENTITY work.multiply8
-        PORT MAP(
-            clk => clk,
-            rst => mult_rst_signal,
-            in1 => mult_in1,
-            in2 => mult_in2,
-            ready => mult_ready,
-            output => mult_output
-        );
+    
+    
+    inst_dotproduct: entity work.dotproduct
+    generic map (width => width, dim => dim) 
+    port map (
+      clk => clk,
+      rst => dot_rst_signal,
+      A => inS,
+      B => inU,
+      inQ => inQ,
+      C => dot_output,
+      ready => dot_ready
+    );
 
-    thankGoodnessWeOnlyNeedOneModuloComponent : ENTITY work.variableMod8
+    inst_modulo : ENTITY work.variableMod
         PORT MAP(
             clk => clk,
             rst => mod_rst_signal,
@@ -74,6 +74,7 @@ BEGIN
             output => mod_output,
             ready => mod_ready
         );
+
 
     PROCESS (clk)
     BEGIN
@@ -85,60 +86,45 @@ BEGIN
             IF rst = '1' THEN
                 output <= '0';
                 isReady <= '0';
-                count_M <= 0;
                 sum <= (OTHERS => '0');
                 output_intermediate <= (OTHERS => '0');
-                count_M <= 0;
-                mult_rst <= '1';
+                
+                dot_rst <= '1';
                 mod_rst <= '1';
+
                 isModuloFlipped <= false;
-                isWaitingForMultiplier <= false;
-                isMultiplierPrimed <= false;
-                Stage <= MULTIPLY;
+                Stage <= DOTPRODUCT;
             ELSIF isReady = '0' THEN
                 CASE Stage IS
-                    WHEN MULTIPLY =>
-                        IF isWaitingForMultiplier THEN
-                            IF mult_ready = '1' THEN
-                                isWaitingForMultiplier <= false;
-                                sum <= sum + unsigned(mult_output);
-                                count_M <= count_M + 1;
-                                mult_rst <= '1';
-                            END IF;
-
-                            -- if mult_ready = '0' then stall and wait for completion
-                        ELSIF sizeM = count_M THEN
+                    WHEN DOTPRODUCT =>
+                        dot_rst <= '0';
+                        
+                        IF dot_ready = '1' THEN
                             Stage <= SUBTRACT;
-
-                        ELSIF isMultiplierPrimed THEN
-                            isMultiplierPrimed <= false;
-                            mult_rst <= '0';
-                            isWaitingForMultiplier <= true;
-                        ELSE
-                            isMultiplierPrimed <= true;
-                            mult_in1 <= inU(count_M);
-                            mult_in2 <= inS(count_M);
+                            dot_rst <= '1';
                         END IF;
+
                     WHEN SUBTRACT =>
 
-                        -- Save a cycle by always computing this subtraction, and doing it out of the process?
-                        IF inV < sum THEN
+                        IF inV < unsigned(dot_output) THEN
                            isModuloFlipped <= true;
-                           sum <= sum - inV;
+                           sum <= unsigned(dot_output) - inV;
                         ELSE
-                           sum <= inV - sum;
+                           sum <= inV - unsigned(dot_output);
                         END IF;
                         
                         Stage <= MODULO;
 
                     WHEN MODULO =>
                         mod_rst <= '0';
+                        
                         IF mod_ready = '1' THEN
                             IF isModuloFlipped THEN
                                 output_intermediate <= std_logic_vector(unsigned('0' & inQ(width-1 downto 1)) - unsigned(mod_output));
                             ELSE
                                 output_intermediate <= std_logic_vector(unsigned(mod_output) - unsigned(inQ(width-1 downto 2)));
                             END IF;
+                        
                             Stage <= FINAL;
                         END IF;
                     WHEN FINAL => 

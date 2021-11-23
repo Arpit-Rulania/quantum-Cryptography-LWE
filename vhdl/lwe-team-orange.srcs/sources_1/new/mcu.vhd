@@ -8,8 +8,8 @@ use work.commons.all;
 
 -- Add external signals if nessesary.
 entity mcu is
-    generic(aHeight : integer:=16;
-            aWidth : integer:=16);
+    generic(
+        bitWidth : integer := 16;
     port (
         clk : in STD_LOGIC;
         rst : in STD_LOGIC;
