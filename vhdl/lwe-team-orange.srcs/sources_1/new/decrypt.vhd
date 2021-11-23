@@ -5,17 +5,20 @@ USE IEEE.NUMERIC_STD.ALL;
 USE work.commons.ALL;
 
 ENTITY decrypt IS
-
+    GENERIC (
+        sizeM : integer;
+        width : integer
+    );
     PORT (
         clk : IN STD_LOGIC;
         rst : IN STD_LOGIC;
-        sizeM : IN unsigned(7 DOWNTO 0); -- 15!!!!!!!
+     
 
-        inQ : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-        inS : IN arr;
+        inQ : IN STD_LOGIC_VECTOR (width-1 DOWNTO 0);
+        inS : IN t_array;
 
-        inU : IN arr;                           --<------ THIS CHANGES TO t_array CROSS REFERENCE WITH ENCRYPT MODULE
-        inV : IN unsigned(7 DOWNTO 0);
+        inU : IN t_array;
+        inV : IN unsigned(width-1 DOWNTO 0);
 
         outM : OUT STD_LOGIC;
         ready : OUT STD_LOGIC
@@ -25,19 +28,19 @@ ARCHITECTURE Behavioural OF decrypt IS
     SIGNAL output : STD_LOGIC;
     SIGNAL isReady : STD_LOGIC := '0';
 
-    SIGNAL mult_in1 : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL mult_in2 : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL mult_in1 : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
+    SIGNAL mult_in2 : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
     SIGNAL mult_ready : STD_LOGIC;
     SIGNAL mult_rst : STD_LOGIC;
-    SIGNAL mult_output : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL mult_output : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
     SIGNAL mult_rst_signal : STD_LOGIC; -- Assigned 
     SIGNAL mod_ready : STD_LOGIC;
-    SIGNAL mod_output : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL mod_output : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
     SIGNAL mod_rst : STD_LOGIC;
     SIGNAL mod_rst_signal : STD_LOGIC; -- Assigned     
 
-    SIGNAL sum : unsigned(7 DOWNTO 0);
-    SIGNAL output_intermediate : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL sum : unsigned(width-1 DOWNTO 0);
+    SIGNAL output_intermediate : STD_LOGIC_VECTOR(width-1 DOWNTO 0);
 
     SIGNAL count_M : INTEGER := 0;
     SIGNAL isWaitingForMultiplier : BOOLEAN := false;
@@ -113,8 +116,8 @@ BEGIN
                             isWaitingForMultiplier <= true;
                         ELSE
                             isMultiplierPrimed <= true;
-                            mult_in1 <= STD_LOGIC_VECTOR(to_unsigned(inU(count_M), 8));
-                            mult_in2 <= STD_LOGIC_VECTOR(to_unsigned(inS(count_M), 8));
+                            mult_in1 <= inU(count_M);
+                            mult_in2 <= inS(count_M);
                         END IF;
                     WHEN SUBTRACT =>
 
@@ -132,14 +135,14 @@ BEGIN
                         mod_rst <= '0';
                         IF mod_ready = '1' THEN
                             IF isModuloFlipped THEN
-                                output_intermediate <= std_logic_vector(unsigned('0' & inQ(7 downto 1)) - unsigned(mod_output));
+                                output_intermediate <= std_logic_vector(unsigned('0' & inQ(width-1 downto 1)) - unsigned(mod_output));
                             ELSE
-                                output_intermediate <= std_logic_vector(unsigned(mod_output) - unsigned("00" & inQ(7 downto 2)));
+                                output_intermediate <= std_logic_vector(unsigned(mod_output) - unsigned(inQ(width-1 downto 2)));
                             END IF;
                             Stage <= FINAL;
                         END IF;
                     WHEN FINAL => 
-                        IF output_intermediate < '0' & inQ(7 downto 1) THEN
+                        IF output_intermediate < '0' & inQ(width-1 downto 1) THEN
                             output <= '1';
                         ELSE
                             output <= '0';
