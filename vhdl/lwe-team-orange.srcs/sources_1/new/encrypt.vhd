@@ -101,9 +101,6 @@ begin
                         end if;
                     When d =>
                         uArrt(counter) <= tempoutVal;
---                        if counter < A_width then
---                            modInput <= inA(counter + 1);
---                        end if;
                         State <= e;
                     When e =>
                         tempModRst <= '1';
