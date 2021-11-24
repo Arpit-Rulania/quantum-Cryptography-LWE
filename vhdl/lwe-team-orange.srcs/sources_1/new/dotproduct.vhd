@@ -31,10 +31,10 @@ architecture Behavioral of dotproduct is
     signal mod_operation_primed : std_logic;
     signal mod_enable : std_logic;
     signal mod_enable_control : std_logic;
-    signal mod_output : std_logic_vector((2*i)-width downto 0);
+    signal mod_output : std_logic_vector(2*width - 1 downto 0);
     signal mod_ready : std_logic;
     
-    signal expanded_q: std_logic_vector((2*i)-width downto 0);
+    signal expanded_q: std_logic_vector(2*width - 1 downto 0);
 begin
 
     expanded_q <= (2*width-1 downto width => '0') & inQ;
