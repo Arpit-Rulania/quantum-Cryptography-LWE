@@ -22,7 +22,6 @@ entity mcu is
         
         should_reseed : in STD_LOGIC;
         seed : in STD_LOGIC_VECTOR(31 downto 0);
-        
         ctrlLoad    : in STD_LOGIC;
         ctrlEncrypt : in STD_LOGIC;
         ctrlDecrypt : in STD_LOGIC;
