@@ -202,7 +202,7 @@ begin
         port map (
             clk => clk,
             rst => enc_rst,
-            inM => data_M,
+            inM => '1',
             inQ => q_value,
             inA => Amatrix_sampleSum,
             inB => Bmatrix_sampleSum,

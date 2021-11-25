@@ -1,6 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_TEXTIO.ALL;
+use IEEE.NUMERIC_STD.ALL;
 use STD.TEXTIO.ALL;
 entity ApproxMulTB is
 
@@ -23,11 +24,14 @@ component ApproxMul is
         approxmul_result  : out std_logic_vector(31 downto 0)
         );
 end component;
-signal a : std_logic_vector(15 downto 0):="0000000111111111";
-signal b : std_logic_vector(15 downto 0):="0000000000110101";
+signal a : std_logic_vector(15 downto 0);
+signal b : std_logic_vector(15 downto 0);
 
 begin
    
+    -- Test inputs
+    a <= std_logic_vector(to_unsigned(255, 16));
+    b <= std_logic_vector(to_unsigned(127, 16));
     
     -- Instantiate the Unit Under Test (UUT)
     UUT: ApproxMul
@@ -49,11 +53,11 @@ begin
         
     p_RESET : process is
     begin
-        r_reset <= '0';
+        r_reset <= '1';
         wait for 2*clkPeriod  ;
         r_reset <= '0';
         wait for 2*clkPeriod  ;
-        r_reset <= '0';
+        r_reset <= '1';
         wait for 1 sec;
     end process;
 
