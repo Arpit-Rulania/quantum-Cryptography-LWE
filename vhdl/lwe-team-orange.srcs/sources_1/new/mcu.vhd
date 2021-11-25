@@ -21,6 +21,10 @@ entity mcu is
         rst : in STD_LOGIC;
         should_reseed : in STD_LOGIC;
         seed : in STD_LOGIC_VECTOR(31 downto 0)
+        ctrlLoad    : in STD_LOGIC;
+        ctrlEncrypt : in STD_LOGIC;
+        ctrlDecrypt : in STD_LOGIC;
+        ready       : out STD_LOGIC
     );
 end mcu;
 
@@ -32,6 +36,7 @@ architecture Behavioral of mcu is
         GenerateB_post_setup, GenerateB_post,
         
         Idle, -- Idle
+        Load, -- Load
         
         Encrypt, Encrypt_setup_row, Encrypt_exec,
         
@@ -230,6 +235,8 @@ begin
     main: process(clk)
     begin
         if rising_edge(clk) then
+            ready <= '0';
+            
             if rst = '1' then
                 -- This is the main reset for the mcu.
                 -- If anything needs to be reset fully to 
@@ -386,9 +393,24 @@ begin
                             State <= Encrypt;
                         end if;
                     
-                    WHEN Idle => 
+                    WHEN Idle =>
+                        ready <= '1';
+                        
+                        if ctrlLoad = '1' then
+                            State <= Load;
+                        elsif ctrlEncrypt = '1' then
+                            State <= Encrypt;
+                        elsif ctrlDecrypt = '1' then
+                            State <= Decrypt;
+                        end if;
                     
-                    
+                    WHEN Load =>
+                        enc_rst <= '1';
+                        dec_rst <= '1';
+                        
+                        if ctrlLoad = '0' then
+                            State <= Idle;
+                        end if;
                         
                     -- Encryption module goes here
                     -- Sample and sum the random selection of rows from the A and B matrix within the MCU
