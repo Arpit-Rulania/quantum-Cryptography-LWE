@@ -83,16 +83,23 @@ BEGIN
                             State <= Run1;
                         END IF;
                     END IF;
-                    -- Stage: Load
+
+                    -- Stage: Load and return to idle
                 WHEN Run1 =>
                     in_enable <= '0';
                     mcu_ctrlLoad <= '0';
-                    State <= Run2;
 
-                    -- Stage: Idle
+                    IF mcu_ready = '0' THEN
+                        State <= Run2;
+                    END IF;
+
+                    -- Stage: Idle, start encrypt
                 WHEN Run2 =>
                     mcu_ctrlEncrypt <= '1';
-                    State <= Run3;
+
+                    IF mcu_ready = '0' THEN
+                        State <= Run3;
+                    END IF;
 
                     -- Stage: Encrypt
                 WHEN Run3 =>
@@ -104,7 +111,10 @@ BEGIN
                     -- Stage: Idle
                 WHEN Run4 =>
                     mcu_ctrlDecrypt <= '1';
-                    State <= Run5;
+
+                    IF mcu_ready = '0' THEN
+                        State <= Run5;
+                    END IF;
 
                     -- Stage: Decrypt
                 WHEN Run5 =>
@@ -115,6 +125,7 @@ BEGIN
 
                 WHEN Run6 =>
                     M_out <= mcu_outM;
+                    -- M_out <= M_in
                     State <= ReadBit;
 
                 WHEN Finish =>
