@@ -4,14 +4,19 @@ USE std.textio.ALL;
 USE ieee.std_logic_arith.ALL;
 USE ieee.std_logic_textio.ALL;
 
-ENTITY TextFileProvider IS
+ENTITY TextFileProvider_Queued IS
     GENERIC (
       fileName : string
     );
-END TextFileProvider;
+    PORT (
+      clk :    in STD_LOGIC;
+      enable : in STD_LOGIC;
+      ready  : out STD_LOGIC;
+      finished : out STD_LOGIC
+    );
+END TextFileProvider_Queued;
 
-ARCHITECTURE Behavioural OF TextFileProvider IS
-  SIGNAL clk : STD_LOGIC;
+ARCHITECTURE Behavioural OF TextFileProvider_Queued IS
 
   FILE file_input : text;
 
@@ -24,8 +29,6 @@ ARCHITECTURE Behavioural OF TextFileProvider IS
   SIGNAL state : StateType := SETUP;
   
 BEGIN
-  c : ENTITY work.ClockProvider PORT MAP (clk => clk);
-
   PROCESS (clk)
 
     -- Text buffers
@@ -37,6 +40,8 @@ BEGIN
     VARIABLE counter : INTEGER RANGE 0 TO 7;
   BEGIN
     IF rising_edge(clk) THEN
+      ready <= '0';
+      finished <= '0';
       CASE state IS
 
         WHEN setup =>
@@ -64,17 +69,21 @@ BEGIN
           END IF;
 
         WHEN process_BIT =>
-          v_bit <= v_byte_temp(7);
-          v_byte_temp := v_byte_temp(6 DOWNTO 0) & '0';
-
-          IF (counter = 7) THEN
-            state <= PROCESS_CHAR;
-          END IF;
-
-          counter := counter + 1;
+          ready <= '1';
+          
+          if enable = '1' then        
+              v_bit <= v_byte_temp(7);
+              v_byte_temp := v_byte_temp(6 DOWNTO 0) & '0';
+    
+              IF (counter = 7) THEN
+                state <= PROCESS_CHAR;
+              END IF;
+    
+              counter := counter + 1;
+          end if;
         WHEN FINISH =>
           -- Do nothing
-
+          finished <= '1';
       END CASE;
     END IF;
   END PROCESS;
