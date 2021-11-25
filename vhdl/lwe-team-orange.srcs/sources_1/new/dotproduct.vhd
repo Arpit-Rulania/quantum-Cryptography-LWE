@@ -45,13 +45,12 @@ begin
     -- Perform 16 simultaneous multiplications on the integers comprising the vector
     GEN_MULT:
     for n in 0 to dim-1 generate
-        MULT: entity work.ApproxMul
+        MULT: entity work.dgn_mitchellmul8bit
+            Generic map (sz => width) 
             Port MAP (
-                clk => clk,
-                rst => rst,
-                approxmul_in_a => A(n),
-                approxmul_in_b => B(n),
-                approxmul_result => mult_results(n)
+                X => A(n),
+                Y => B(n),
+                M => mult_results(n)
             );
     end generate GEN_MULT;
     
