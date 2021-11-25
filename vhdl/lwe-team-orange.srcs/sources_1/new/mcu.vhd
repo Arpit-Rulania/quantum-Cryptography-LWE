@@ -463,6 +463,12 @@ begin
                         
                     -- Decryption module here.
                     WHEN Decrypt =>
+                        dec_rst <= '0';
+                          
+                        if dec_ready = '1' then
+                            State <= Idle;
+                        end if;
+                      
                       --signals to activate decryption.
                 end case;
             end if;
