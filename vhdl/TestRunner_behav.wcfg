@@ -6,22 +6,32 @@
       <db_ref path="TestRunner_behav.wdb" id="1">
          <top_modules>
             <top_module name="TestRunner" />
+            <top_module name="commons" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="39701fs"></ZoomEndTime>
-      <Cursor1Time time="0fs"></Cursor1Time>
+      <ZoomStartTime time="74610000fs"></ZoomStartTime>
+      <ZoomEndTime time="74874001fs"></ZoomEndTime>
+      <Cursor1Time time="88915000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="151"></NameColumnWidth>
-      <ValueColumnWidth column_width="83"></ValueColumnWidth>
+      <ValueColumnWidth column_width="79"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="2" />
+   <WVObjectSize size="4" />
    <wvobject fp_name="/TestRunner/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="group164" type="group">
+      <obj_property name="label">Runner</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/TestRunner/State" type="other">
+         <obj_property name="ElementShortName">State</obj_property>
+         <obj_property name="ObjectShortName">State</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject fp_name="group321" type="group">
       <obj_property name="label">Reader</obj_property>
@@ -46,6 +56,70 @@
       <wvobject fp_name="/TestRunner/fileReader/v_bit" type="logic">
          <obj_property name="ElementShortName">v_bit</obj_property>
          <obj_property name="ObjectShortName">v_bit</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group165" type="group">
+      <obj_property name="label">MCU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/TestRunner/mcu/ready" type="logic">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/State" type="other">
+         <obj_property name="ElementShortName">State</obj_property>
+         <obj_property name="ObjectShortName">State</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/ctrlLoad" type="logic">
+         <obj_property name="ElementShortName">ctrlLoad</obj_property>
+         <obj_property name="ObjectShortName">ctrlLoad</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/ctrlEncrypt" type="logic">
+         <obj_property name="ElementShortName">ctrlEncrypt</obj_property>
+         <obj_property name="ObjectShortName">ctrlEncrypt</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/ctrlDecrypt" type="logic">
+         <obj_property name="ElementShortName">ctrlDecrypt</obj_property>
+         <obj_property name="ObjectShortName">ctrlDecrypt</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/rst" type="logic">
+         <obj_property name="ElementShortName">rst</obj_property>
+         <obj_property name="ObjectShortName">rst</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/should_reseed" type="logic">
+         <obj_property name="ElementShortName">should_reseed</obj_property>
+         <obj_property name="ObjectShortName">should_reseed</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/seed" type="array">
+         <obj_property name="ElementShortName">seed[31:0]</obj_property>
+         <obj_property name="ObjectShortName">seed[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/q_value" type="array">
+         <obj_property name="ElementShortName">q_value[15:0]</obj_property>
+         <obj_property name="ObjectShortName">q_value[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/data_M" type="logic">
+         <obj_property name="ElementShortName">data_M</obj_property>
+         <obj_property name="ObjectShortName">data_M</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/data_U" type="array">
+         <obj_property name="ElementShortName">data_U[0:15][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_U[0:15][15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/data_V" type="array">
+         <obj_property name="ElementShortName">data_V[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_V[15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/Amatrix" type="array">
+         <obj_property name="ElementShortName">Amatrix[0:15][0:15][15:0]</obj_property>
+         <obj_property name="ObjectShortName">Amatrix[0:15][0:15][15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/Bmatrix" type="array">
+         <obj_property name="ElementShortName">Bmatrix[0:15][15:0]</obj_property>
+         <obj_property name="ObjectShortName">Bmatrix[0:15][15:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/secret_key" type="array">
+         <obj_property name="ElementShortName">secret_key[0:15][15:0]</obj_property>
+         <obj_property name="ObjectShortName">secret_key[0:15][15:0]</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>
