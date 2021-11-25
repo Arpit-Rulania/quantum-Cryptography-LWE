@@ -18,13 +18,13 @@ END TestRunner;
 ARCHITECTURE Behavioral OF TestRunner IS
     SIGNAL clk : STD_LOGIC;
 
-    SIGNAL in_enable : STD_LOGIC;
+    SIGNAL in_enable : STD_LOGIC := '0';
     SIGNAL in_bit : STD_LOGIC;
     SIGNAL in_ready : STD_LOGIC;
     SIGNAL in_finished : STD_LOGIC;
 
-    SIGNAL mcu_rst : STD_LOGIC;
-    SIGNAL mcu_should_reseed : STD_LOGIC;
+    SIGNAL mcu_rst : STD_LOGIC := '1';
+    SIGNAL mcu_should_reseed : STD_LOGIC := '0';
     SIGNAL mcu_seed : STD_LOGIC_VECTOR(31 DOWNTO 0) := STD_LOGIC_VECTOR(to_unsigned(789623428, 32));
     SIGNAL mcu_ctrlLoad : STD_LOGIC;
     SIGNAL mcu_ctrlEncrypt : STD_LOGIC;
@@ -59,7 +59,7 @@ BEGIN
                 WHEN start =>
                     mcu_rst <= '1';
                     State <= InitMCU;
-                    M_in <= '0';
+                    M_in <= 'U';
 
                 WHEN InitMCU =>
                     mcu_rst <= '0';

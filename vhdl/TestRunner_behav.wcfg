@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="74610000fs"></ZoomStartTime>
-      <ZoomEndTime time="74874001fs"></ZoomEndTime>
-      <Cursor1Time time="88915000fs"></Cursor1Time>
+      <ZoomStartTime time="87605400fs"></ZoomStartTime>
+      <ZoomEndTime time="87799201fs"></ZoomEndTime>
+      <Cursor1Time time="87695000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="151"></NameColumnWidth>
-      <ValueColumnWidth column_width="79"></ValueColumnWidth>
+      <NameColumnWidth column_width="125"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="4" />
    <wvobject fp_name="/TestRunner/clk" type="logic">
@@ -31,6 +31,14 @@
       <wvobject fp_name="/TestRunner/State" type="other">
          <obj_property name="ElementShortName">State</obj_property>
          <obj_property name="ObjectShortName">State</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/M_in" type="logic">
+         <obj_property name="ElementShortName">M_in</obj_property>
+         <obj_property name="ObjectShortName">M_in</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/M_out" type="logic">
+         <obj_property name="ElementShortName">M_out</obj_property>
+         <obj_property name="ObjectShortName">M_out</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="group321" type="group">
@@ -61,6 +69,7 @@
    <wvobject fp_name="group165" type="group">
       <obj_property name="label">MCU</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
       <wvobject fp_name="/TestRunner/mcu/ready" type="logic">
          <obj_property name="ElementShortName">ready</obj_property>
          <obj_property name="ObjectShortName">ready</obj_property>
@@ -68,6 +77,14 @@
       <wvobject fp_name="/TestRunner/mcu/State" type="other">
          <obj_property name="ElementShortName">State</obj_property>
          <obj_property name="ObjectShortName">State</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/outM" type="logic">
+         <obj_property name="ElementShortName">outM</obj_property>
+         <obj_property name="ObjectShortName">outM</obj_property>
+      </wvobject>
+      <wvobject fp_name="/TestRunner/mcu/inM" type="logic">
+         <obj_property name="ElementShortName">inM</obj_property>
+         <obj_property name="ObjectShortName">inM</obj_property>
       </wvobject>
       <wvobject fp_name="/TestRunner/mcu/ctrlLoad" type="logic">
          <obj_property name="ElementShortName">ctrlLoad</obj_property>
