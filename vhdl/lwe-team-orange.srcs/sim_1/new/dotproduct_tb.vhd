@@ -1,18 +1,7 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-package pkg is
-  type t_array is array (natural range <>) of std_logic_vector(15 downto 0);
-end package;
-
-package body pkg is
-end package body;
-
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
-library work;
-use work.pkg.all;
+use IEEE.NUMERIC_STD.ALL;
+use work.commons.all;
 
 entity dotproduct_tb is
 --  Port ( );
@@ -20,22 +9,27 @@ end dotproduct_tb;
 
 architecture Behavioral of dotproduct_tb is
     component dotproduct is
-    Generic ( i : integer:= 16);
+    Generic ( 
+        width : integer:= 16;
+        dim : integer := 16
+    );
     Port (
         clk: in std_logic;
         rst: in std_logic;
-        A : in t_array (0 to i-1);
-        B : in t_array (0 to i-1);
-        C : out std_logic_vector (15 downto 0);
+        A : in t_array;
+        B : in t_array;
+        inQ : in std_logic_vector (width-1 downto 0);
+        C : out std_logic_vector (width-1 downto 0);
         ready : out std_logic
     );
     end component;
     
     SIGNAL Clk_s, Rst_s: std_logic;
     SIGNAL output_s: std_logic_vector(15 DOWNTO 0);
-    SIGNAL in1: t_array (0 to 15);
-    SIGNAL in2: t_array (0 to 15);
+    SIGNAL in1: t_array;
+    SIGNAL in2: t_array;
     SIGNAL t_ready: std_logic;
+    signal Q: std_logic_vector(15 downto 0);
     
 begin
     CompToTest: dotproduct port map (
@@ -43,6 +37,7 @@ begin
         rst => rst_s,
         A => in1,
         B => in2,
+        inQ => Q,
         C => output_s,
         ready => t_ready
     );
@@ -54,6 +49,9 @@ begin
         Clk_s <= '0';
         WAIT FOR 10 ns;
     END PROCESS clk_proc;
+    
+    -- Set up Q
+    Q <= std_logic_vector(to_unsigned(1009, 16));
     
     -- Set up input APPEND_MODE
     -- Input 1:
