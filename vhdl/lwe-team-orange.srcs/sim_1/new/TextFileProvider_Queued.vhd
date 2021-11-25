@@ -39,8 +39,7 @@ BEGIN
     VARIABLE v_OLINE : line;
 
     VARIABLE v_char : CHARACTER;
-    VARIABLE v_byte_temp : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    VARIABLE counter : INTEGER RANGE 0 TO 7;
+    VARIABLE counter : INTEGER RANGE 0 TO 7 := 0;
   BEGIN
     IF rising_edge(clk) THEN
       ready <= '0';
@@ -63,7 +62,6 @@ BEGIN
           IF v_ILINE'length > 0 THEN
             read(v_ILINE, v_char);
             v_byte <= CONV_STD_LOGIC_VECTOR(CHARACTER'pos(v_char), 8);
-            v_byte_temp := CONV_STD_LOGIC_VECTOR(CHARACTER'pos(v_char), 8);
             counter := 0;
             state <= process_BIT;
           ELSE
@@ -73,19 +71,20 @@ BEGIN
 
         WHEN process_BIT =>
           ready <= '1';
+          v_bit <= v_byte(7 - counter);
 
-          v_bit <= v_byte_temp(7);
-          
           IF enable = '1' THEN
-            v_byte_temp := v_byte_temp(6 DOWNTO 0) & '0';
-            IF (counter = 7) THEN
-              state <= PROCESS_CHAR;
-            END IF;
 
-            counter := counter + 1;
+            IF counter = 7 THEN
+              counter := 0;
+              state <= PROCESS_CHAR;
+            ELSE
+              counter := counter + 1;
+            END IF;
           END IF;
         WHEN FINISH =>
           -- Do nothing
+          ready <= '1';
           finished <= '1';
       END CASE;
     END IF;

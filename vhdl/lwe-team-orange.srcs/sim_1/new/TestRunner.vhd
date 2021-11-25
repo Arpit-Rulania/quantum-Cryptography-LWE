@@ -39,7 +39,7 @@ ARCHITECTURE Behavioral OF TestRunner IS
     TYPE StateType IS (
         Start,
         InitMCU,
-        InitFileReader,
+        SyncFileReader,
         ReadBit,
         Run1,
         Run2,
@@ -50,11 +50,20 @@ ARCHITECTURE Behavioral OF TestRunner IS
         Finish
     );
     SIGNAL State : StateType := Start;
+
+    --
+    SIGNAL builder : STD_LOGIC_VECTOR(0 TO 7) := (OTHERS => '1');
+    SIGNAL decoded : STD_LOGIC_VECTOR(0 TO 7) := (OTHERS => '0');
+
 BEGIN
     mcu_inM <= M_in;
 
-    PROCESS (clk) BEGIN
+    PROCESS (clk) IS
+        VARIABLE counter : INTEGER RANGE 0 TO 7 := 0;
+    BEGIN
         IF rising_edge(clk) THEN
+            in_enable <= '0';
+
             CASE State IS
                 WHEN start =>
                     mcu_rst <= '1';
@@ -65,23 +74,26 @@ BEGIN
                     mcu_rst <= '0';
                     -- Wait for initial load
                     IF mcu_ready = '1' THEN
-                        State <= InitFileReader;
+                        State <= SyncFileReader;
                     END IF;
-                WHEN InitFileReader =>
+                WHEN SyncFileReader =>
                     IF in_ready = '1' THEN
+                        IF counter = 0 THEN
+                            decoded <= builder;
+                        END IF;
+                        in_enable <= '1';
                         State <= ReadBit;
                     END IF;
+
                 WHEN ReadBit =>
+                    in_enable <= '0';
                     IF in_finished = '1' THEN
                         State <= Finish;
                     ELSE
-                        in_enable <= '0';
-                        IF in_ready = '1' THEN
-                            in_enable <= '1';
-                            mcu_ctrlLoad <= '1';
-                            M_in <= in_bit;
-                            State <= Run1;
-                        END IF;
+
+                        mcu_ctrlLoad <= '1';
+                        M_in <= in_bit;
+                        State <= Run1;
                     END IF;
 
                     -- Stage: Load and return to idle
@@ -125,11 +137,21 @@ BEGIN
 
                 WHEN Run6 =>
                     M_out <= mcu_outM;
-                    -- M_out <= M_in
-                    State <= ReadBit;
+                    builder(counter) <= mcu_outM;
+
+                    -- M_out <= M_in;
+                    -- builder(counter) <= M_in;
+
+                    IF counter = 7 THEN
+                        counter := 0;
+                    ELSE
+                        counter := counter + 1;
+                    END IF;
+
+                    State <= SyncFileReader;
 
                 WHEN Finish =>
-
+                    -- idle
             END CASE;
 
         END IF;
