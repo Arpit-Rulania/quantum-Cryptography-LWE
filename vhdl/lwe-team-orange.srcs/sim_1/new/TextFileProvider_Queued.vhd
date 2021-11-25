@@ -11,6 +11,7 @@ ENTITY TextFileProvider_Queued IS
     PORT (
       clk :    in STD_LOGIC;
       enable : in STD_LOGIC;
+      outBit : out STD_LOGIC;
       ready  : out STD_LOGIC;
       finished : out STD_LOGIC
     );
@@ -29,6 +30,8 @@ ARCHITECTURE Behavioural OF TextFileProvider_Queued IS
   SIGNAL state : StateType := SETUP;
   
 BEGIN
+
+  outBit <= v_bit;
   PROCESS (clk)
 
     -- Text buffers

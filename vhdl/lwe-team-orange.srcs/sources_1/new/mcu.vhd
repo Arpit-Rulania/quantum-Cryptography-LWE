@@ -26,6 +26,10 @@ entity mcu is
         ctrlLoad    : in STD_LOGIC;
         ctrlEncrypt : in STD_LOGIC;
         ctrlDecrypt : in STD_LOGIC;
+        
+        inM: in STD_LOGIC;
+        outM: out STD_LOGIC;
+        
         ready       : out STD_LOGIC
     );
 end mcu;
@@ -226,7 +230,7 @@ begin
             inS => secret_key,
             inU => data_U,
             inV => unsigned(data_V),
-            outM => data_M,
+            outM => outM, -- data_M
             ready => dec_ready
         );
     
@@ -378,7 +382,7 @@ begin
                             end if;
                         else
                             rowCounter <= 0;
-                            State <= Encrypt;
+                            State <= Idle;
                         end if;
                     
                     WHEN Idle =>
@@ -395,6 +399,8 @@ begin
                     WHEN Load =>
                         enc_rst <= '1';
                         dec_rst <= '1';
+                        
+                        data_M <= inM;
                         
                         if ctrlLoad = '0' then
                             State <= Idle;
