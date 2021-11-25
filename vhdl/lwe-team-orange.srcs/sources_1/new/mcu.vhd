@@ -20,7 +20,7 @@ entity mcu is
         clk : in STD_LOGIC;
         rst : in STD_LOGIC;
         should_reseed : in STD_LOGIC;
-        seed : in STD_LOGIC_VECTOR(31 downto 0)
+        seed : in STD_LOGIC_VECTOR(31 downto 0);
         ctrlLoad    : in STD_LOGIC;
         ctrlEncrypt : in STD_LOGIC;
         ctrlDecrypt : in STD_LOGIC;
