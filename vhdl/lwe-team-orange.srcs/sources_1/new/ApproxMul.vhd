@@ -21,12 +21,12 @@ architecture Behavioral of ApproxMul is
 
     function position_of_leading_one (signal a: std_logic_vector) return integer is
         begin    
-        for i in a'low to a'high loop
+        for i in 0 to 15 loop
             if a(15 - i) = '1' then
                 return 15 - i;
             end if;
         end loop;
-        return -1;
+        return 0;
     end function;
  begin
     Approx_Mul: process(rst)

@@ -36,7 +36,7 @@ end mcu;
 architecture Behavioral of mcu is
     type StateType is (
         GenerateQ,
-        GenerateA, GenerateSecret, GenerateErrorMatrix,
+        GenerateA, GenerateSecret,
         GenerateB_setup, GenerateB,
         GenerateB_post_setup, GenerateB_post,
         
@@ -78,8 +78,8 @@ architecture Behavioral of mcu is
     signal mult_inB: t_array;
     
     -- signals for error matrix generator
-    signal errorGen_ready : std_logic;
-    signal errorGen_value : integer;
+    --signal errorGen_ready : std_logic;
+    --signal errorGen_value : integer;
     
     -- signals for modulo unit
     signal mod_rst: std_logic;
@@ -173,13 +173,13 @@ begin
         ready => mult_ready
       );
     
-    inst_errMtx: entity work.errormatrixgen
-        port map (
-            clk => clk,
-            rst => rst,
-            ready => errorGen_ready,
-            error_normalised => errorGen_value
-        );
+--    inst_errMtx: entity work.errormatrixgen
+--        port map (
+--            clk => clk,
+--            rst => rst,
+--            ready => errorGen_ready,
+--            error_normalised => errorGen_value
+--        );
     
     inst_mod: entity work.variableMod
         generic map (i => bitWidth)
@@ -208,7 +208,7 @@ begin
         port map (
             clk => clk,
             rst => enc_rst,
-            inM => data_M,
+            inM => '1',
             inQ => q_value,
             inA => Amatrix_sampleSum,
             inB => Bmatrix_sampleSum,
@@ -315,19 +315,20 @@ begin
                             secret_rst <= '1';
                             mult_rst <= '1';
                             secret_key <= secret_output;
-                            State <= GenerateErrorMatrix;
-                        end if;
-
-                    WHEN GenerateErrorMatrix => 
-                        if rowCounter < aHeight then
-                            if errorGen_ready = '1' then
-                                Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
-                                rowCounter <= rowCounter + 1;
-                            end if;
-                        else
-                            rowCounter <= 0;
                             State <= GenerateB_setup;
                         end if;
+
+--                    WHEN GenerateErrorMatrix => 
+--                        if rowCounter < aHeight then
+--                            if errorGen_ready = '1' then
+--                                Bmatrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+--                                DEBUG_error_matrix(rowCounter) <= std_logic_vector(to_unsigned(errorGen_value, Bmatrix(rowCounter)'length));
+--                                rowCounter <= rowCounter + 1;
+--                            end if;
+--                        else
+--                            rowCounter <= 0;
+--                            State <= GenerateB_setup;
+--                        end if;
 
                     WHEN GenerateB_setup =>
                         -- signals to activate multiplier.

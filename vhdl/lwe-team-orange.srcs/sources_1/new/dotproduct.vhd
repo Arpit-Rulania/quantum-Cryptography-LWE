@@ -6,7 +6,7 @@ use work.commons.all;
 entity dotproduct is
     Generic (
          width : integer := 16;
-         dim   : integer
+         dim   : integer := 4
     );
     Port (
         clk: in std_logic;
@@ -45,15 +45,12 @@ begin
     -- Perform 16 simultaneous multiplications on the integers comprising the vector
     GEN_MULT:
     for n in 0 to dim-1 generate
-        MULT: entity work.multiply
-            Generic MAP (i => width) -- bits
+        MULT: entity work.dgn_mitchellmul8bit
+            Generic map (sz => width) 
             Port MAP (
-                clk => clk,
-                rst => rst,
-                in1 => A(n),
-                in2 => B(n),
-                output => mult_results(n),
-                ready => mult_ready(n)
+                X => A(n),
+                Y => B(n),
+                M => mult_results(n)
             );
     end generate GEN_MULT;
     
@@ -91,7 +88,7 @@ begin
                     sum <= unsigned(mod_output);
                     counter <= counter + 1;
                 end if;
-            elsif mult_ready(counter) = '1' then               
+            else               
                 if mod_operation_primed = '0' then
                     mod_operation_primed <= '1';
                     sum <= sum + unsigned(mult_results(counter));
