@@ -2,3 +2,8 @@
 node_modules
 public/bundle.*
 vhdl/lwe-team-orange.xpr
+vhdl/vivado_pid7408.str
+
+vhdl/vivado.jou
+
+vhdl/vivado.log
