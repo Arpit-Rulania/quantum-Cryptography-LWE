@@ -13,8 +13,8 @@ entity mcu is
         bitWidth : integer := 16;
         
         -- Matrix dimensions
-        aHeight : integer := 16;
-        aWidth : integer := 16 -- MAX 16
+        aHeight : integer := 256;
+        aWidth : integer := 4 -- MAX 16
     );
     port (
         clk : in STD_LOGIC;
