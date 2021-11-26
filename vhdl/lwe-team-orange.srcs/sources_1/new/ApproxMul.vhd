@@ -8,9 +8,10 @@ entity ApproxMul is
     port(
         clk : in std_logic;
         rst : in std_logic;
-        approxmul_in_a    : in std_logic_vector(15 downto 0);
-        approxmul_in_b    : in std_logic_vector(15 downto 0);
-        approxmul_result  : out std_logic_vector(31 downto 0)
+        in1    : in std_logic_vector(15 downto 0);
+        in2    : in std_logic_vector(15 downto 0);
+        output  : out std_logic_vector(31 downto 0);
+        ready : out std_logic
         );
 end ApproxMul;
 
@@ -39,47 +40,47 @@ architecture Behavioral of ApproxMul is
     variable fraction_b :std_logic_vector(15 downto 0):="0000000000000000";
     variable fraction_sum :std_logic_vector(15 downto 0):="0000000000000000";
     begin
-        k1 := position_of_leading_one(approxmul_in_a);
-        k2 := position_of_leading_one(approxmul_in_b);
+        k1 := position_of_leading_one(in1);
+        k2 := position_of_leading_one(in2);
         if k1 = 0 then 
-            result <= zero(15 downto 0) & approxmul_in_b(15 downto 0);
+            result <= zero(15 downto 0) & in2(15 downto 0);
         elsif k2 = 0 then                  
-            result <= zero(15 downto 0) & approxmul_in_a(15 downto 0);
+            result <= zero(15 downto 0) & in1(15 downto 0);
         end if;
         case k1 is
-            when 15 => fraction_a (14 downto 0) := approxmul_in_a(14 downto 0);
-            when 14 => fraction_a (13 downto 0) := approxmul_in_a(13 downto 0);
-            when 13 => fraction_a (12 downto 0) := approxmul_in_a(12 downto 0);
-            when 12 => fraction_a (11 downto 0) := approxmul_in_a(11 downto 0);
-            when 11 => fraction_a (10 downto 0) := approxmul_in_a(10 downto 0);
-            when 10 => fraction_a (9 downto 0) := approxmul_in_a(9 downto 0);
-            when 9 => fraction_a (8 downto 0) := approxmul_in_a(8 downto 0);
-            when 8 => fraction_a (7 downto 0) := approxmul_in_a(7 downto 0);
-            when 7 => fraction_a (6 downto 0) := approxmul_in_a(6 downto 0);
-            when 6 => fraction_a (5 downto 0) := approxmul_in_a(5 downto 0);
-            when 5 => fraction_a (4 downto 0) := approxmul_in_a(4 downto 0);
-            when 4 => fraction_a (3 downto 0) := approxmul_in_a(3 downto 0);
-            when 3 => fraction_a (2 downto 0) := approxmul_in_a(2 downto 0);
-            when 2 => fraction_a (1 downto 0) := approxmul_in_a(1 downto 0);
-            when others => fraction_a (0) := approxmul_in_a(0);
+            when 15 => fraction_a (14 downto 0) := in1(14 downto 0);
+            when 14 => fraction_a (13 downto 0) := in1(13 downto 0);
+            when 13 => fraction_a (12 downto 0) := in1(12 downto 0);
+            when 12 => fraction_a (11 downto 0) := in1(11 downto 0);
+            when 11 => fraction_a (10 downto 0) := in1(10 downto 0);
+            when 10 => fraction_a (9 downto 0) := in1(9 downto 0);
+            when 9 => fraction_a (8 downto 0) := in1(8 downto 0);
+            when 8 => fraction_a (7 downto 0) := in1(7 downto 0);
+            when 7 => fraction_a (6 downto 0) := in1(6 downto 0);
+            when 6 => fraction_a (5 downto 0) := in1(5 downto 0);
+            when 5 => fraction_a (4 downto 0) := in1(4 downto 0);
+            when 4 => fraction_a (3 downto 0) := in1(3 downto 0);
+            when 3 => fraction_a (2 downto 0) := in1(2 downto 0);
+            when 2 => fraction_a (1 downto 0) := in1(1 downto 0);
+            when others => fraction_a (0) := in1(0);
         end case;
         
         case k2 is
-            when 15 => fraction_b (14 downto 0) := approxmul_in_b(14 downto 0);
-            when 14 => fraction_b (13 downto 0) := approxmul_in_b(13 downto 0);
-            when 13 => fraction_b (12 downto 0) := approxmul_in_b(12 downto 0);
-            when 12 => fraction_b (11 downto 0) := approxmul_in_b(11 downto 0);
-            when 11 => fraction_b (10 downto 0) := approxmul_in_b(10 downto 0);
-            when 10 => fraction_b (9 downto 0) := approxmul_in_b(9 downto 0);
-            when 9 => fraction_b (8 downto 0) := approxmul_in_b(8 downto 0);
-            when 8 => fraction_b (7 downto 0) := approxmul_in_b(7 downto 0);
-            when 7 => fraction_b (6 downto 0) := approxmul_in_b(6 downto 0);
-            when 6 => fraction_b (5 downto 0) := approxmul_in_b(5 downto 0);
-            when 5 => fraction_b (4 downto 0) := approxmul_in_b(4 downto 0);
-            when 4 => fraction_b (3 downto 0) := approxmul_in_b(3 downto 0);
-            when 3 => fraction_b (2 downto 0) := approxmul_in_b(2 downto 0);
-            when 2 => fraction_b (1 downto 0) := approxmul_in_b(1 downto 0);
-            when others => fraction_b (0) := approxmul_in_b(0);
+            when 15 => fraction_b (14 downto 0) := in2(14 downto 0);
+            when 14 => fraction_b (13 downto 0) := in2(13 downto 0);
+            when 13 => fraction_b (12 downto 0) := in2(12 downto 0);
+            when 12 => fraction_b (11 downto 0) := in2(11 downto 0);
+            when 11 => fraction_b (10 downto 0) := in2(10 downto 0);
+            when 10 => fraction_b (9 downto 0) := in2(9 downto 0);
+            when 9 => fraction_b (8 downto 0) := in2(8 downto 0);
+            when 8 => fraction_b (7 downto 0) := in2(7 downto 0);
+            when 7 => fraction_b (6 downto 0) := in2(6 downto 0);
+            when 6 => fraction_b (5 downto 0) := in2(5 downto 0);
+            when 5 => fraction_b (4 downto 0) := in2(4 downto 0);
+            when 4 => fraction_b (3 downto 0) := in2(3 downto 0);
+            when 3 => fraction_b (2 downto 0) := in2(2 downto 0);
+            when 2 => fraction_b (1 downto 0) := in2(1 downto 0);
+            when others => fraction_b (0) := in2(0);
         end case;
         
         if k1 > k2 then
@@ -167,6 +168,7 @@ architecture Behavioral of ApproxMul is
                 when others => result <= zero(13 downto 0) & fraction_sum(15 downto 0) & zero(1 downto 0);
             end case;
         end if;
+        ready <= '1';
     end process;
-    approxmul_result <= result;
+    output <= result;
 end Behavioral;
