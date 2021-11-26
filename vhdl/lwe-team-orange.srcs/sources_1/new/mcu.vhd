@@ -19,8 +19,17 @@ entity mcu is
     port (
         clk : in STD_LOGIC;
         rst : in STD_LOGIC;
+        
         should_reseed : in STD_LOGIC;
-        seed : in STD_LOGIC_VECTOR(31 downto 0)
+        seed : in STD_LOGIC_VECTOR(31 downto 0);
+        ctrlLoad    : in STD_LOGIC;
+        ctrlEncrypt : in STD_LOGIC;
+        ctrlDecrypt : in STD_LOGIC;
+        
+        inM: in STD_LOGIC;
+        outM: out STD_LOGIC;
+        
+        ready       : out STD_LOGIC
     );
 end mcu;
 
@@ -32,6 +41,7 @@ architecture Behavioral of mcu is
         GenerateB_post_setup, GenerateB_post,
         
         Idle, -- Idle
+        Load, -- Load
         
         Encrypt, Encrypt_setup_row, Encrypt_exec,
         
@@ -85,10 +95,6 @@ architecture Behavioral of mcu is
     signal Amatrix : amat_array (0 to aHeight-1);
     signal Bmatrix : t_array;  
     signal secret_key : t_array;
-    
-    signal DEBUG_error_matrix: t_array;
-    signal DEBUG_raw_B_matrix: t_array;
-    signal DEBUG_premod_B_matrix: t_array;
     
     signal rowCounter : integer := 0;
     
@@ -223,13 +229,15 @@ begin
             inS => secret_key,
             inU => data_U,
             inV => unsigned(data_V),
-            outM => data_M,
+            outM => outM, -- data_M
             ready => dec_ready
         );
     
     main: process(clk)
     begin
         if rising_edge(clk) then
+            ready <= '0';
+            
             if rst = '1' then
                 -- This is the main reset for the mcu.
                 -- If anything needs to be reset fully to 
@@ -254,13 +262,7 @@ begin
                 
                 Amatrix_sampleSum <= (others => (others => '0'));
                 Bmatrix_sampleSum <= (others => '0');
-                
-                
-                --- DEBUG SIGNALS
-                DEBUG_error_matrix <= (others => (others => '0'));
-                DEBUG_raw_B_matrix <= (others => (others => '0'));
-                DEBUG_premod_B_matrix <= (others => (others => '0'));
-                
+                                
                 mult_inA <= (others => (others => '0'));
                 mult_inB <= (others => (others => '0'));
                 
@@ -342,9 +344,6 @@ begin
                             if mult_ready = '1' and mult_rst /= '1' then
                                 Bmatrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
                                 
-                                DEBUG_raw_B_matrix(rowCounter) <= mult_out;
-                                DEBUG_premod_B_matrix(rowCounter) <= Bmatrix(rowCounter) + mult_out;
-                                
                                 mult_rst <= '1';
                                 if rowCounter /= (aHeight-1) then
                                     mult_inA <= Amatrix(rowCounter + 1);
@@ -383,12 +382,29 @@ begin
                             end if;
                         else
                             rowCounter <= 0;
-                            State <= Encrypt;
+                            State <= Idle;
                         end if;
                     
-                    WHEN Idle => 
+                    WHEN Idle =>
+                        ready <= '1';
+                        
+                        if ctrlLoad = '1' then
+                            State <= Load;
+                        elsif ctrlEncrypt = '1' then
+                            State <= Encrypt;
+                        elsif ctrlDecrypt = '1' then
+                            State <= Decrypt;
+                        end if;
                     
-                    
+                    WHEN Load =>
+                        enc_rst <= '1';
+                        dec_rst <= '1';
+                        
+                        data_M <= inM;
+                        
+                        if ctrlLoad = '0' then
+                            State <= Idle;
+                        end if;
                         
                     -- Encryption module goes here
                     -- Sample and sum the random selection of rows from the A and B matrix within the MCU
@@ -441,6 +457,12 @@ begin
                         
                     -- Decryption module here.
                     WHEN Decrypt =>
+                        dec_rst <= '0';
+                          
+                        if dec_ready = '1' then
+                            State <= Idle;
+                        end if;
+                      
                       --signals to activate decryption.
                 end case;
             end if;
